@@ -6,11 +6,8 @@
     "name": "Sebastian G",
     "email": "contact@agent007.dev"
   },
-  "homepage": "https://github.com/sebasing/agent007",
-  "repository": {
-    "type": "git",
-    "url": "https://github.com/sebasing/agent007.git"
-  },
+  "homepage": "https://github.com/SebastianDevps/agent007",
+  "repository": "https://github.com/SebastianDevps/agent007.git",
   "license": "MIT",
   "keywords": [
     "orchestration",
@@ -29,8 +26,5 @@
     "react",
     "consultation",
     "token-optimization"
-  ],
-  "engines": {
-    "claude": ">=1.0.0"
-  }
+  ]
 }
