@@ -1,0 +1,78 @@
+name: Feature Request
+description: Suggest a new feature or improvement for Agent007
+title: "[FEATURE] "
+labels: ["enhancement", "needs-review"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for suggesting a feature! Please note that all feature requests are reviewed by the core team before implementation.
+
+  - type: textarea
+    id: problem
+    attributes:
+      label: Problem Statement
+      description: What problem does this feature solve?
+      placeholder: I'm frustrated when...
+    validations:
+      required: true
+
+  - type: textarea
+    id: solution
+    attributes:
+      label: Proposed Solution
+      description: How would you like to solve this problem?
+      placeholder: I would like Agent007 to...
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Feature Category
+      description: What type of feature is this?
+      options:
+        - New Expert Agent
+        - New Skill
+        - New Command
+        - Orchestration Improvement
+        - Token Optimization
+        - Documentation
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: alternatives
+    attributes:
+      label: Alternatives Considered
+      description: Have you considered any alternative solutions?
+      placeholder: I've also thought about...
+
+  - type: textarea
+    id: use-case
+    attributes:
+      label: Use Case
+      description: Describe a specific scenario where this would be useful
+      placeholder: When working on...
+    validations:
+      required: true
+
+  - type: checkboxes
+    id: willing
+    attributes:
+      label: Contribution
+      description: Are you willing to contribute to this feature?
+      options:
+        - label: I'm willing to help implement this feature (subject to approval)
+        - label: I'm willing to test this feature once implemented
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues to ensure this isn't a duplicate
+          required: true
+        - label: I understand this feature requires core team review before implementation
+          required: true

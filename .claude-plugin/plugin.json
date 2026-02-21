@@ -3,7 +3,7 @@
   "description": "Agent007 - Intelligent Development Orchestration System. 5 expert agents (backend, frontend, platform, product, security), 17 active skills, automatic task routing, quality enforcement, and token-optimized consultations (85-92% reduction).",
   "version": "2.0.0",
   "author": {
-    "name": "Sebastian G",
+    "name": "Sebastian Guerra",
     "email": "contact@agent007.dev"
   },
   "homepage": "https://github.com/SebastianDevps/agent007",

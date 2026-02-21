@@ -1,0 +1,90 @@
+name: Bug Report
+description: Report a bug or unexpected behavior in Agent007
+title: "[BUG] "
+labels: ["bug", "needs-triage"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Thanks for taking the time to report a bug! Please fill out the sections below.
+
+  - type: textarea
+    id: description
+    attributes:
+      label: Bug Description
+      description: A clear and concise description of the bug
+      placeholder: What went wrong?
+    validations:
+      required: true
+
+  - type: textarea
+    id: steps
+    attributes:
+      label: Steps to Reproduce
+      description: Steps to reproduce the behavior
+      placeholder: |
+        1. Run command '...'
+        2. Query with '...'
+        3. See error
+    validations:
+      required: true
+
+  - type: textarea
+    id: expected
+    attributes:
+      label: Expected Behavior
+      description: What did you expect to happen?
+      placeholder: I expected...
+    validations:
+      required: true
+
+  - type: textarea
+    id: actual
+    attributes:
+      label: Actual Behavior
+      description: What actually happened?
+      placeholder: Instead, I got...
+    validations:
+      required: true
+
+  - type: input
+    id: version
+    attributes:
+      label: Agent007 Version
+      description: Run `/plugin list` to find the version
+      placeholder: "e.g., 2.0.0"
+    validations:
+      required: true
+
+  - type: dropdown
+    id: skill
+    attributes:
+      label: Which skill/command?
+      description: Which Agent007 skill or command is affected?
+      options:
+        - /agent007:consult
+        - /agent007:review
+        - /agent007:plan
+        - /agent007:architecture-review
+        - /agent007:tdd
+        - /agent007:frontend-design
+        - Other (specify in description)
+    validations:
+      required: true
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any other relevant information (logs, screenshots, etc.)
+      placeholder: Paste error messages, logs, or screenshots here
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have searched existing issues to ensure this isn't a duplicate
+          required: true
+        - label: I have updated to the latest version (`/plugin update agent007`)
+          required: true

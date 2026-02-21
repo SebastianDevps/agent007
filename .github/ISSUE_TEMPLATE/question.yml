@@ -1,0 +1,60 @@
+name: Question / Help
+description: Ask a question or request help using Agent007
+title: "[QUESTION] "
+labels: ["question", "help-wanted"]
+body:
+  - type: markdown
+    attributes:
+      value: |
+        Need help with Agent007? Ask your question below!
+
+        For general discussions, consider using [GitHub Discussions](https://github.com/SebastianDevps/agent007/discussions) instead.
+
+  - type: textarea
+    id: question
+    attributes:
+      label: Your Question
+      description: What do you need help with?
+      placeholder: How do I...?
+    validations:
+      required: true
+
+  - type: dropdown
+    id: category
+    attributes:
+      label: Question Category
+      description: What is your question about?
+      options:
+        - Installation / Setup
+        - Using a specific skill
+        - Understanding orchestration
+        - Token optimization
+        - Configuration
+        - Contributing
+        - Other
+    validations:
+      required: true
+
+  - type: textarea
+    id: tried
+    attributes:
+      label: What Have You Tried?
+      description: What steps have you already taken to solve this?
+      placeholder: I tried...
+
+  - type: textarea
+    id: context
+    attributes:
+      label: Additional Context
+      description: Any relevant information (error messages, configuration, etc.)
+      placeholder: Paste logs, config files, or screenshots here
+
+  - type: checkboxes
+    id: checklist
+    attributes:
+      label: Checklist
+      options:
+        - label: I have read the [README](https://github.com/SebastianDevps/agent007/blob/main/README.md)
+          required: true
+        - label: I have checked [existing issues](https://github.com/SebastianDevps/agent007/issues) for similar questions
+          required: true

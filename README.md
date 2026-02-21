@@ -1,8 +1,18 @@
 # Agent007 - Intelligent Development Orchestration System
 
+<p align="center">
+  <img src="https://img.shields.io/badge/version-2.0.0-blue.svg" alt="Version">
+  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
+  <img src="https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg" alt="Claude Code Plugin">
+  <img src="https://img.shields.io/badge/token%20reduction-85--92%25-orange.svg" alt="Token Reduction">
+  <img src="https://img.shields.io/badge/PRs-welcome%20(reviewed)-brightgreen.svg" alt="PRs Welcome">
+</p>
+
 > **v2.0** - Optimized for 85-92% token reduction with OpenCode-inspired patterns
 
 An autonomous AI development team ecosystem with 5 consolidated expert agents, 17 active skills, and intelligent orchestration that automatically detects tasks, assesses risk, and routes work to the right experts.
+
+**🎉 Open Source** | **🔧 Reviewed Contributions** | **📚 MIT License**
 
 ---
 
@@ -26,20 +36,26 @@ An autonomous AI development team ecosystem with 5 consolidated expert agents, 1
 
 ## 🚀 Quick Start
 
-### Installation (One Command)
+### Installation (Two Commands)
 
 ```bash
-/plugin install agent007@sebasing/agent007 --scope user
+/plugin marketplace add SebastianDevps/agent007-marketplace
+/plugin install agent007@agent007-marketplace
 ```
 
 **That's it!** Agent007 is now available in **all your projects**. ✅
 
 ---
 
-### Alternative: Local Testing
+### Alternative Installation Methods
 
+**Direct from GitHub** (without marketplace):
 ```bash
-# Test locally without installing
+/plugin install agent007@SebastianDevps/agent007 --scope user
+```
+
+**Local Testing**:
+```bash
 cd ~/Projects/YourProject
 claude --plugin-dir /path/to/agent007
 ```
@@ -264,9 +280,8 @@ The old `.claude/` directory structure is maintained for backward compatibility:
 
 ## 📚 Documentation
 
-- **IMPLEMENTATION_PLAN.md** - Complete 13-task roadmap
-- **OPTIMIZATION_COMPLETED.md** - Implementation status & next steps
-- **OPENCODE_ADOPTION.md** - What we adopted from OpenCode and why
+- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Technical architecture & orchestration details
+- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Contribution guidelines & code review process
 
 ---
 
@@ -313,10 +328,45 @@ The old `.claude/` directory structure is maintained for backward compatibility:
 
 ---
 
-## 📄 License
+## 🤝 Contributing
 
-MIT
+Agent007 is **open source** and welcomes contributions!
+
+**How to Contribute**:
+1. 📖 Read [CONTRIBUTING.md](CONTRIBUTING.md)
+2. 🐛 Report bugs via [Issues](https://github.com/SebastianDevps/agent007/issues)
+3. 💡 Suggest features (subject to review)
+4. 🔧 Submit PRs (requires approval)
+
+**Note**: All PRs are reviewed by the core team to ensure quality and architecture consistency.
+
+### Ways to Help
+
+- Report bugs and suggest improvements
+- Improve documentation
+- Add examples and use cases
+- Share your experience using Agent007
+
+See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
 
 ---
 
-**For detailed implementation guide, see IMPLEMENTATION_PLAN.md**
+## 📄 License
+
+MIT License - See [LICENSE](LICENSE)
+
+---
+
+## 📞 Support
+
+- **Issues**: [GitHub Issues](https://github.com/SebastianDevps/agent007/issues)
+- **Discussions**: [GitHub Discussions](https://github.com/SebastianDevps/agent007/discussions)
+- **Documentation**: See links above
+
+---
+
+<p align="center">
+  <strong>Agent007 v2.0.0</strong> - Intelligent Development Orchestration
+  <br>
+  Made with ❤️ by the Sebastian Guerra
+</p>
