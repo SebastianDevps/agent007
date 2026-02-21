@@ -1,0 +1,29 @@
+{
+  "defaultAgent": "backend-db-expert",
+  "effortLevel": "medium",
+  "orchestration": {
+    "enabled": true,
+    "autoDetect": true,
+    "confirmations": {
+      "criticalRisk": true,
+      "highRisk": false,
+      "mediumRisk": false
+    }
+  },
+  "tokenOptimization": {
+    "lazyLoading": true,
+    "useSummaries": true,
+    "promptCaching": true,
+    "maxSkillsPerQuery": 3
+  },
+  "consultation": {
+    "defaultMode": "normal",
+    "maxExperts": 2,
+    "consolidateResponses": true
+  },
+  "quality": {
+    "verification": true,
+    "antiRationalization": true,
+    "contextAwareness": true
+  }
+}

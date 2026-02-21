@@ -1,0 +1,126 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "version": "2.0.0",
+  "description": "Configuración del motor de orchestration context-aware",
+
+  "contextDetection": {
+    "enabled": true,
+    "rules": {
+      "feature": {
+        "keywords": ["implement", "add", "create", "build", "new feature", "funcionalidad"],
+        "patterns": ["implement .+", "add .+ to .+", "create new .+"]
+      },
+      "bug": {
+        "keywords": ["bug", "error", "fix", "broken", "no funciona", "falla"],
+        "patterns": ["fix .+", ".+ not working", ".+ is broken"]
+      },
+      "refactor": {
+        "keywords": ["refactor", "restructure", "reorganize", "improve", "clean up"],
+        "patterns": ["refactor .+", "restructure .+", "improve .+"]
+      },
+      "consult": {
+        "keywords": ["how", "what", "why", "should I", "mejor manera", "cómo"],
+        "patterns": ["how (do|can|should) I .+", "what is .+", "should I use .+"]
+      },
+      "review": {
+        "keywords": ["review", "audit", "check", "revisar", "auditar"],
+        "patterns": ["review .+", "audit .+", "check if .+"]
+      }
+    }
+  },
+
+  "riskDetection": {
+    "enabled": true,
+    "rules": {
+      "critical": {
+        "pathContains": ["auth", "payment", "migration", "security", "database/migrations"],
+        "filePatterns": ["*.migration.ts", "auth.*.ts", "payment.*.ts"],
+        "modifiesSchema": true,
+        "touchesMultipleContexts": true
+      },
+      "high": {
+        "pathContains": ["controllers", "services", "entities"],
+        "newApiEndpoint": true,
+        "modifiesEntity": true,
+        "touchesCriticalPath": true,
+        "crossContextChanges": true
+      },
+      "medium": {
+        "newFeature": true,
+        "refactorsService": true,
+        "updatesDependencies": true,
+        "multipleFileChanges": true
+      },
+      "low": {
+        "docsOnly": true,
+        "singleFileChange": true,
+        "typoFix": true,
+        "testOnly": true
+      }
+    }
+  },
+
+  "stackDetection": {
+    "enabled": true,
+    "indicators": {
+      "nestjs": {
+        "files": ["nest-cli.json", "tsconfig.json"],
+        "imports": ["@nestjs/", "@nestjs/common", "@nestjs/core"],
+        "patterns": ["@Controller", "@Injectable", "@Module"]
+      },
+      "react": {
+        "files": ["package.json"],
+        "dependencies": ["react", "next"],
+        "patterns": ["useState", "useEffect", "jsx"]
+      },
+      "typeorm": {
+        "files": ["ormconfig.json", "data-source.ts"],
+        "imports": ["typeorm"],
+        "patterns": ["@Entity", "@Column", "Repository"]
+      }
+    }
+  },
+
+  "workflowRouting": {
+    "feature": {
+      "low": "feature-development-fast-track",
+      "medium": "feature-development-standard",
+      "high": "feature-development-full-pipeline",
+      "critical": "feature-development-critical"
+    },
+    "bug": {
+      "low": "bug-fixing-simple",
+      "medium": "bug-fixing-standard",
+      "high": "bug-fixing-systematic",
+      "critical": "bug-fixing-critical"
+    },
+    "refactor": {
+      "low": "refactoring-simple",
+      "medium": "refactoring-standard",
+      "high": "refactoring-architectural",
+      "critical": "refactoring-critical"
+    },
+    "consult": {
+      "all": "consultation-pipeline"
+    },
+    "review": {
+      "all": "code-review-pipeline"
+    }
+  },
+
+  "autoActivation": {
+    "enabled": true,
+    "coreSkills": [
+      "context-awareness",
+      "verification-enforcement",
+      "anti-rationalization"
+    ],
+    "sessionInjection": true
+  },
+
+  "adaptiveGating": {
+    "enabled": true,
+    "defaultMinimumRisk": "medium",
+    "strictMode": false
+  }
+}

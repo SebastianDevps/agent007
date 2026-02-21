@@ -1,0 +1,152 @@
+# Adaptive Gates Configuration
+# Gates are applied based on task risk level
+
+version: "1.0.0"
+
+# Gate definitions
+gates:
+  # Basic verification - always active
+  verification-basic:
+    required_for: ["low", "medium", "high", "critical"]
+    description: "Basic verification that code compiles and runs"
+    checks:
+      - build_passes
+      - no_syntax_errors
+    can_skip: false
+
+  # Unit tests - required for medium+
+  unit-tests:
+    required_for: ["medium", "high", "critical"]
+    description: "Unit tests must pass"
+    checks:
+      - unit_tests_pass
+      - no_test_failures
+    can_skip: false
+
+  # Code review - required for high+
+  code-review:
+    required_for: ["high", "critical"]
+    description: "Two-stage code review (spec + quality)"
+    checks:
+      - spec_conformance
+      - code_quality_check
+      - no_anti_patterns
+    can_skip: false
+
+  # Integration tests - required for critical
+  integration-tests:
+    required_for: ["critical"]
+    description: "Integration tests must pass"
+    checks:
+      - integration_tests_pass
+      - e2e_tests_pass
+    can_skip: false
+
+  # Security audit - required for high+ when touching auth/payment
+  security-audit:
+    required_for: ["high", "critical"]
+    description: "OWASP security audit"
+    conditions:
+      touches_critical_path: true
+    checks:
+      - no_owasp_violations
+      - no_secrets_exposed
+      - auth_properly_implemented
+    can_skip: false
+
+  # Performance check - required for high+ when touching queries/api
+  performance-check:
+    required_for: ["high", "critical"]
+    description: "Performance regression check"
+    conditions:
+      touches_performance_path: true
+    checks:
+      - no_n_plus_1_queries
+      - response_time_acceptable
+      - no_memory_leaks
+    can_skip: false
+
+  # Manual approval - required for critical production changes
+  manual-approval:
+    required_for: ["critical"]
+    description: "Human approval required"
+    conditions:
+      affects_production: true
+    checks:
+      - human_review_approved
+    can_skip: false
+
+# Workflow-specific gates
+workflows:
+  feature-development:
+    low_risk:
+      gates: ["verification-basic"]
+      skippable_stages: ["brainstorming"]
+    medium_risk:
+      gates: ["verification-basic", "unit-tests"]
+      skippable_stages: []
+    high_risk:
+      gates: ["verification-basic", "unit-tests", "code-review"]
+      skippable_stages: []
+    critical_risk:
+      gates: ["verification-basic", "unit-tests", "code-review", "integration-tests", "manual-approval"]
+      skippable_stages: []
+
+  bug-fixing:
+    low_risk:
+      gates: ["verification-basic", "unit-tests"]
+      required_stages: ["root-cause-analysis"]
+    medium_risk:
+      gates: ["verification-basic", "unit-tests"]
+      required_stages: ["root-cause-analysis", "regression-tests"]
+    high_risk:
+      gates: ["verification-basic", "unit-tests", "code-review"]
+      required_stages: ["root-cause-analysis", "regression-tests"]
+    critical_risk:
+      gates: ["verification-basic", "unit-tests", "code-review", "integration-tests"]
+      required_stages: ["root-cause-analysis", "regression-tests", "manual-approval"]
+
+  refactoring:
+    low_risk:
+      gates: ["verification-basic", "unit-tests"]
+      required_stages: ["tests-pass-before", "tests-pass-after"]
+    medium_risk:
+      gates: ["verification-basic", "unit-tests"]
+      required_stages: ["tests-pass-before", "tests-pass-after", "no-behavior-change"]
+    high_risk:
+      gates: ["verification-basic", "unit-tests", "code-review"]
+      required_stages: ["tests-pass-before", "tests-pass-after", "no-behavior-change"]
+    critical_risk:
+      gates: ["verification-basic", "unit-tests", "code-review", "integration-tests"]
+      required_stages: ["tests-pass-before", "tests-pass-after", "no-behavior-change", "manual-approval"]
+
+  code-review:
+    all_risks:
+      gates: ["code-review"]
+      stages: ["nestjs-reviewer", "two-stage-review", "security-audit"]
+
+# Risk escalation rules
+escalation:
+  auto_escalate_if:
+    - touches_auth: "high"
+    - touches_payment: "critical"
+    - affects_production: "critical"
+    - has_security_implications: "high"
+    - touches_database_schema: "high"
+    - modifies_api_contracts: "medium"
+    - large_scope: "medium"  # >5 files or >500 lines
+
+  de_escalate_if:
+    - simple_typo_fix: "low"
+    - documentation_only: "low"
+    - cosmetic_change: "low"
+    - test_only_change: "low"
+
+# Gate bypass (emergency only)
+bypass:
+  allowed: false  # Set to true to enable bypass (NOT RECOMMENDED)
+  requires_reason: true
+  logs_to_knowledge_base: true
+  conditions:
+    - emergency_hotfix: true
+    - user_explicitly_requests: true

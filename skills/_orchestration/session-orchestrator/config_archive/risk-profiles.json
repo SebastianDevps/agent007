@@ -1,0 +1,273 @@
+{
+  "version": "1.0.0",
+  "description": "Risk profiles for different types of changes",
+
+  "risk_factors": {
+    "critical_paths": [
+      "authentication",
+      "authorization",
+      "payment",
+      "billing",
+      "data_privacy",
+      "user_credentials",
+      "api_keys",
+      "production_deployment"
+    ],
+
+    "performance_paths": [
+      "database_queries",
+      "api_endpoints",
+      "data_processing",
+      "file_operations",
+      "external_api_calls"
+    ],
+
+    "high_complexity_areas": [
+      "microservices_orchestration",
+      "distributed_transactions",
+      "caching_strategies",
+      "state_management",
+      "concurrency_control"
+    ]
+  },
+
+  "risk_assessment_rules": {
+    "critical": {
+      "description": "Changes that could cause severe production issues",
+      "triggers": [
+        "touches_authentication",
+        "touches_payment",
+        "affects_production",
+        "modifies_database_schema",
+        "changes_api_contracts",
+        "touches_security_critical_code",
+        "large_scope_change"
+      ],
+      "file_patterns": [
+        "**/auth/**",
+        "**/payment/**",
+        "**/security/**",
+        "**/*.migration.ts",
+        "**/database/schema/**"
+      ],
+      "keywords": [
+        "password",
+        "token",
+        "secret",
+        "payment",
+        "billing",
+        "creditcard",
+        "migration"
+      ]
+    },
+
+    "high": {
+      "description": "Significant changes requiring thorough review",
+      "triggers": [
+        "touches_core_business_logic",
+        "modifies_api_endpoints",
+        "changes_database_queries",
+        "affects_user_data",
+        "medium_scope_change"
+      ],
+      "file_patterns": [
+        "**/services/**",
+        "**/controllers/**",
+        "**/repositories/**",
+        "**/entities/**"
+      ],
+      "keywords": [
+        "user",
+        "order",
+        "transaction",
+        "api",
+        "query"
+      ],
+      "complexity_thresholds": {
+        "files_changed": 5,
+        "lines_changed": 500
+      }
+    },
+
+    "medium": {
+      "description": "Standard changes with moderate impact",
+      "triggers": [
+        "adds_new_feature",
+        "fixes_non_critical_bug",
+        "small_to_medium_scope"
+      ],
+      "file_patterns": [
+        "**/dto/**",
+        "**/guards/**",
+        "**/pipes/**",
+        "**/interceptors/**",
+        "**/filters/**"
+      ],
+      "complexity_thresholds": {
+        "files_changed": 3,
+        "lines_changed": 200
+      }
+    },
+
+    "low": {
+      "description": "Minor changes with minimal risk",
+      "triggers": [
+        "typo_fix",
+        "documentation_update",
+        "cosmetic_change",
+        "test_only_change"
+      ],
+      "file_patterns": [
+        "**/*.md",
+        "**/*.spec.ts",
+        "**/*.test.ts",
+        "**/README",
+        "**/CHANGELOG"
+      ],
+      "complexity_thresholds": {
+        "files_changed": 1,
+        "lines_changed": 50
+      }
+    }
+  },
+
+  "stack_detection": {
+    "nestjs": {
+      "indicators": [
+        "nest",
+        "@nestjs",
+        "Injectable",
+        "Controller",
+        "Module",
+        "nest-cli.json"
+      ],
+      "file_patterns": [
+        "**/*.module.ts",
+        "**/*.controller.ts",
+        "**/*.service.ts"
+      ]
+    },
+
+    "typeorm": {
+      "indicators": [
+        "typeorm",
+        "@Entity",
+        "Repository",
+        "ormconfig",
+        "migrations"
+      ],
+      "file_patterns": [
+        "**/*.entity.ts",
+        "**/*.repository.ts",
+        "**/migrations/**"
+      ]
+    },
+
+    "react": {
+      "indicators": [
+        "react",
+        "useState",
+        "useEffect",
+        "jsx",
+        "tsx"
+      ],
+      "file_patterns": [
+        "**/*.tsx",
+        "**/*.jsx",
+        "**/components/**"
+      ]
+    },
+
+    "generic": {
+      "description": "Fallback when no specific stack detected"
+    }
+  },
+
+  "scope_assessment": {
+    "single_file": {
+      "max_files": 1
+    },
+    "module": {
+      "max_files": 5,
+      "same_directory": true
+    },
+    "multi_module": {
+      "max_files": 10
+    },
+    "architecture": {
+      "min_files": 10,
+      "crosses_boundaries": true
+    }
+  },
+
+  "task_type_detection": {
+    "feature": {
+      "keywords": [
+        "add",
+        "implement",
+        "create",
+        "new",
+        "feature"
+      ],
+      "indicators": [
+        "new_files_created",
+        "adds_functionality"
+      ]
+    },
+
+    "bug": {
+      "keywords": [
+        "fix",
+        "bug",
+        "issue",
+        "error",
+        "broken"
+      ],
+      "indicators": [
+        "fixes_existing_code",
+        "addresses_error"
+      ]
+    },
+
+    "refactor": {
+      "keywords": [
+        "refactor",
+        "restructure",
+        "reorganize",
+        "cleanup",
+        "improve"
+      ],
+      "indicators": [
+        "modifies_structure",
+        "no_behavior_change"
+      ]
+    },
+
+    "consult": {
+      "keywords": [
+        "how",
+        "why",
+        "what",
+        "should",
+        "recommend"
+      ],
+      "indicators": [
+        "question_format",
+        "no_code_changes"
+      ]
+    },
+
+    "review": {
+      "keywords": [
+        "review",
+        "audit",
+        "check",
+        "analyze"
+      ],
+      "indicators": [
+        "inspection_request",
+        "no_implementation"
+      ]
+    }
+  }
+}
