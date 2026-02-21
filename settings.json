@@ -14,7 +14,38 @@
     "lazyLoading": true,
     "useSummaries": true,
     "promptCaching": true,
-    "maxSkillsPerQuery": 3
+    "maxSkillsPerQuery": 3,
+    "excludeArchives": true,
+    "onDemandSkillLoading": true,
+    "contextStrategy": "minimal",
+    "estimatedSavings": "60-70%"
+  },
+  "contextLoading": {
+    "strategy": "minimal",
+    "baseContext": ["CLAUDE.md"],
+    "excludePatterns": [
+      "skills/**",
+      "agents/**",
+      "**/_archive/**",
+      "metrics/**",
+      "commands/**/*.md"
+    ],
+    "loadOnDemand": ["skills", "agents"]
+  },
+  "agentLimits": {
+    "explore": {
+      "maxIterations": 5,
+      "maxCostUSD": 1.5,
+      "taskTypes": ["consult", "documentation", "research"]
+    },
+    "tdd": {
+      "maxIterations": 20,
+      "maxCostUSD": 5.0
+    },
+    "debugging": {
+      "maxIterations": 15,
+      "maxCostUSD": 3.0
+    }
   },
   "consultation": {
     "defaultMode": "normal",
