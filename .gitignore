@@ -28,3 +28,6 @@ Thumbs.db
 
 # Token metrics (local only)
 .claude/metrics/tokens.jsonl
+
+# Juego (repos separados: impostor-back, impostor-front)
+Juego/
