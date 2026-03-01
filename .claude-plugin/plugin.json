@@ -1,7 +1,7 @@
 {
   "name": "agent007",
-  "description": "Agent007 - Intelligent Development Orchestration System. 5 expert agents (backend, frontend, platform, product, security), 17 active skills, automatic task routing, quality enforcement, and token-optimized consultations (85-92% reduction).",
-  "version": "2.0.0",
+  "description": "Agent007 - Autonomous AI Development Team. 5 expert agents, 26 skills, 9 workflow commands, and full autonomous orchestration: /dev classifies and routes tasks, /ralph-loop iterates until completion, /consult selects the right expert automatically. Includes Stop hook for guaranteed task completion and cross-session state persistence.",
+  "version": "3.0.0",
   "author": {
     "name": "Sebastian Guerra",
     "email": "contact@agent007.dev"
@@ -13,6 +13,8 @@
     "orchestration",
     "agents",
     "experts",
+    "autonomous",
+    "ralph-loop",
     "backend",
     "frontend",
     "platform",
@@ -25,6 +27,83 @@
     "nestjs",
     "react",
     "consultation",
-    "token-optimization"
+    "worktrees",
+    "subagents",
+    "planning"
+  ],
+  "commands": [
+    "/dev",
+    "/consult",
+    "/ralph-loop",
+    "/brainstorming",
+    "/writing-plans",
+    "/using-git-worktrees",
+    "/subagent-driven-development",
+    "/requesting-code-review",
+    "/finishing-a-development-branch"
+  ],
+  "agents": [
+    "backend-db-expert",
+    "frontend-ux-expert",
+    "platform-expert",
+    "product-expert",
+    "security-expert"
+  ],
+  "skills": {
+    "domain": [
+      "api-design-principles",
+      "architecture-patterns",
+      "resilience-patterns",
+      "nestjs-code-reviewer",
+      "frontend-design",
+      "react-best-practices",
+      "security-review"
+    ],
+    "workflow": [
+      "brainstorming",
+      "writing-plans",
+      "tdd",
+      "executing-plans",
+      "subagent-driven-development",
+      "using-git-worktrees",
+      "requesting-code-review",
+      "finishing-a-development-branch"
+    ],
+    "quality-gates": [
+      "systematic-debugging",
+      "architecture-review"
+    ],
+    "product": [
+      "product-discovery"
+    ],
+    "devrel": [
+      "api-documentation"
+    ],
+    "core": [
+      "anti-rationalization",
+      "context-awareness",
+      "verification-enforcement",
+      "decision-memory",
+      "session-state"
+    ],
+    "orchestration": [
+      "session-orchestrator",
+      "ralph-loop-wrapper"
+    ]
+  },
+  "hooks": {
+    "stop": "hooks/ralph-check.js",
+    "postToolUse": "hooks/format-on-save.sh"
+  },
+  "features": [
+    "Autonomous task classification and routing (simple/medium/complex)",
+    "Ralph Loop: iterates until <promise>COMPLETE</promise> detected",
+    "Stop hook blocks premature stops and injects continuation context",
+    "Git worktrees for isolated feature development",
+    "Subagent-driven execution with spec + quality review per task",
+    "Cross-session state persistence via STATE.md",
+    "Auto-selects expert agent by keyword matching",
+    "Two-stage code review (spec compliance + code quality)",
+    "Keyboard shortcuts in brainstorming (A/D/E)"
   ]
 }

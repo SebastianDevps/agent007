@@ -1,4 +1,4 @@
-# Legacy .claude/ directory (use plugin structure instead)
+
 .claude/
 
 # Node
@@ -31,3 +31,4 @@ Thumbs.db
 
 # Juego (repos separados: impostor-back, impostor-front)
 Juego/
+.worktrees/

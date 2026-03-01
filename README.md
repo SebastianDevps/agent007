@@ -1,372 +1,228 @@
-# Agent007 - Intelligent Development Orchestration System
+# Agent007 v2.0
 
-<p align="center">
-  <img src="https://img.shields.io/badge/version-2.0.0-blue.svg" alt="Version">
-  <img src="https://img.shields.io/badge/license-MIT-green.svg" alt="License">
-  <img src="https://img.shields.io/badge/Claude%20Code-Plugin-purple.svg" alt="Claude Code Plugin">
-  <img src="https://img.shields.io/badge/token%20reduction-85--92%25-orange.svg" alt="Token Reduction">
-  <img src="https://img.shields.io/badge/PRs-welcome%20(reviewed)-brightgreen.svg" alt="PRs Welcome">
-</p>
-
-> **v2.0** - Optimized for 85-92% token reduction with OpenCode-inspired patterns
-
-An autonomous AI development team ecosystem with 5 consolidated expert agents, 17 active skills, and intelligent orchestration that automatically detects tasks, assesses risk, and routes work to the right experts.
-
-**🎉 Open Source** | **🔧 Reviewed Contributions** | **📚 MIT License**
+Un equipo de desarrollo autónomo para Claude Code. 5 agentes expertos, 9 comandos/skills de workflow, y un sistema de iteración autónoma (Ralph Loop) que garantiza que la tarea termine realmente.
 
 ---
 
-## 🎯 What's New in v2.0
+## Comandos disponibles
 
-### Token Optimization (85-92% Reduction)
-- **Lazy Skill Loading**: Only loads relevant skills based on query keywords
-- **Skill Summaries**: 100-line summaries vs 650+ line full skills
-- **Prompt Caching**: Anthropic caching for 67% additional savings
-- **Context Contracts**: Minimal, structured context reduces redundancy
+Hay 3 comandos de entrada principales. El resto son skills de workflow que se activan internamente (o puedes invocarlos directamente si sabes cuándo usarlos).
 
-**Impact**: 60K → 5-10K tokens per consultation
+### Comandos de entrada
 
-### OpenCode-Inspired Features
-- **Dual Agent System**: Plan (read-only) vs Build (full access) modes
-- **Multi-Model Support**: Runtime selection (Opus, Sonnet, Haiku)
-- **CI/CD Validation**: Auto-validate skills and agents on PRs
-- **Modern Tooling**: Turborepo for task orchestration
+| Comando | Descripción |
+|---|---|
+| `/dev "tarea"` | Comando maestro. Clasifica la tarea, elige el workflow (simple/medium/complex) y ejecuta de forma autónoma. |
+| `/consult "pregunta"` | Auto-selecciona el experto por keywords y responde con contexto especializado. |
+| `/ralph-loop "tarea"` | Activa el loop autónomo. Itera hasta que detecta la promise de completitud. |
 
----
+### Skills de workflow (invocados internamente por `/dev`)
 
-## 🚀 Quick Start
+| Skill | Cuándo se activa |
+|---|---|
+| `/brainstorming` | Tareas complejas con requisitos poco claros. Hace preguntas socráticas de una en una. |
+| `/using-git-worktrees` | Crea rama aislada `feat/<nombre>` en `.worktrees/` antes de implementar. |
+| `/writing-plans` | Descompone la tarea en sub-tareas de 2-5 min con rutas exactas y código completo. Guarda en `docs/plans/`. |
+| `/subagent-driven-development` | Despacha un subagente experto por tarea. Cada tarea pasa por spec review + quality review antes de avanzar. |
+| `/requesting-code-review` | Review en 2 etapas: cumplimiento de spec → calidad de código. Se corre después de cada tarea. |
+| `/finishing-a-development-branch` | Cierra el branch: verifica tests y presenta 4 opciones (merge local / push+PR / mantener / descartar). |
 
-### Installation (Two Commands)
+### Skills de dominio (invocados por los agentes)
 
-```bash
-/plugin marketplace add SebastianDevps/agent007-marketplace
-/plugin install agent007@agent007-marketplace
-```
-
-**That's it!** Agent007 is now available in **all your projects**. ✅
+`api-design-principles` · `architecture-patterns` · `resilience-patterns` · `nestjs-code-reviewer` · `frontend-design` · `react-best-practices` · `security-review`
 
 ---
 
-### Alternative Installation Methods
+## Los 3 comandos en detalle
 
-**Direct from GitHub** (without marketplace):
-```bash
-/plugin install agent007@SebastianDevps/agent007 --scope user
-```
+### `/dev "tarea"`
 
-**Local Testing**:
-```bash
-cd ~/Projects/YourProject
-claude --plugin-dir /path/to/agent007
-```
-
-### Basic Usage
-
-Once installed, Agent007 skills are available globally:
-
-```bash
-# Simple consultation (normal mode - lazy loading + summaries)
-/agent007:consult "How to implement circuit breaker for S3?"
-# → Loads only: resilience-patterns summary (~100 lines)
-
-# Deep consultation (all skills, full content)
-/agent007:consult "Complete API architecture review" --deep
-# → Loads all relevant skills in full detail
-
-# Other skills (namespaced with plugin name)
-/agent007:review
-/agent007:plan
-/agent007:architecture-review
-/agent007:api-design-principles
-/agent007:resilience-patterns
-/agent007:frontend-design
-```
-
-**Note**: Skills are namespaced as `/agent007:skill-name` when installed as a plugin. This prevents conflicts with other plugins.
-
----
-
-## 📊 Performance Metrics
-
-| Metric | Before | After | Improvement |
-|--------|--------|-------|-------------|
-| **Tokens/query** | 60,000 | 10,000 | **83% ↓** |
-| **Cost/query (Opus)** | $0.90 | $0.15 | **83% ↓** |
-| **Cost/month** (10/day) | $270 | $45 | **$225 saved** |
-| **With caching** | - | 5,000 tokens | **92% ↓** |
-
----
-
-## 🛠️ Available Expert Agents (5)
-
-| Agent | Model | Specialization |
-|-------|-------|----------------|
-| **backend-db-expert** | Opus | APIs, distributed systems, schema design, query optimization |
-| **frontend-ux-expert** | Sonnet | React/Next.js, performance, UX design, accessibility |
-| **platform-expert** | Sonnet | CI/CD, Docker, testing (TDD/BDD), quality gates |
-| **product-expert** | Opus | Product discovery, roadmap, prioritization (RICE/ICE) |
-| **security-expert** | Opus | OWASP, threat modeling, compliance (GDPR, SOC2) |
-
----
-
-## 🎯 Available Commands
-
-### Core Commands
-- `/consult "question"` - Auto-selects experts and provides consolidated advice
-- `/brainstorm` - Socratic requirements exploration before implementation
-- `/plan` - Decomposes features into 2-5 minute tasks
-- `/review` - Code review for NestJS + TypeORM
-
-### Advanced
-- `/architecture-review` - Deep architecture review (DRY, testing gaps, edge cases)
-- `/api-design-principles` - API design audit
-- `/architecture-patterns` - Architecture patterns review
-- `/resilience-patterns` - Resilience patterns implementation
-- `/frontend-design` - High-quality frontend interface creation
-
----
-
-## 📈 Token Optimization Features
-
-### 1. Lazy Skill Loading
-
-**Before**: Loaded all 3 skills for backend-expert (~40K tokens)
-**After**: Loads 1-2 relevant skills (~10K tokens)
-
-```javascript
-// Automatic keyword matching
-Query: "circuit breaker for S3"
-→ Loads ONLY: resilience-patterns
-
-Query: "API design best practices"
-→ Loads ONLY: api-design-principles
-```
-
-### 2. Skill Summaries
-
-**Before**: Full SKILL.md (650+ lines)
-**After**: SUMMARY.md (100 lines)
-
-- Normal mode: Uses SUMMARY.md
-- Deep mode (`--deep`): Uses full SKILL.md
-
-### 3. Dual Agent System (Plan/Build)
-
-**High-risk tasks** → Plan mode first (read-only analysis)
+Clasifica automáticamente y elige el camino:
 
 ```
-User: "Migrate database to PostgreSQL" (high risk)
-  ↓
-PLAN mode: Analysis, risks, steps
-  ↓
-User approves
-  ↓
-BUILD mode: Implementation
+Simple  → implementa directo → verifica → done
+Medium  → /writing-plans → /subagent-driven-development → /finishing-a-development-branch
+Complex → /brainstorming → /using-git-worktrees → /writing-plans
+          → /subagent-driven-development → /finishing-a-development-branch
 ```
 
-### 4. Prompt Caching
+Flags:
 
-**First query**: 15K tokens
-**Cached queries** (5min TTL): 5K tokens (67% reduction)
+| Flag | Efecto |
+|---|---|
+| `--simple` | Fuerza implementación directa |
+| `--full` | Fuerza pipeline completo (brainstorm → worktree → plan → subagents) |
+| `--ralph` | Activa ralph loop por iteración |
+| `--max-iterations N` | Límite de iteraciones (default 20, max 50) |
+| `--verify "cmd"` | Comando de verificación para ralph |
 
-Automatically caches:
-- Expert methodology
-- Skill summaries
-- Static project context
+Ejemplos:
 
----
-
-## 🔧 Monitoring & Analytics
-
-### Token Usage Dashboard
-
-```bash
-# Analyze last 7 days
-node analyze-tokens.js
-
-# Comparison report (before/after optimization)
-node analyze-tokens.js --comparison
 ```
-
-**Output**:
-```
-📊 Token Usage Statistics (Last 7 days)
-
-Token Usage:
-  Total: 150,000
-  Average: 10,000
-  Range: 5,000 - 18,000
-
-Caching:
-  Hit Rate: 62.3%
-  Avg Cached Tokens: 8,500
-
-Optimization Usage:
-  Lazy Loading: 95.0%
-  Summaries: 98.0%
-  Avg Skills Loaded: 1.2
+/dev "Fix null pointer en UserService.findById()"
+/dev "Agregar paginación cursor-based al endpoint /users"
+/dev "Implementar módulo de notificaciones completo" --full --ralph --max-iterations 30
 ```
 
 ---
 
-## 🏗️ Architecture
+### `/consult "pregunta"`
 
-### Plugin Structure
+Auto-selecciona el experto por keywords:
+
+| Keywords detectados | Experto asignado |
+|---|---|
+| api, nestjs, database, query, typeorm, cache, schema | backend-db-expert |
+| auth, jwt, owasp, vulnerability, cors, xss | security-expert |
+| react, next, component, tailwind, ux, form | frontend-ux-expert |
+| docker, ci/cd, test, tdd, coverage, kubernetes | platform-expert |
+| roadmap, mvp, backlog, user story, rice | product-expert |
+
+Flags: `--deep` (120 líneas) · `--experts backend,security` (consulta múltiple)
+
+Ejemplos:
 
 ```
-Agent007/                           # Root plugin directory
-├── .claude-plugin/
-│   └── plugin.json                 # Plugin manifest
-│
-├── agents/                         # 5 expert agents
-│   ├── backend-db-expert.md
-│   ├── frontend-ux-expert.md
-│   ├── platform-expert.md
-│   ├── product-expert.md
-│   └── security-expert.md
-│
-├── skills/                         # 17 active skills
-│   ├── architecture-patterns/
-│   │   ├── SKILL.md               # Full details (650+ lines)
-│   │   └── SUMMARY.md             # Quick reference (100 lines)
-│   ├── resilience-patterns/
-│   ├── api-design-principles/
-│   ├── nestjs-code-reviewer/
-│   ├── frontend-design/
-│   ├── react-best-practices/
-│   └── ...
-│
-├── commands/                       # Custom commands (optional)
-│   └── consult/
-│       ├── consult.md
-│       └── lib/
-│           ├── skill-selector.js      # Lazy loading
-│           ├── skills-injector.js     # Summary vs full
-│           ├── execution-mode.js      # Plan/Build modes
-│           ├── prompt-builder.js      # Cache optimization
-│           └── context-contracts.js   # Minimal context
-│
-├── settings.json                   # Default plugin configuration
-├── README.md                       # This file
-├── LICENSE                         # MIT
-└── VERSION                         # Semantic versioning
+/consult "¿Cómo implemento circuit breaker en NestJS?"
+/consult "¿Cursor-based o offset pagination para mi API?" --deep
+/consult "¿JWT o session para auth?" --experts backend,security
 ```
 
-### Legacy Structure (Deprecated)
+---
 
-The old `.claude/` directory structure is maintained for backward compatibility:
+### `/ralph-loop "tarea"`
+
+Itera autónomamente hasta que se detecta `<promise>COMPLETE</promise>` en la respuesta. El Stop hook (`ralph-check.js`) bloquea que Claude pare, incrementa el contador e inyecta contexto de continuación en cada iteración.
+
+Routing automático por complejidad:
+
+| Condición | Modo |
+|---|---|
+| ≥ 3 requisitos **o** múltiples tecnologías | **ORCHESTRATED**: worktree → plan → subagents → verify |
+| < 3 requisitos, alcance pequeño | **DIRECT**: implementa directo → verifica |
+
+Formato completo:
+
+```
+/ralph-loop "Implementar herramienta de gestión de proyectos"
+
+Requisitos:
+- Aplicación Next.js + Tailwind con localStorage
+- Tablero Kanban (columnas: Todo / In Progress / Done)
+- Lista de tareas con CRUD completo
+- Sin errores de linter
+
+Criterios de éxito:
+- Todos los requisitos implementados
+- Sin errores de linter
+- Documentación actualizada
+
+Output <promise>COMPLETE</promise> al finalizar. --max-iterations 30 --completion-promise "COMPLETE"
+```
+
+Lo que sucede internamente (modo ORCHESTRATED):
+
+```
+1. Escribe .claude/ralph-state.json con loopId, task, requirements, maxIterations
+2. Banner: RALPH LOOP ACTIVATED — Task / Iterations / Completion promise
+3. /using-git-worktrees → feat/<task-slug> en .worktrees/
+4. /writing-plans → docs/plans/YYYY-MM-DD-<feature>.md
+5. /subagent-driven-development:
+   ├── experto → Tarea 1 → spec review → quality review → commit
+   ├── experto → Tarea 2 → spec review → quality review → commit
+   └── (una por una, sin paralelo)
+6. npm run build && npm run lint (verificación final)
+7. <promise>COMPLETE</promise> + echo COMPLETE > .claude/ralph-complete.txt
+8. Stop hook detecta ralph-complete.txt → permite parar
+```
+
+Si algo falla antes de COMPLETE: el Stop hook bloquea, incrementa iteración e inyecta "continúa trabajando, esto falta: [criterios pendientes]". Claude retoma donde quedó.
+
+---
+
+## Los 5 agentes expertos
+
+| Agente | Dominio |
+|---|---|
+| `backend-db-expert` | APIs, NestJS, TypeORM, microservicios, queries, schema design |
+| `frontend-ux-expert` | React, Next.js, Tailwind, accesibilidad, UX, design systems |
+| `platform-expert` | CI/CD, Docker, testing (TDD/BDD), cobertura, monitoreo |
+| `product-expert` | Product discovery, roadmap, user stories, RICE/ICE, MVP |
+| `security-expert` | OWASP, JWT, threat modeling, GDPR, SOC2 |
+
+Asignación automática por dominio en `subagent-driven-development`:
+
+| Dominio detectado | Agente |
+|---|---|
+| API, DB, NestJS, backend | backend-db-expert |
+| React, Next.js, UI/UX, Tailwind | frontend-ux-expert |
+| CI/CD, tests, infra | platform-expert |
+| Auth, permisos, seguridad | security-expert |
+| Mixed / general | platform-expert |
+
+---
+
+## Hooks
+
+**Stop hook** — se ejecuta al terminar cada turno de Claude:
+1. `ralph-check.js` — si ralph está activo y no existe `ralph-complete.txt`, bloquea el stop e inyecta contexto de continuación con iteración incrementada
+2. Task verifier (prompt LLM) — verifica que la tarea del usuario esté realmente completa antes de permitir parar
+
+**PostToolUse hook** — en cada `Edit` o `Write`:
+- `format-on-save.sh` — formatea el archivo automáticamente
+
+**Notification hook**:
+- Notificación macOS cuando Claude necesita atención
+
+---
+
+## Estructura
 
 ```
 .claude/
-├── agents/                  # Symlink to /agents/
-├── skills/                  # Symlink to /skills/
-├── commands/                # Symlink to /commands/
-├── shared/                  # Shared utilities (deprecated)
-└── metrics/                 # Token tracking (deprecated)
+├── agents/              # 5 definiciones de agentes expertos
+├── commands/            # 9 comandos/skills:
+│   ├── dev.md                          ← comando maestro
+│   ├── consult.md                      ← consulta experta
+│   ├── ralph-loop.md                   ← loop autónomo
+│   ├── brainstorming.md
+│   ├── writing-plans.md
+│   ├── using-git-worktrees.md
+│   ├── subagent-driven-development.md
+│   ├── requesting-code-review.md
+│   └── finishing-a-development-branch.md
+├── skills/              # Skills de dominio (cargados por agentes)
+│   ├── api-design-principles/
+│   ├── architecture-patterns/
+│   ├── resilience-patterns/
+│   ├── nestjs-code-reviewer/
+│   ├── frontend-design/
+│   ├── react-best-practices/
+│   └── security-review/
+├── hooks/
+│   ├── ralph-check.js       # Stop hook: control del ralph loop
+│   └── format-on-save.sh
+├── README.md            # Manual de uso detallado
+├── STATE.md             # Persistencia entre sesiones (auto-cargado)
+└── settings.json        # Permisos, hooks, context includes
 ```
 
-**Migration Note**: New installations should use the plugin structure. The `.claude/` directory is only needed for project-specific overrides.
-
 ---
 
-## 🧪 Quality Enforcement (Always Active)
-
-- **Verification**: No completion claims without actual test/build output
-- **Anti-Rationalization**: No "should work" - only verified facts
-- **Context-Awareness**: Read files before changing
-- **CI/CD Validation**: Automatic validation on PRs
-
----
-
-## 📚 Documentation
-
-- **[ARCHITECTURE.md](ARCHITECTURE.md)** - Technical architecture & orchestration details
-- **[CONTRIBUTING.md](CONTRIBUTING.md)** - Contribution guidelines & code review process
-
----
-
-## 🎯 Workflow Example
+## Instalación en tu proyecto
 
 ```bash
-# 1. User asks question
-/consult "How to implement retry logic with exponential backoff?"
+# Clona el repo
+git clone https://github.com/SebastianDevps/agent007
 
-# 2. Orchestrator detects:
-#    - Keywords: "retry", "exponential backoff"
-#    - Risk: medium
-#    - Expert: backend-db-expert
-
-# 3. Lazy loading:
-#    - Loads ONLY: resilience-patterns/SUMMARY.md
-#    - Skips: api-design-principles, architecture-patterns
-
-# 4. Response:
-#    - Uses cached expert methodology (if available)
-#    - Provides implementation steps
-#    - Total tokens: ~10K (vs 60K before)
+# Copia la carpeta .claude/ a tu proyecto
+cp -r agent007/.claude/ tu-proyecto/.claude/
 ```
 
----
-
-## 🚀 Next Steps
-
-1. **Test optimizations**:
-   ```bash
-   /consult "circuit breaker for S3"
-   # Verify lazy loading works
-   ```
-
-2. **Monitor token usage**:
-   ```bash
-   node analyze-tokens.js
-   # Track actual savings
-   ```
-
-3. **Enable prompt caching** (optional):
-   - Requires Anthropic API with caching support
-   - See `.claude/shared/providers/cached-anthropic-client.js`
+Los hooks y comandos se activan automáticamente al abrir Claude Code en el directorio del proyecto.
 
 ---
 
-## 🤝 Contributing
+## Licencia
 
-Agent007 is **open source** and welcomes contributions!
-
-**How to Contribute**:
-1. 📖 Read [CONTRIBUTING.md](CONTRIBUTING.md)
-2. 🐛 Report bugs via [Issues](https://github.com/SebastianDevps/agent007/issues)
-3. 💡 Suggest features (subject to review)
-4. 🔧 Submit PRs (requires approval)
-
-**Note**: All PRs are reviewed by the core team to ensure quality and architecture consistency.
-
-### Ways to Help
-
-- Report bugs and suggest improvements
-- Improve documentation
-- Add examples and use cases
-- Share your experience using Agent007
-
-See [CONTRIBUTING.md](CONTRIBUTING.md) for detailed guidelines.
-
----
-
-## 📄 License
-
-MIT License - See [LICENSE](LICENSE)
-
----
-
-## 📞 Support
-
-- **Issues**: [GitHub Issues](https://github.com/SebastianDevps/agent007/issues)
-- **Discussions**: [GitHub Discussions](https://github.com/SebastianDevps/agent007/discussions)
-- **Documentation**: See links above
-
----
-
-<p align="center">
-  <strong>Agent007 v2.0.0</strong> - Intelligent Development Orchestration
-  <br>
-  Made with ❤️ by the Sebastian Guerra
-</p>
+MIT — ver [LICENSE](LICENSE)

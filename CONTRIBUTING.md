@@ -2,269 +2,203 @@
 
 Thank you for your interest in contributing to Agent007! This document provides guidelines for contributing to the project.
 
+## 🚀 Quick Start
+
+1. **Fork the repository** and clone your fork
+2. **Read the documentation** in `.claude/CLAUDE.md` to understand the architecture
+3. **Check existing issues** or create a new one to discuss your contribution
+4. **Make your changes** following the guidelines below
+5. **Submit a pull request** with a clear description
+
+## 📋 Contribution Areas
+
+### 1. Skills Development
+- Create new skills for specific workflows
+- Improve existing skills with better prompts or patterns
+- Add reference materials to skills using `references/` directory
+
+### 2. Agent Enhancement
+- Improve agent prompts and methodologies
+- Add new expert agents for different domains
+- Enhance agent selection logic in orchestrator
+
+### 3. Documentation
+- Improve README and setup guides
+- Add examples and use cases
+- Write tutorials or walkthroughs
+
+### 4. Quality & Testing
+- Add validation scripts
+- Improve test coverage
+- Report bugs or edge cases
+
+## 🛠️ Development Guidelines
+
+### Skill Development Standards
+
+When creating or modifying skills, follow the **Frontmatter Standard**:
+
+```yaml
 ---
-
-## 🎯 Contribution Model
-
-Agent007 follows a **reviewed contribution model**:
-
-- ✅ **Issues**: Anyone can create issues for bugs, features, or questions
-- ✅ **Discussions**: Open for community questions and ideas
-- ⚠️ **Pull Requests**: Require core team review and approval before merge
-- ❌ **Direct Commits**: Only core team members can commit directly to `main`
-
-**Why?** This ensures:
-- Architecture consistency across the codebase
-- Token optimization strategies remain effective
-- Quality standards are maintained
-- Breaking changes are carefully evaluated
-
+name: skill-name              # kebab-case, required
+description: "..."            # Include trigger phrases, required
+version: X.Y.Z                # Semver, required
+invokable: true/false         # User can call directly?, required
+accepts_args: true/false      # Accepts arguments?, optional
+allowed-tools: [...]          # Tool restrictions, optional
+when:                         # Auto-activation conditions, optional
+  - task_type: [...]
+    risk_level: [...]
 ---
-
-## 🐛 Reporting Bugs
-
-### Before Submitting a Bug Report
-
-1. **Update to latest**: Run `/plugin update agent007`
-2. **Search existing issues**: Check if it's already reported
-3. **Reproduce**: Ensure the bug is reproducible
-
-### How to Submit
-
-Use the [Bug Report template](https://github.com/SebastianDevps/agent007/issues/new?template=bug_report.yml)
-
-**Include**:
-- Clear description
-- Steps to reproduce
-- Expected vs actual behavior
-- Agent007 version
-- Relevant logs/screenshots
-
----
-
-## 💡 Suggesting Features
-
-### Before Suggesting a Feature
-
-1. **Search existing issues**: Check if someone else suggested it
-2. **Read ARCHITECTURE.md**: Understand how Agent007 works
-3. **Consider scope**: Does it fit Agent007's purpose?
-
-### How to Suggest
-
-Use the [Feature Request template](https://github.com/SebastianDevps/agent007/issues/new?template=feature_request.yml)
-
-**Include**:
-- Problem statement (what pain point does this solve?)
-- Proposed solution
-- Use case examples
-- Alternatives you've considered
-
-**Note**: All feature requests are reviewed by the core team. Not all features will be accepted, even if well-intentioned.
-
----
-
-## 🔧 Contributing Code
-
-### Getting Started
-
-1. **Fork the repository**
-2. **Clone your fork**:
-   ```bash
-   git clone https://github.com/YOUR-USERNAME/agent007.git
-   cd agent007
-   ```
-3. **Create a branch**:
-   ```bash
-   git checkout -b feature/your-feature-name
-   ```
-
-### Development Setup
-
-**Test locally**:
-```bash
-# In any project directory
-claude --plugin-dir /path/to/agent007
-
-# Test your changes
-/agent007:consult "test query"
 ```
 
-### Making Changes
+**Description Requirements**:
+- Must include "Use when user asks to..." trigger phrases
+- Should clearly explain what the skill does
+- Keep it concise (1-3 sentences)
 
-**Guidelines**:
+**File Organization**:
+- Skills >600 lines: Use `references/` for lookup tables, checklists, examples
+- Keep behavioral instructions in main `SKILL.md`
+- Add `SUMMARY.md` (50 lines) for large skills
 
-1. **One Feature Per PR**: Focus on a single bug/feature per pull request
-2. **Follow Existing Patterns**: Match the architecture and code style
-3. **Update Documentation**: Update README.md, ARCHITECTURE.md as needed
-4. **Test Thoroughly**: Verify your changes don't break existing functionality
-5. **Consider Token Impact**: If your change affects token consumption, document it
+### Validation Before Submitting
 
-**Code Style**:
-- Use clear, descriptive variable names
-- Add comments for complex logic
-- Follow existing markdown formatting for skills
-- Keep skills under 700 lines (create SUMMARY.md for >100 lines)
+Run validation scripts:
+```bash
+node .claude/scripts/validate-frontmatter.js
+```
 
-### Submitting a Pull Request
+Ensure:
+- ✅ YAML frontmatter parses correctly
+- ✅ All required fields present
+- ✅ No duplicate skill names
+- ✅ File size reasonable (<1500 lines)
 
-1. **Push to your fork**:
-   ```bash
-   git push origin feature/your-feature-name
-   ```
+### Commit Message Format
 
-2. **Create PR** from your fork to `SebastianDevps/agent007:main`
+Use conventional commits:
+```
+type(scope): brief description
 
-3. **Fill out PR template** completely
+Longer description if needed
 
-4. **Link related issue**: All PRs must reference an issue
+Co-Authored-By: Claude Sonnet 4.5 <noreply@anthropic.com>
+```
 
-5. **Wait for review**: Core team will review and provide feedback
+**Types**: feat, fix, docs, refactor, test, chore
 
-**PR Review Process**:
-- Initial review: 2-7 days
-- Feedback provided via PR comments
-- You may be asked to make changes
-- Approval required before merge
-
----
-
-## 📚 Documentation Contributions
-
-Documentation improvements are always welcome!
-
-**Where to contribute**:
-- Fix typos or unclear sections in README.md
-- Improve ARCHITECTURE.md explanations
-- Add examples to INSTALLATION.md
-- Enhance skill documentation
-
-**Process**:
-1. Create an issue describing the documentation improvement
-2. Submit a PR with changes
-3. Use the PR template (mark as "Documentation update")
-
----
-
-## 🎓 Adding Skills or Agents
-
-### Adding a New Skill
-
-**Requirements**:
-1. Must fit within an existing expert's domain
-2. Must provide clear value (not duplicate existing skills)
-3. Must follow skill structure:
-   ```
-   /skills/{category}/{skill-name}/
-   ├── SKILL.md (full, 500-700 lines max)
-   └── SUMMARY.md (100 lines max)
-   ```
-
-**Process**:
-1. Create an issue proposing the skill
-2. Wait for core team approval
-3. Implement following the template (see existing skills)
-4. Submit PR with both SKILL.md and SUMMARY.md
-
-### Adding a New Expert Agent
-
-**Requirements**:
-- Must cover a distinct domain not covered by existing experts
-- Must have at least 2-3 associated skills
-- Requires strong justification (experts are intentionally limited to 5)
-
-**Process**:
-1. Create a detailed proposal issue
-2. Discuss with core team (expect extensive review)
-3. Only proceed if approved
-
----
-
-## 🚫 What NOT to Contribute
-
-**We won't accept**:
-
-- ❌ Breaking changes without strong justification
-- ❌ Features that significantly increase token consumption
-- ❌ Changes that don't follow existing architecture patterns
-- ❌ Duplicate functionality (check existing skills first)
-- ❌ Unrelated changes bundled together in one PR
-- ❌ Changes without proper documentation
-- ❌ PRs without linked issues
-
----
-
-## 🧪 Testing Guidelines
+## 🧪 Testing
 
 ### Manual Testing Checklist
 
-Before submitting a PR, test:
+When adding/modifying skills:
+1. Test that skill activates correctly with trigger phrases
+2. Verify integration with related skills (sub-skills, transitions)
+3. Check that `allowed-tools` restrictions work
+4. Test edge cases and error handling
 
-- [ ] Installation: `/plugin install` from local directory works
-- [ ] Basic functionality: `/agent007:consult "test query"` works
-- [ ] No regressions: Existing skills still work
-- [ ] Documentation: README examples are accurate
-- [ ] No errors in logs
+### Behavioral Testing
 
-### Automated Testing (Future)
+Document test cases in `.claude/skills/TEST_SUITE.md`:
+```markdown
+## Test: [Skill Name] Auto-Activation
+**Input**: "[User prompt]"
+**Expected**: [Expected behavior]
+**Actual**: [PASS/FAIL]
+```
 
-We plan to add:
-- Unit tests for skill-selector.js
-- Integration tests for orchestration flow
-- Token consumption benchmarks
+## 📝 Pull Request Process
 
-Contributions to testing infrastructure are welcome!
+1. **Create a descriptive PR title**
+   - Good: "feat(skills): Add security-review skill with OWASP checklist"
+   - Bad: "Update files"
 
----
+2. **Describe your changes**
+   - What problem does this solve?
+   - How does it work?
+   - Any breaking changes?
 
-## 📞 Getting Help
+3. **Link related issues**
+   - Use "Fixes #123" or "Relates to #456"
 
-**Need help contributing?**
+4. **Request review**
+   - Tag relevant maintainers
+   - Be responsive to feedback
 
-- 💬 **GitHub Discussions**: https://github.com/SebastianDevps/agent007/discussions
-- 🎫 **Create a Question Issue**: Use the [Question template](https://github.com/SebastianDevps/agent007/issues/new?template=question.yml)
-- 📖 **Read Documentation**: See ARCHITECTURE.md for technical details
+## 🎯 Skill Development Guide
 
----
+### Creating a New Skill
 
-## 🏆 Recognition
+1. **Choose the right location**:
+   ```
+   .claude/skills/
+   ├── _core/              # Quality enforcement (verification, anti-rationalization)
+   ├── _orchestration/     # Session orchestration
+   ├── workflow/           # Development workflows (brainstorming, TDD, planning)
+   ├── quality-gates/      # Quality checks (debugging, architecture review)
+   ├── product/            # Product management
+   ├── devrel/             # Developer relations
+   └── [domain]/           # Domain-specific (api-design, frontend-design, etc.)
+   ```
 
-Contributors will be recognized in:
-- Release notes (for merged PRs)
-- CONTRIBUTORS.md file (planned)
-- GitHub contributors page
+2. **Use the template**:
+   ```markdown
+   ---
+   name: my-skill
+   description: "Brief description. Use when user asks to 'keyword1' or 'keyword2'."
+   version: 1.0.0
+   invokable: true
+   ---
+   
+   # Skill Name - Brief Title
+   
+   **Purpose**: What this skill does
+   
+   **When to use**: Conditions for activation
+   
+   ## Process
+   
+   [Step-by-step workflow]
+   
+   ## Output
+   
+   [What this skill produces]
+   
+   ## Integration
+   
+   [How this connects to other skills]
+   ```
 
----
+3. **Test thoroughly** before submitting
 
-## 📄 License
+### Extending Existing Skills
 
-By contributing to Agent007, you agree that your contributions will be licensed under the [MIT License](LICENSE).
+1. Read the skill completely first
+2. Understand its purpose and integration points
+3. Make minimal changes - avoid scope creep
+4. Test that existing functionality still works
+5. Update version number (semver)
 
----
+## ❓ Questions?
 
-## ✅ Quick Contribution Checklist
+- **General questions**: Open a GitHub Discussion
+- **Bug reports**: Create an issue with reproduction steps
+- **Feature requests**: Create an issue describing the use case
+- **Security issues**: Email security@agent007.dev (if applicable)
 
-Before submitting a PR, ensure:
+## 📜 Code of Conduct
 
-- [ ] I created an issue first and it was discussed
-- [ ] I read CONTRIBUTING.md (this file)
-- [ ] I read ARCHITECTURE.md to understand the system
-- [ ] My code follows existing patterns
-- [ ] I tested locally with `/plugin install` from directory
-- [ ] I updated documentation (README, ARCHITECTURE, etc.)
-- [ ] I created SUMMARY.md if adding/updating skills
-- [ ] My PR focuses on ONE feature/fix
-- [ ] I filled out the PR template completely
-- [ ] I linked the related issue in my PR
+- Be respectful and inclusive
+- Focus on constructive feedback
+- Help others learn and grow
+- Assume good intentions
 
----
+## 🎉 Recognition
 
-## 🙏 Thank You
+Contributors will be:
+- Listed in CHANGELOG.md for each release
+- Credited in commit messages (Co-Authored-By)
+- Mentioned in release notes for significant contributions
 
-Thank you for contributing to Agent007! Your contributions help make this tool better for everyone.
-
-**Questions?** Open an issue or start a discussion. We're here to help!
-
----
-
-**Sebastian Guerra**
+Thank you for contributing to Agent007!
