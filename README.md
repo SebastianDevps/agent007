@@ -7,7 +7,7 @@
 ║/_/ \_\___|___|_|\_| |_|  \___/\___//_ /                            ║
 ║                                                                    ║
 ║  Autonomous AI Development Team · v4.1 · by Sebastian Guerra       ║
-║  5 agents · 42 skills · 16 commands                                ║
+║  5 agents · 41 skills · 16 commands                                ║
 ║                                                                    ║
 ║  ▸ /dev "task"         → auto-classifies & routes                  ║
 ║  ▸ /consult "question" → expert consultation                       ║
@@ -16,9 +16,6 @@
 ║                                                                    ║
 ╚════════════════════════════════════════════════════════════════════╝
 ```
-
-# Agent007
-
 Plugin para Claude Code que resuelve dos problemas concretos: Claude para demasiado pronto y responde genéricamente sin contexto de dominio. Agent007 agrega un loop de iteración autónoma que bloquea el stop hasta que la tarea esté verificablemente completa, y un sistema de routing que inyecta skills especializados antes de responder.
 
 **No es un IDE, no tiene UI, no reemplaza a Cursor.** Se usa con Claude Code CLI cuando necesitas control preciso del pipeline de desarrollo.
