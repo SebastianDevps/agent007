@@ -113,6 +113,9 @@
     "orchestration": [
       "session-orchestrator",
       "ralph-loop-wrapper"
+    ],
+    "bootstrap": [
+      "using-agent007"
     ]
   },
   "hooks": {

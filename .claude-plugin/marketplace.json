@@ -1,0 +1,20 @@
+{
+  "name": "agent007-marketplace",
+  "description": "Agent007 — Autonomous AI Development Team for Claude Code",
+  "owner": {
+    "name": "Sebastian Guerra",
+    "email": "contact@agent007.dev"
+  },
+  "plugins": [
+    {
+      "name": "agent007",
+      "description": "5 expert agents, 42 skills, 16 commands. /dev auto-classifies tasks, /ralph-loop iterates until completion, /consult injects domain expert context.",
+      "version": "4.1.0",
+      "source": "./",
+      "author": {
+        "name": "Sebastian Guerra",
+        "email": "contact@agent007.dev"
+      }
+    }
+  ]
+}
