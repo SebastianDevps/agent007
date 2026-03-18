@@ -32,7 +32,6 @@
     "planning"
   ],
   "commands": "./commands/",
-  "agents": "./agents/",
   "skills": "./skills/",
   "hooks": {
     "SessionStart": [
