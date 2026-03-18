@@ -3,7 +3,7 @@
   "description": "Agent007 — Autonomous AI Development Team for Claude Code",
   "owner": {
     "name": "Sebastian Guerra",
-    "email": "contact@agent007.dev"
+    "email": "guerrasebastian16@gmail.com"
   },
   "plugins": [
     {
@@ -13,7 +13,7 @@
       "source": "./",
       "author": {
         "name": "Sebastian Guerra",
-        "email": "contact@agent007.dev"
+        "email": "guerrasebastian16@gmail.com"
       }
     }
   ]
