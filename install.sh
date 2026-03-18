@@ -1,5 +1,5 @@
 #!/usr/bin/env bash
-# install.sh — Agent007 manual installer (git clone distribution)
+# install.sh — Agent007 installer (git clone distribution)
 # Usage: bash install.sh [target-directory]
 #   target-directory defaults to current directory
 
@@ -24,12 +24,11 @@ cat << 'BANNER'
 BANNER
 printf "${RESET}"
 printf "  ${DIM}autor: Sebastian Guerra${RESET}\n"
-printf "  ${DIM}v4.1 · 41 skills · 5 agents · 16 commands${RESET}\n"
+printf "  ${DIM}v4.1 · 42 skills · 5 agents · 16 commands${RESET}\n"
 echo ""
 
 # ── Resolve paths ───────────────────────────────────────────────────────────────
 SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")" && pwd)"
-SOURCE_DIR="$SCRIPT_DIR/.claude"
 TARGET_DIR="${1:-$(pwd)}"
 
 if [ ! -d "$TARGET_DIR" ]; then
@@ -37,10 +36,13 @@ if [ ! -d "$TARGET_DIR" ]; then
   exit 1
 fi
 
-if [ ! -d "$SOURCE_DIR" ]; then
-  printf "${RED}❌  .claude/ not found in $SCRIPT_DIR — run this from the Agent007 repo root${RESET}\n"
-  exit 1
-fi
+# ── Verify source completeness ──────────────────────────────────────────────────
+for required in agents commands skills hooks CLAUDE.md claude-settings.json; do
+  if [ ! -e "$SCRIPT_DIR/$required" ]; then
+    printf "${RED}❌  Missing required file/dir: $required — run this from the Agent007 repo root${RESET}\n"
+    exit 1
+  fi
+done
 
 DEST="$TARGET_DIR/.claude"
 
@@ -56,11 +58,39 @@ if [ -d "$DEST" ]; then
       exit 0
       ;;
   esac
+  rm -rf "$DEST"
 fi
 
-# ── Copy ─────────────────────────────────────────────────────────────────────────
+# ── Install ───────────────────────────────────────────────────────────────────────
 printf "📦 Installing to ${BOLD}$TARGET_DIR/.claude/${RESET} ...\n"
-cp -r "$SOURCE_DIR/" "$DEST/"
+
+mkdir -p "$DEST"
+cp -r "$SCRIPT_DIR/agents"   "$DEST/agents"
+cp -r "$SCRIPT_DIR/commands" "$DEST/commands"
+cp -r "$SCRIPT_DIR/skills"   "$DEST/skills"
+cp -r "$SCRIPT_DIR/hooks"    "$DEST/hooks"
+cp    "$SCRIPT_DIR/CLAUDE.md"              "$DEST/CLAUDE.md"
+cp    "$SCRIPT_DIR/claude-settings.json"   "$DEST/settings.json"
+
+# Create fresh STATE.md
+cat > "$DEST/STATE.md" << 'STATE'
+# STATE.md — Agent007 Session State
+
+## Tarea Activa
+ninguna
+
+## Branch
+main
+
+## Tareas Completadas
+(ninguna aún)
+
+## Decisiones Tomadas
+(ninguna aún)
+
+## Resumen de Última Sesión
+(primera sesión)
+STATE
 
 # Make hooks executable
 find "$DEST/hooks" -type f \( -name "*.sh" -o -name "*.js" -o -name "*.py" \) \

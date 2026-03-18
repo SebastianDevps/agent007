@@ -1,0 +1,158 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/welcome.py'"
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/memory-check.py'"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/subagent-start.py'"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && node .claude/hooks/ralph-check.js'"
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/stop-state-sync.py'"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && node .claude/hooks/agent007-statusline.js'"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/sdd-test-guard.py'"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/context-window-guard.py'"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/format-on-save.py'"
+          },
+          {
+            "type": "command",
+            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/sdd-auto-test.py'"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/constraint-reinforcement.py'"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "bash -c 'if command -v osascript &>/dev/null; then osascript -e '\"'\"'display notification \"Claude necesita tu atención\" with title \"Agent007\" sound name \"Glass\"'\"'\"' 2>/dev/null; elif command -v notify-send &>/dev/null; then notify-send \"Agent007\" \"Claude necesita tu atención\" 2>/dev/null; fi; true'"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(git:*)",
+      "Bash(mkdir:*)",
+      "Bash(pnpm:*)",
+      "Bash(bun:*)",
+      "Bash(echo:*)",
+      "Bash(rm:*)",
+      "Bash(node:*)",
+      "Bash(python3:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(gh:*)",
+      "Bash(chmod:*)"
+    ],
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(sudo:*)",
+      "Write(.env)",
+      "Edit(.env)"
+    ]
+  },
+  "context": {
+    "include": [
+      ".claude/CLAUDE.md",
+      ".claude/STATE.md",
+      "plugins/**/*.md",
+      "docs/**/*.md"
+    ],
+    "exclude": [
+      "node_modules/**",
+      "dist/**",
+      ".git/**",
+      ".claude/skills/**",
+      ".claude/agents/**",
+      ".claude/**/_archive/**",
+      ".claude/metrics/**",
+      ".claude/commands/**/*.md"
+    ]
+  },
+  "maxOutputTokens": 64000,
+  "maxFileReadTokens": 100000,
+  "experimental": {
+    "agentTeams": true
+  }
+}
