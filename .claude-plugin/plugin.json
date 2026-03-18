@@ -1,7 +1,7 @@
 {
   "name": "agent007",
-  "description": "Agent007 - Autonomous AI Development Team. 5 expert agents, 26 skills, 9 workflow commands, and full autonomous orchestration: /dev classifies and routes tasks, /ralph-loop iterates until completion, /consult selects the right expert automatically. Includes Stop hook for guaranteed task completion and cross-session state persistence.",
-  "version": "3.0.0",
+  "description": "Agent007 - Autonomous AI Development Team. 5 expert agents, 41 skills, 16 commands — /dev auto-classifies and routes tasks, /ralph-loop iterates until completion, /consult injects domain expert context. Cross-platform (macOS/Linux/Windows). First-session welcome banner.",
+  "version": "4.1.0",
   "author": {
     "name": "Sebastian Guerra",
     "email": "contact@agent007.dev"
@@ -92,8 +92,9 @@
     ]
   },
   "hooks": {
+    "sessionStart": "hooks/welcome.py",
     "stop": "hooks/ralph-check.js",
-    "postToolUse": "hooks/format-on-save.sh"
+    "postToolUse": "hooks/format-on-save.py"
   },
   "features": [
     "Autonomous task classification and routing (simple/medium/complex)",
