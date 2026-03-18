@@ -31,100 +31,90 @@
     "subagents",
     "planning"
   ],
-  "commands": [
-    "/dev",
-    "/consult",
-    "/ralph-loop",
-    "/brainstorming",
-    "/writing-plans",
-    "/using-git-worktrees",
-    "/subagent-driven-development",
-    "/requesting-code-review",
-    "/finishing-a-development-branch",
-    "/commit",
-    "/changelog",
-    "/deep-research",
-    "/prompt-gen",
-    "/pull-request",
-    "/scenario-driven-development",
-    "/verification-before-completion"
-  ],
-  "agents": [
-    "backend-db-expert",
-    "frontend-ux-expert",
-    "platform-expert",
-    "product-expert",
-    "security-expert"
-  ],
-  "skills": {
-    "domain": [
-      "api-design-principles",
-      "architecture-patterns",
-      "resilience-patterns",
-      "nestjs-code-reviewer",
-      "frontend-design",
-      "react-best-practices",
-      "security-review"
-    ],
-    "workflow": [
-      "brainstorming",
-      "writing-plans",
-      "commit",
-      "changelog",
-      "deep-research",
-      "prompt-gen",
-      "pull-request",
-      "scenario-driven-development",
-      "verification-before-completion",
-      "subagent-driven-development",
-      "using-git-worktrees",
-      "requesting-code-review",
-      "finishing-a-development-branch",
-      "branch-cleanup",
-      "context-engineering",
-      "dispatching-parallel-agents",
-      "humanizer",
-      "skill-creator"
-    ],
-    "sop": [
-      "sop-discovery",
-      "sop-planning",
-      "sop-code-assist",
-      "sop-reviewer",
-      "sop-reverse"
-    ],
-    "quality-gates": [
-      "systematic-debugging",
-      "architecture-review"
-    ],
-    "product": [
-      "product-discovery"
-    ],
-    "devrel": [
-      "api-documentation"
-    ],
-    "core": [
-      "anti-rationalization",
-      "context-awareness",
-      "verification-enforcement",
-      "decision-memory",
-      "session-state"
-    ],
-    "orchestration": [
-      "session-orchestrator",
-      "ralph-loop-wrapper"
-    ],
-    "bootstrap": [
-      "using-agent007"
-    ]
-  },
+  "commands": "./commands/",
+  "agents": "./agents/",
+  "skills": "./skills/",
   "hooks": {
-    "sessionStart": ["hooks/welcome.py", "hooks/memory-check.py"],
-    "subagentStart": "hooks/subagent-start.py",
-    "stop": ["hooks/ralph-check.js", "hooks/stop-state-sync.py"],
-    "preToolUse": ["hooks/agent007-statusline.js", "hooks/sdd-test-guard.py"],
-    "postToolUse": ["hooks/context-window-guard.py", "hooks/format-on-save.py", "hooks/sdd-auto-test.py"],
-    "userPromptSubmit": "hooks/constraint-reinforcement.py"
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/welcome.py"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/memory-check.py"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/subagent-start.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ralph-check.js"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/stop-state-sync.py"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/agent007-statusline.js"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/sdd-test-guard.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/context-window-guard.py"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/format-on-save.py"
+          },
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/sdd-auto-test.py"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/constraint-reinforcement.py"
+          }
+        ]
+      }
+    ]
   },
   "features": [
     "Autonomous task classification and routing (simple/medium/complex)",
