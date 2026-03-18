@@ -39,11 +39,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/welcome.py"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/welcome.py"
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/memory-check.py"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/memory-check.py"
           }
         ]
       }
@@ -53,7 +53,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/subagent-start.py"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/subagent-start.py"
           }
         ]
       }
@@ -63,11 +63,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/ralph-check.js"
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/ralph-check.js"
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/stop-state-sync.py"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/stop-state-sync.py"
           }
         ]
       }
@@ -77,11 +77,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/agent007-statusline.js"
+            "command": "node ${CLAUDE_PLUGIN_ROOT}/hooks/agent007-statusline.js"
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/sdd-test-guard.py"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/sdd-test-guard.py"
           }
         ]
       }
@@ -91,15 +91,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/context-window-guard.py"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/context-window-guard.py"
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/format-on-save.py"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/format-on-save.py"
           },
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/sdd-auto-test.py"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/sdd-auto-test.py"
           }
         ]
       }
@@ -109,7 +109,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "${CLAUDE_PLUGIN_ROOT}/hooks/constraint-reinforcement.py"
+            "command": "python3 ${CLAUDE_PLUGIN_ROOT}/hooks/constraint-reinforcement.py"
           }
         ]
       }
