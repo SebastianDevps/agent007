@@ -1,3 +1,22 @@
+```
+╔════════════════════════════════════════════════════════════════════╗
+║                                                                    ║
+║   _  ___  ___ _  _  ____  ___  ___  _____                          ║
+║  /_\/ __ | _ | \| ||_  _|/ _ \/ _ \| __ /                          ║
+║ / _ \ (_ | _ | .` | | | | (_)| (_)| /  /                           ║
+║/_/ \_\___|___|_|\_| |_|  \___/\___//_ /                            ║
+║                                                                    ║
+║  Autonomous AI Development Team · v4.1 · by Sebastian Guerra       ║
+║  5 agents · 42 skills · 16 commands                                ║
+║                                                                    ║
+║  ▸ /dev "task"         → auto-classifies & routes                  ║
+║  ▸ /consult "question" → expert consultation                       ║
+║  ▸ /ralph-loop "task"  → autonomous loop until COMPLETE            ║
+║  ▸ /prompt-gen         → convert /consult output to /dev prompt    ║
+║                                                                    ║
+╚════════════════════════════════════════════════════════════════════╝
+```
+
 # Agent007
 
 Plugin para Claude Code que resuelve dos problemas concretos: Claude para demasiado pronto y responde genéricamente sin contexto de dominio. Agent007 agrega un loop de iteración autónoma que bloquea el stop hasta que la tarea esté verificablemente completa, y un sistema de routing que inyecta skills especializados antes de responder.
