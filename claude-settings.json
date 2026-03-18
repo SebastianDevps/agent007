@@ -134,6 +134,7 @@
   },
   "context": {
     "include": [
+      ".claude/skills/using-agent007/SKILL.md",
       ".claude/CLAUDE.md",
       ".claude/STATE.md",
       "plugins/**/*.md",
