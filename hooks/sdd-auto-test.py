@@ -14,11 +14,13 @@ import subprocess
 import sys
 import tempfile
 import hashlib
+import threading
 import time
 from typing import Optional
 
 STATE_DIR = "/tmp/agent007-sdd"
-PID_FILE = os.path.join(STATE_DIR, "test-runner.pid")
+LOCK_FILE = os.path.join(STATE_DIR, "test-runner.lock")
+VITEST_WORKER_FLAGS = "--pool=forks --poolOptions.forks.maxForks=2"
 RESULT_FILE = os.path.join(STATE_DIR, "last-test-result.json")
 TTL_SECONDS = 600  # 10 minutes
 
@@ -38,6 +40,11 @@ def is_source_file(path: str) -> bool:
     _, ext = os.path.splitext(path)
     return ext in SOURCE_EXTENSIONS
 
+def _uses_vitest(scripts: dict) -> bool:
+    """Check if the test script invokes vitest."""
+    test_val = scripts.get("test", "")
+    return "vitest" in test_val
+
 def detect_test_command(cwd: str) -> Optional[str]:
     """Detect the test command for the current project."""
     # Check package.json for test script
@@ -50,10 +57,16 @@ def detect_test_command(cwd: str) -> Optional[str]:
             if "test" in scripts:
                 # Determine package manager
                 if os.path.exists(os.path.join(cwd, "bun.lockb")):
+                    if _uses_vitest(scripts):
+                        return f"bun test {VITEST_WORKER_FLAGS} --timeout 30000 2>&1 | head -100"
                     return "bun test --timeout 30000 2>&1 | head -100"
                 elif os.path.exists(os.path.join(cwd, "pnpm-lock.yaml")):
+                    if _uses_vitest(scripts):
+                        return f"pnpm test -- {VITEST_WORKER_FLAGS} --passWithNoTests 2>&1 | head -100"
                     return "pnpm test --passWithNoTests 2>&1 | head -100"
                 else:
+                    if _uses_vitest(scripts):
+                        return f"npm test -- {VITEST_WORKER_FLAGS} --passWithNoTests 2>&1 | head -100"
                     return "npm test -- --passWithNoTests 2>&1 | head -100"
         except (json.JSONDecodeError, OSError):
             pass
@@ -74,18 +87,28 @@ def detect_test_command(cwd: str) -> Optional[str]:
 
     return None
 
-def is_already_running() -> bool:
-    """Check if a test worker is already running."""
+def acquire_lock() -> bool:
+    """Atomic lock using O_CREAT|O_EXCL — no race window between check and create."""
     os.makedirs(STATE_DIR, exist_ok=True)
-    if not os.path.exists(PID_FILE):
-        return False
     try:
-        with open(PID_FILE) as f:
-            pid = int(f.read().strip())
-        os.kill(pid, 0)  # Signal 0 = check existence
+        fd = os.open(LOCK_FILE, os.O_CREAT | os.O_EXCL | os.O_WRONLY)
+        os.write(fd, str(os.getpid()).encode())
+        os.close(fd)
         return True
-    except (ValueError, OSError, ProcessLookupError):
-        return False
+    except FileExistsError:
+        # Lock exists — check if owning process is still alive
+        try:
+            with open(LOCK_FILE) as f:
+                pid = int(f.read().strip())
+            os.kill(pid, 0)  # Signal 0 = check liveness, raises OSError if dead
+            return False  # Process alive — skip this run
+        except (ValueError, OSError):
+            # Stale lock (process dead) — remove and acquire
+            try:
+                os.unlink(LOCK_FILE)
+            except OSError:
+                pass
+            return acquire_lock()
 
 def run_tests_background(test_cmd: str, cwd: str):
     """Fork test process, ~10ms blocking."""
@@ -96,7 +119,7 @@ def run_tests_background(test_cmd: str, cwd: str):
 import subprocess, json, os, time
 
 result_file = {repr(RESULT_FILE)}
-pid_file = {repr(PID_FILE)}
+lock_file = {repr(LOCK_FILE)}
 
 try:
     proc = subprocess.run(
@@ -120,15 +143,15 @@ try:
         }}, f)
 finally:
     try:
-        os.remove(pid_file)
+        os.remove(lock_file)
     except OSError:
         pass
 """
 
-    script_file = tempfile.mktemp(suffix=".py", prefix="agent007-test-")
     try:
-        with open(script_file, "w") as f:
-            f.write(worker_script)
+        with tempfile.NamedTemporaryFile(mode='w', suffix='.py', prefix='agent007-test-', delete=False) as tf:
+            tf.write(worker_script)
+            script_file = tf.name
 
         proc = subprocess.Popen(
             [sys.executable, script_file],
@@ -138,8 +161,22 @@ finally:
             stderr=subprocess.DEVNULL
         )
 
-        with open(PID_FILE, "w") as f:
-            f.write(str(proc.pid))
+        # Update lock with child PID — parent exits soon, child holds the lock
+        try:
+            with open(LOCK_FILE, 'w') as f:
+                f.write(str(proc.pid))
+        except OSError:
+            pass
+
+        # Cleanup temp script after child has had time to read it
+        def _cleanup_script(path: str) -> None:
+            time.sleep(1.0)
+            try:
+                os.unlink(path)
+            except OSError:
+                pass
+
+        threading.Thread(target=_cleanup_script, args=(script_file,), daemon=True).start()
 
     except OSError:
         pass  # Best effort — never block Claude
@@ -183,8 +220,8 @@ def main():
     if not test_cmd:
         sys.exit(0)
 
-    # Start background test run (debounced)
-    if not is_already_running():
+    # Start background test run (atomic lock — no race window)
+    if acquire_lock():
         run_tests_background(test_cmd, cwd)
 
     # Check if previous run result is ready to report
