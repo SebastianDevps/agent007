@@ -5,11 +5,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/welcome.py'"
+            "command": "bash -c 'set -- $(git worktree list 2>/dev/null | head -1); cd $1 && python3 .claude/hooks/welcome.py'"
           },
           {
             "type": "command",
-            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/memory-check.py'"
+            "command": "bash -c 'set -- $(git worktree list 2>/dev/null | head -1); cd $1 && python3 .claude/hooks/memory-check.py'"
           }
         ]
       }
@@ -19,7 +19,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/subagent-start.py'"
+            "command": "bash -c 'set -- $(git worktree list 2>/dev/null | head -1); cd $1 && python3 .claude/hooks/subagent-start.py'"
           }
         ]
       }
@@ -29,11 +29,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && node .claude/hooks/ralph-check.js'"
+            "command": "bash -c 'set -- $(git worktree list 2>/dev/null | head -1); cd $1 && node .claude/hooks/ralph-check.js'"
           },
           {
             "type": "command",
-            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/stop-state-sync.py'"
+            "command": "bash -c 'set -- $(git worktree list 2>/dev/null | head -1); cd $1 && python3 .claude/hooks/stop-state-sync.py'"
           }
         ]
       }
@@ -43,7 +43,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && node .claude/hooks/agent007-statusline.js'"
+            "command": "bash -c 'set -- $(git worktree list 2>/dev/null | head -1); cd $1 && node .claude/hooks/agent007-statusline.js'"
           }
         ]
       },
@@ -52,7 +52,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/sdd-test-guard.py'"
+            "command": "bash -c 'set -- $(git worktree list 2>/dev/null | head -1); cd $1 && python3 .claude/hooks/sdd-test-guard.py'"
           }
         ]
       }
@@ -62,7 +62,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/context-window-guard.py'"
+            "command": "bash -c 'set -- $(git worktree list 2>/dev/null | head -1); cd $1 && python3 .claude/hooks/context-window-guard.py'"
           }
         ]
       },
@@ -71,11 +71,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/format-on-save.py'"
+            "command": "bash -c 'set -- $(git worktree list 2>/dev/null | head -1); cd $1 && python3 .claude/hooks/format-on-save.py'"
           },
           {
             "type": "command",
-            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/sdd-auto-test.py'"
+            "command": "bash -c 'set -- $(git worktree list 2>/dev/null | head -1); cd $1 && python3 .claude/hooks/sdd-auto-test.py'"
           }
         ]
       }
@@ -85,7 +85,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "bash -c 'r=$(git rev-parse --show-toplevel 2>/dev/null || pwd); cd \"$r\" && python3 .claude/hooks/constraint-reinforcement.py'"
+            "command": "bash -c 'set -- $(git worktree list 2>/dev/null | head -1); cd $1 && python3 .claude/hooks/constraint-reinforcement.py'"
           }
         ]
       }
