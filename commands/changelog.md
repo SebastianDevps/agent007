@@ -33,18 +33,19 @@ git log --since="2026-01-01" --oneline
 
 ## Step 2 — Categorize commits
 
-Group by conventional commit type:
+Commits follow the pipe-delimited standard: `Tipo|IdTarea|YYYYMMDD|Descripción`
+Extract the `Tipo` from the first pipe segment:
 
 ```bash
-git log v1.2.3..HEAD --format="%s" | sort
+git log v1.2.3..HEAD --format="%s" | awk -F'|' '{print $1}' | sort | uniq -c
 ```
 
 Categories:
-- **Breaking Changes** — `BREAKING CHANGE:` footer
-- **New Features** — `feat:` commits
-- **Bug Fixes** — `fix:` commits
-- **Performance** — `perf:` commits
-- **Other** — refactor, docs, chore, ci, style
+- **Breaking Changes** — manual annotation in body or footer
+- **New Features** — `feat` commits
+- **Bug Fixes** — `fix` commits
+- **Performance** — `perf` commits (if used)
+- **Other** — `refactor`, `docs`, `chore`, `test`, `review`
 
 ---
 

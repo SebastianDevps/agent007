@@ -48,7 +48,7 @@ git push -u origin $(git branch --show-current)
 ## Step 4 — Create PR
 
 ```bash
-gh pr create --title "[type]: [description]" --body "$(cat <<'EOF'
+gh pr create --title "Tipo|IdTarea|YYYYMMDD|Brief description" --body "$(cat <<'EOF'
 ## Summary
 
 - [Bullet 1: what was implemented]
@@ -79,12 +79,18 @@ EOF
 
 ## PR Title Format
 
-Follow conventional commit format:
-- `feat: add user authentication`
-- `fix: resolve token expiry race condition`
-- `refactor: extract payment service`
+Follow the project pipe-delimited standard (same as commit format):
 
-Max 70 characters.
+```
+Tipo|IdTarea|YYYYMMDD|Brief description
+```
+
+Examples:
+- `feat|LIQUI|20260321|Add user authentication`
+- `fix|LIQUI|20260321|Resolve token expiry race condition`
+- `refactor|20260321|Extract payment service`
+
+Max 70 characters total. IdTarea omitted when no ticket — leave empty between pipes.
 
 ---
 
