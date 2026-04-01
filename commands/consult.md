@@ -16,7 +16,7 @@ Invocation: `/consult "question"` · `/consult "question" --deep` · `/consult "
 |--------|---------------|
 | `backend-db-expert` | api, endpoint, architecture, nestjs, database, query, sql, schema, typeorm, microservice, performance, cache, redis, migration |
 | `security-expert` | security, auth, jwt, oauth, owasp, vulnerability, permission, encryption, cors, xss, injection |
-| `frontend-ux-expert` | react, next, component, ui, ux, design, wireframe, accessibility, performance, tailwind, state, form |
+| `frontend-ux-expert` | react, next, component, ui, ux, design, wireframe, accessibility, performance, tailwind, state, form, gsap, animation, scroll, tween, timeline, stagger, parallax, motion |
 | `platform-expert` | deploy, docker, ci/cd, test, tdd, coverage, pipeline, kubernetes, monitoring, infra, devops |
 | `product-expert` | product, roadmap, user story, mvp, backlog, prioritize, rice, acceptance criteria, feature, discovery |
 

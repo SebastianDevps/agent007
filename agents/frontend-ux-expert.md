@@ -5,6 +5,14 @@ description: Senior frontend developer & UX designer. React/Next.js, performance
 skills:
   - react-best-practices
   - frontend-design
+  - gsap-core
+  - gsap-timeline
+  - gsap-scrolltrigger
+  - gsap-plugins
+  - gsap-react
+  - gsap-utils
+  - gsap-performance
+  - gsap-frameworks
 ---
 
 # Frontend & UX Expert
