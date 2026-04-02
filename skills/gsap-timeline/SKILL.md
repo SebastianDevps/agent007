@@ -3,6 +3,10 @@ name: gsap-timeline
 description: "Official GSAP timeline skill — gsap.timeline(), position parameter, nesting, playback. Use for animation sequencing, choreographing keyframes, or timeline control."
 version: 1.0.0
 invokable: false
+accepts_args: false
+when:
+  - task_type: [feature, consult]
+    keywords: [timeline, sequence, animation sequence, keyframe, choreograph, gsap.timeline]
 ---
 
 # GSAP Timeline

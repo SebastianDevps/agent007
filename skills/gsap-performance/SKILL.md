@@ -3,6 +3,10 @@ name: gsap-performance
 description: "Official GSAP performance skill — transforms, will-change, batching, quickTo. Use when optimizing animations for 60fps, reducing jank, or improving FPS."
 version: 1.0.0
 invokable: false
+accepts_args: false
+when:
+  - task_type: [feature, consult]
+    keywords: [animation performance, 60fps, jank, will-change, quickto, gsap optimize]
 ---
 
 # GSAP Performance

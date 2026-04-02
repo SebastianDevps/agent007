@@ -73,7 +73,7 @@ Unified Response (10K tokens vs 60K)
 | Agent | Model | Specialization | Skills |
 |-------|-------|----------------|--------|
 | **backend-db-expert** | Opus | APIs, NestJS, databases, distributed systems | api-design-principles, architecture-patterns, resilience-patterns |
-| **frontend-ux-expert** | Sonnet | React, Next.js, UX, performance | react-best-practices, frontend-design |
+| **frontend-ux-expert** | Sonnet | React, Next.js, UX, performance, animations | react-best-practices, frontend-design, gsap-core, gsap-timeline, gsap-scrolltrigger, gsap-plugins, gsap-react, gsap-utils, gsap-performance, gsap-frameworks |
 | **platform-expert** | Sonnet | CI/CD, Docker, testing, quality gates | workflow/tdd, quality-gates/systematic-debugging |
 | **product-expert** | Opus | Product discovery, roadmap, prioritization | product/product-discovery |
 | **security-expert** | Opus | OWASP, threat modeling, compliance | nestjs-code-reviewer |
@@ -86,7 +86,7 @@ Each agent has:
 - Associated skills
 - Model preference (Opus/Sonnet)
 
-### 2. Domain Skills (17)
+### 2. Domain Skills (25)
 
 Skills are grouped by category:
 
@@ -113,7 +113,17 @@ Skills are grouped by category:
 - `frontend-design` - High-quality UI design
 - `react-best-practices` - React optimization
 
-**Location**: `/skills/{category}/{skill-name}/`
+**GSAP Animation** (frontend-ux-expert):
+- `gsap-core` - Tweens, easing, stagger, matchMedia
+- `gsap-timeline` - Sequencing, position parameter, nesting
+- `gsap-scrolltrigger` - Scroll-linked animations, pinning, scrub
+- `gsap-plugins` - Flip, Draggable, SplitText, MorphSVG, MotionPath
+- `gsap-react` - useGSAP hook, context, SSR
+- `gsap-utils` - clamp, mapRange, snap, toArray, pipe
+- `gsap-performance` - transforms, will-change, quickTo
+- `gsap-frameworks` - Vue, Svelte lifecycle, cleanup
+
+**Location**: `/skills/{skill-name}/`
 
 Each skill has:
 - `SKILL.md` (full, 650+ lines)

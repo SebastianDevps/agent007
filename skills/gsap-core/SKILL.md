@@ -3,6 +3,10 @@ name: gsap-core
 description: "Official GSAP core API skill — gsap.to(), from(), fromTo(), easing, stagger, defaults, matchMedia. Use for JS animation, DOM/SVG tweens, responsive and reduced-motion animation."
 version: 1.0.0
 invokable: false
+accepts_args: false
+when:
+  - task_type: [feature, consult]
+    keywords: [animation, gsap, tween, gsap.to, gsap.from, easing, stagger, motion]
 ---
 
 # GSAP Core

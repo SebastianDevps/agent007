@@ -3,6 +3,10 @@ name: gsap-frameworks
 description: "Official GSAP frameworks skill — Vue, Svelte lifecycle, scoping selectors, cleanup. Use for GSAP animation in Vue/Nuxt/Svelte/SvelteKit. For React use gsap-react."
 version: 1.0.0
 invokable: false
+accepts_args: false
+when:
+  - task_type: [feature, consult]
+    keywords: [gsap vue, gsap svelte, gsap nuxt, gsap sveltekit, animation vue, animation svelte]
 ---
 
 # GSAP with Vue, Svelte, and Other Frameworks

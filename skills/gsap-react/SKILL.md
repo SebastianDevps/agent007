@@ -3,6 +3,10 @@ name: gsap-react
 description: "Official GSAP React skill — useGSAP hook, refs, gsap.context(), cleanup. Use for animation in React/Next.js, GSAP with React, or cleanup on unmount."
 version: 1.0.0
 invokable: false
+accepts_args: false
+when:
+  - task_type: [feature, consult]
+    keywords: [gsap react, usegsap, animation react, gsap next.js, gsap cleanup]
 ---
 
 # GSAP with React

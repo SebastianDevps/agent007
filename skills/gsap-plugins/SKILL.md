@@ -3,6 +3,10 @@ name: gsap-plugins
 description: "Official GSAP plugins skill — Flip, Draggable, SplitText, ScrollSmoother, MorphSVG, MotionPath, Physics2D, CustomEase. Use for plugin registration and advanced GSAP features."
 version: 1.0.0
 invokable: false
+accepts_args: false
+when:
+  - task_type: [feature, consult]
+    keywords: [flip animation, draggable, splittext, morphsvg, motionpath, gsap plugin]
 ---
 
 # GSAP Plugins

@@ -5,6 +5,27 @@ All notable changes to Agent007 will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [4.2.0] — 2026-04-02
+
+### Added
+
+- **8 GSAP animation skills** for `frontend-ux-expert` (contributed by @JuanesEspinosa, issue #2):
+  - `gsap-core` — tweens, easing, stagger, matchMedia, reduced-motion
+  - `gsap-timeline` — sequencing, position parameter, labels, nesting
+  - `gsap-scrolltrigger` — scroll-linked animations, pinning, scrub
+  - `gsap-plugins` — Flip, Draggable, SplitText, MorphSVG, MotionPath, CustomEase
+  - `gsap-react` — useGSAP hook, gsap.context(), cleanup on unmount
+  - `gsap-utils` — clamp, mapRange, normalize, snap, toArray, pipe, distribute
+  - `gsap-performance` — transforms, will-change, batching, quickTo
+  - `gsap-frameworks` — Vue, Svelte, Nuxt, SvelteKit lifecycle & cleanup
+- Animation keywords added to `/consult` routing: `gsap`, `animation`, `scroll`, `tween`, `timeline`, `stagger`, `parallax`, `motion`
+
+### Changed
+
+- `frontend-ux-expert` agent now includes 8 GSAP domain skills
+- `ARCHITECTURE.md`: skill count updated 17 → 25, GSAP section added
+- `plugin.json`: version bump 4.1.0 → 4.2.0, description updated (42 → 50 skills), keywords `gsap` and `animation` added
+
 ## [3.0.0] — 2026-03-01
 
 ### Added

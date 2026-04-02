@@ -3,6 +3,10 @@ name: gsap-scrolltrigger
 description: "Official GSAP ScrollTrigger skill — scroll-linked animations, pinning, scrub, triggers. Use for scroll-based animation, parallax, pinned sections."
 version: 1.0.0
 invokable: false
+accepts_args: false
+when:
+  - task_type: [feature, consult]
+    keywords: [scroll animation, scrolltrigger, parallax, pin, scrub, scroll-linked]
 ---
 
 # GSAP ScrollTrigger

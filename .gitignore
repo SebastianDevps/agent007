@@ -33,6 +33,4 @@ Thumbs.db
 Juego/
 .worktrees/
 
-# External skills CLI artifacts
-.agents/
-skills-lock.json
+

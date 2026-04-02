@@ -1,7 +1,7 @@
 {
   "name": "agent007",
-  "description": "Agent007 - Autonomous AI Development Team. 5 expert agents, 42 skills, 16 commands — /dev auto-classifies and routes tasks, /ralph-loop iterates until completion, /consult injects domain expert context. Cross-platform (macOS/Linux/Windows). First-session welcome banner.",
-  "version": "4.1.0",
+  "description": "Agent007 - Autonomous AI Development Team. 5 expert agents, 50 skills, 16 commands — /dev auto-classifies and routes tasks, /ralph-loop iterates until completion, /consult injects domain expert context. Cross-platform (macOS/Linux/Windows). First-session welcome banner.",
+  "version": "4.2.0",
   "author": {
     "name": "Sebastian Guerra",
     "email": "guerrasebastian16@gmail.com"
@@ -26,6 +26,8 @@
     "code-review",
     "nestjs",
     "react",
+    "gsap",
+    "animation",
     "consultation",
     "worktrees",
     "subagents",
