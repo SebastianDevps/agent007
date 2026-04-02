@@ -1,0 +1,240 @@
+{
+  "hooks": {
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/welcome.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/memory-check.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/rtk-bootstrap.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/memory-decay.py"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/orchestrator-gate.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/constraint-reinforcement.py"
+          }
+        ]
+      }
+    ],
+    "SubagentStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/subagent-context.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/transcript-policy.py"
+          }
+        ]
+      }
+    ],
+    "Stop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/state-sync.py"
+          },
+          {
+            "type": "command",
+            "command": "node .claude/hooks/session-observer.js"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/rtk-analytics.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/context-engine.py"
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "node .claude/hooks/agent007-statusline.js"
+          }
+        ]
+      },
+      {
+        "matcher": "Agent",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/context-engine.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/provider-rotation.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/tool-policy-guard.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/sdd-guard.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/config-guard.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/mutation-guard.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Bash",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/safety-guard.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/rtk-rewrite.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/block-no-verify.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/pre-commit-guard.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/mutation-guard.py"
+          }
+        ]
+      }
+    ],
+    "PostToolUse": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/context-window-guard.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/tool-loop-detection.py"
+          }
+        ]
+      },
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/conversation-tick.py"
+          }
+        ]
+      },
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/format-on-save.py"
+          },
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/sdd-guard.py"
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 .claude/hooks/notify.py"
+          }
+        ]
+      }
+    ]
+  },
+  "permissions": {
+    "allow": [
+      "Read",
+      "Write",
+      "Edit",
+      "Bash(npm:*)",
+      "Bash(npx:*)",
+      "Bash(git:*)",
+      "Bash(mkdir:*)",
+      "Bash(pnpm:*)",
+      "Bash(bun:*)",
+      "Bash(echo:*)",
+      "Bash(rm:*)",
+      "Bash(node:*)",
+      "Bash(python3:*)",
+      "Bash(ls:*)",
+      "Bash(cat:*)",
+      "Bash(find:*)",
+      "Bash(grep:*)",
+      "Bash(cp:*)",
+      "Bash(mv:*)",
+      "Bash(gh:*)",
+      "Bash(chmod:*)"
+    ],
+    "deny": ["Bash(rm -rf /)", "Bash(sudo:*)", "Write(.env)", "Edit(.env)"]
+  },
+  "context": {
+    "include": [
+      ".claude/CLAUDE.md",
+      ".claude/STATE.md",
+      "plugins/**/*.md",
+      "docs/**/*.md"
+    ],
+    "exclude": [
+      "node_modules/**",
+      "dist/**",
+      ".git/**",
+      ".claude/skills/**",
+      ".claude/agents/**",
+      ".claude/**/_archive/**",
+      ".claude/metrics/**",
+      ".claude/commands/**/*.md"
+    ]
+  },
+  "maxOutputTokens": 64000,
+  "maxFileReadTokens": 100000,
+  "experimental": {
+    "agentTeams": true
+  }
+}
