@@ -32,3 +32,7 @@ Thumbs.db
 # Juego (repos separados: impostor-back, impostor-front)
 Juego/
 .worktrees/
+
+# External skills CLI artifacts
+.agents/
+skills-lock.json
