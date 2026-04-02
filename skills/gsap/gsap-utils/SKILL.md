@@ -3,7 +3,6 @@ name: gsap-utils
 description: "Official GSAP utils skill — clamp, mapRange, normalize, interpolate, random, snap, toArray, wrap, pipe. Use for GSAP utility/helper functions."
 version: 1.0.0
 invokable: false
-license: MIT
 ---
 
 # gsap.utils
@@ -284,3 +283,7 @@ wrapY(150); // 50
 ### Learn More
 
 https://gsap.com/docs/v3/HelperFunctions
+
+## Attribution
+
+GSAP is released under the [GSAP Standard License](https://gsap.com/standard-license) (proprietary, no charge). This is **not** an open-source or MIT license. See [GSAP licensing](https://gsap.com/licensing/) for full terms. Copyright Webflow, Inc. (formerly GreenSock, Inc.).

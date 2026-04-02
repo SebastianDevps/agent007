@@ -3,7 +3,6 @@ name: gsap-plugins
 description: "Official GSAP plugins skill — Flip, Draggable, SplitText, ScrollSmoother, MorphSVG, MotionPath, Physics2D, CustomEase. Use for plugin registration and advanced GSAP features."
 version: 1.0.0
 invokable: false
-license: MIT
 ---
 
 # GSAP Plugins
@@ -426,3 +425,7 @@ gsap.to(sprite, { pixi: { x: 200, y: 100, scale: 1.5 }, duration: 1 });
 ### Learn More
 
 https://gsap.com/docs/v3/Plugins/
+
+## Attribution
+
+All GSAP plugins are released under the [GSAP Standard License](https://gsap.com/standard-license) (proprietary, no charge). Since Webflow's acquisition of GreenSock, all formerly paid "Club GSAP" plugins (Flip, SplitText, MorphSVG, DrawSVG, Physics2D, PhysicsProps, ScrambleText, CustomEase, CustomWiggle, CustomBounce, GSDevTools, ScrollSmoother, InertiaPlugin, MotionPathHelper) are now **free** for commercial and non-commercial use. This is **not** an open-source or MIT license. Key restriction: GSAP may not be used to build competing visual animation tools. See [GSAP licensing](https://gsap.com/licensing/) for full terms. Copyright Webflow, Inc. (formerly GreenSock, Inc.).

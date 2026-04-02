@@ -3,7 +3,6 @@ name: gsap-scrolltrigger
 description: "Official GSAP ScrollTrigger skill — scroll-linked animations, pinning, scrub, triggers. Use for scroll-based animation, parallax, pinned sections."
 version: 1.0.0
 invokable: false
-license: MIT
 ---
 
 # GSAP ScrollTrigger
@@ -295,3 +294,7 @@ In React, use the `useGSAP()` hook (@gsap/react NPM package) to ensure proper cl
 ### Learn More
 
 https://gsap.com/docs/v3/Plugins/ScrollTrigger/
+
+## Attribution
+
+GSAP and ScrollTrigger are released under the [GSAP Standard License](https://gsap.com/standard-license) (proprietary, no charge). This is **not** an open-source or MIT license. See [GSAP licensing](https://gsap.com/licensing/) for full terms. Copyright Webflow, Inc. (formerly GreenSock, Inc.).

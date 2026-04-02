@@ -3,7 +3,6 @@ name: gsap-timeline
 description: "Official GSAP timeline skill — gsap.timeline(), position parameter, nesting, playback. Use for animation sequencing, choreographing keyframes, or timeline control."
 version: 1.0.0
 invokable: false
-license: MIT
 ---
 
 # GSAP Timeline
@@ -107,3 +106,7 @@ master.to(".c", { opacity: 0 }, "+=0.2");
 - ❌ Forget to pass **defaults** (e.g. `defaults: { duration: 0.5, ease: "power2.out" }`) when many child tweens share the same duration or ease.
 - ❌ Forget that **duration** on the timeline constructor is not the same as tween duration; timeline "duration" is determined by its children.
 - ❌ Nest animations that contain a ScrollTrigger; ScrollTriggers should only be on top-level Tweens/Timelines.
+
+## Attribution
+
+GSAP is released under the [GSAP Standard License](https://gsap.com/standard-license) (proprietary, no charge). This is **not** an open-source or MIT license. See [GSAP licensing](https://gsap.com/licensing/) for full terms. Copyright Webflow, Inc. (formerly GreenSock, Inc.).

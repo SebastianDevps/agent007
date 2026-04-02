@@ -3,7 +3,6 @@ name: gsap-frameworks
 description: "Official GSAP frameworks skill — Vue, Svelte lifecycle, scoping selectors, cleanup. Use for GSAP animation in Vue/Nuxt/Svelte/SvelteKit. For React use gsap-react."
 version: 1.0.0
 invokable: false
-license: MIT
 ---
 
 # GSAP with Vue, Svelte, and Other Frameworks
@@ -153,3 +152,7 @@ Do not create GSAP animations in the component's setup or in a synchronous top-l
 ### Learn More
 
 - **gsap-react** skill for React-specific patterns (useGSAP, contextSafe).
+
+## Attribution
+
+GSAP is released under the [GSAP Standard License](https://gsap.com/standard-license) (proprietary, no charge). This is **not** an open-source or MIT license. See [GSAP licensing](https://gsap.com/licensing/) for full terms. Copyright Webflow, Inc. (formerly GreenSock, Inc.).

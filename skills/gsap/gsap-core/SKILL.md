@@ -3,7 +3,6 @@ name: gsap-core
 description: "Official GSAP core API skill — gsap.to(), from(), fromTo(), easing, stagger, defaults, matchMedia. Use for JS animation, DOM/SVG tweens, responsive and reduced-motion animation."
 version: 1.0.0
 invokable: false
-license: MIT
 ---
 
 # GSAP Core
@@ -254,3 +253,7 @@ Full docs: [gsap.matchMedia()](https://gsap.com/docs/v3/GSAP/gsap.matchMedia/). 
 - ❌ Rely on the default **immediateRender: true** when stacking multiple **from()** or **fromTo()** tweens on the same property of the same target; set **immediateRender: false** on the later tweens so they animate correctly.
 - ❌ Use invalid or non-existent ease names; stick to documented eases.
 - ❌ Forget that **gsap.from()** uses the element's current state as the end state; the initial values in the tween will be applied immediately unless `immediateRender: false` is in the `vars`.
+
+## Attribution
+
+GSAP is released under the [GSAP Standard License](https://gsap.com/standard-license) (proprietary, no charge). All plugins are free for commercial and non-commercial use in websites and web apps, but this is **not** an open-source or MIT license. Key restriction: GSAP may not be used to build competing visual animation tools. See [GSAP licensing](https://gsap.com/licensing/) for full terms. Copyright Webflow, Inc. (formerly GreenSock, Inc.).

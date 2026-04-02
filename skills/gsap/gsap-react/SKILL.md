@@ -3,7 +3,6 @@ name: gsap-react
 description: "Official GSAP React skill — useGSAP hook, refs, gsap.context(), cleanup. Use for animation in React/Next.js, GSAP with React, or cleanup on unmount."
 version: 1.0.0
 invokable: false
-license: MIT
 ---
 
 # GSAP with React
@@ -136,3 +135,7 @@ GSAP runs in the browser. Do not call gsap or ScrollTrigger during SSR.
 ### Learn More
 
 https://gsap.com/resources/React
+
+## Attribution
+
+GSAP and `@gsap/react` are released under the [GSAP Standard License](https://gsap.com/standard-license) (proprietary, no charge). This is **not** an open-source or MIT license. See [GSAP licensing](https://gsap.com/licensing/) for full terms. Copyright Webflow, Inc. (formerly GreenSock, Inc.).

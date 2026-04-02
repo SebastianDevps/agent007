@@ -3,7 +3,6 @@ name: gsap-performance
 description: "Official GSAP performance skill — transforms, will-change, batching, quickTo. Use when optimizing animations for 60fps, reducing jank, or improving FPS."
 version: 1.0.0
 invokable: false
-license: MIT
 ---
 
 # GSAP Performance
@@ -79,3 +78,7 @@ document.querySelector("#container").addEventListener("mousemove", (e) => {
 - ❌ Set **will-change** or **force3D** on every element "just in case"; use for elements that are actually animating.
 - ❌ Create hundreds of overlapping tweens or ScrollTriggers without testing on low-end devices.
 - ❌ Ignore cleanup; stray tweens and ScrollTriggers keep running and can hurt performance and correctness.
+
+## Attribution
+
+GSAP is released under the [GSAP Standard License](https://gsap.com/standard-license) (proprietary, no charge). This is **not** an open-source or MIT license. See [GSAP licensing](https://gsap.com/licensing/) for full terms. Copyright Webflow, Inc. (formerly GreenSock, Inc.).
