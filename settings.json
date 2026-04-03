@@ -5,19 +5,19 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/welcome.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/welcome.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/memory-check.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/memory-check.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/rtk-bootstrap.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/rtk-bootstrap.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/memory-decay.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/memory-decay.py"
           }
         ]
       }
@@ -28,11 +28,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/orchestrator-gate.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/orchestrator-gate.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/constraint-reinforcement.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/constraint-reinforcement.py"
           }
         ]
       }
@@ -42,11 +42,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/subagent-context.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/subagent-context.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/transcript-policy.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/transcript-policy.py"
           }
         ]
       }
@@ -56,19 +56,19 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/state-sync.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/state-sync.py"
           },
           {
             "type": "command",
-            "command": "node .claude/hooks/session-observer.js"
+            "command": "node $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/session-observer.js"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/rtk-analytics.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/rtk-analytics.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/context-engine.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/context-engine.py"
           }
         ]
       }
@@ -78,7 +78,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "node .claude/hooks/agent007-statusline.js"
+            "command": "node $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/agent007-statusline.js"
           }
         ]
       },
@@ -87,11 +87,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/context-engine.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/context-engine.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/provider-rotation.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/provider-rotation.py"
           }
         ]
       },
@@ -100,19 +100,19 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/tool-policy-guard.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/tool-policy-guard.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/sdd-guard.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/sdd-guard.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/config-guard.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/config-guard.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/mutation-guard.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/mutation-guard.py"
           }
         ]
       },
@@ -121,23 +121,23 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/safety-guard.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/safety-guard.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/rtk-rewrite.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/rtk-rewrite.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/block-no-verify.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/block-no-verify.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/pre-commit-guard.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/pre-commit-guard.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/mutation-guard.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/mutation-guard.py"
           }
         ]
       }
@@ -147,11 +147,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/context-window-guard.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/context-window-guard.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/tool-loop-detection.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/tool-loop-detection.py"
           }
         ]
       },
@@ -159,7 +159,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/conversation-tick.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/conversation-tick.py"
           }
         ]
       },
@@ -168,11 +168,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/format-on-save.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/format-on-save.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/sdd-guard.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/sdd-guard.py"
           }
         ]
       }
@@ -182,7 +182,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/notify.py"
+            "command": "python3 $HOME/.claude/plugins/cache/agent007-marketplace/agent007/5.0.0/hooks/notify.py"
           }
         ]
       }
