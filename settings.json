@@ -5,15 +5,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/memory-check.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/memory-check.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/rtk-bootstrap.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/rtk-bootstrap.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/memory-decay.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/memory-decay.py"
           }
         ]
       }
@@ -24,7 +24,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/constraint-reinforcement.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/constraint-reinforcement.py"
           }
         ]
       }
@@ -34,11 +34,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/subagent-context.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/subagent-context.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/transcript-policy.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/transcript-policy.py"
           }
         ]
       }
@@ -48,11 +48,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/state-sync.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/state-sync.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/context-engine.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/context-engine.py"
           }
         ]
       }
@@ -63,7 +63,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/web-distill.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/web-distill.py"
           }
         ]
       },
@@ -72,7 +72,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/context-engine.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/context-engine.py"
           }
         ]
       },
@@ -81,19 +81,19 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/tool-policy-guard.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/tool-policy-guard.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/sdd-guard.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/sdd-guard.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/config-guard.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/config-guard.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/mutation-guard.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/mutation-guard.py"
           }
         ]
       },
@@ -102,23 +102,23 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/safety-guard.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/safety-guard.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/rtk-rewrite.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/rtk-rewrite.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/block-no-verify.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/block-no-verify.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/pre-commit-guard.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/pre-commit-guard.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/mutation-guard.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/mutation-guard.py"
           }
         ]
       }
@@ -128,11 +128,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/context-window-guard.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/context-window-guard.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/tool-loop-detection.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/tool-loop-detection.py"
           }
         ]
       },
@@ -141,11 +141,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/format-on-save.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/format-on-save.py"
           },
           {
             "type": "command",
-            "command": "python3 .claude/hooks/sdd-guard.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/sdd-guard.py"
           }
         ]
       }
@@ -155,7 +155,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 .claude/hooks/notify.py"
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/notify.py"
           }
         ]
       }
