@@ -82,10 +82,11 @@ SKILL_REGISTRY = """
 - Skill('plan')                            → Decompose to 2-5min tasks with exact paths + TDD steps
 - Skill('generate')                        → Execute single task: RED→GREEN→REFACTOR + commit
 - Skill('verify')                          → Two-pass verification: evidence gate + SDD compliance
-- Skill('subagent-driven-development')     → Dispatch expert subagents per task from plan
+- Skill('tdd-workflow')                    → Red-Green-Refactor gate: failing test REQUIRED before any implementation
+- Skill('subagent-driven-development')     → Dispatch expert subagents per task from plan (wave execution)
 - Skill('using-git-worktrees')             → Isolated branch via git worktree
 - Skill('finishing-a-development-branch')  → Close branch: verify → merge/PR/keep/discard
-- Skill('reverse-engineer')                → Reverse-engineer existing code before refactoring
+- Skill('sop-reverse')                     → Reverse-engineer existing code before refactoring
 
 ### Domain / Expert
 - Skill('api-design-principles')   → NestJS REST API design and audit
@@ -95,19 +96,29 @@ SKILL_REGISTRY = """
 - Skill('security-review')         → OWASP Top 10, auth, authorization, sensitive data
 - Skill('react-best-practices')    → React/Next.js optimization and best practices
 - Skill('frontend-design')         → High-quality UI/UX design and implementation
+- Skill('gsap')                    → GSAP animations: tweens, timelines, ScrollTrigger, React integration
+
+### Quality Gates
+- Skill('systematic-debugging')    → Root-cause analysis: reproduce → isolate → fix → verify
+- Skill('agent-self-diagnosis')    → 4-phase loop recovery (fires at 3 repeated calls with no progress)
 
 ### Workflow Utilities
 - Skill('commit')              → Pipe-delimited commit: Tipo|IdTarea|YYYYMMDD|Desc
 - Skill('pull-request')        → Create structured GitHub PRs
 - Skill('changelog')           → Generate changelog from git history
 - Skill('deep-research')       → 4-phase systematic research methodology
+- Skill('search-first')        → Pre-coding gate: scan libs + codebase → Adopt/Extend/Compose/Build
+- Skill('rules-distill')       → Scan skills for repeated principles → elevate to rules/ (with approval)
+- Skill('skill-stocktake')     → Automated skill audit: Keep/Improve/Retire/Merge
 
 ### Standard Workflows
-- Build/fix feature:  Skill('generate') → Skill('verify')
+- Build/fix feature:  Skill('tdd-workflow') → Skill('generate') → Skill('verify')
 - Complex feature:    Skill('brainstorming') → Skill('using-git-worktrees') → Skill('plan') → Skill('subagent-driven-development')
-- Bug fix:            Skill('generate') → Skill('verify')
-- Refactor:           Skill('reverse-engineer') → Skill('plan') → Skill('generate') → Skill('verify')
+- Bug fix:            Skill('systematic-debugging') → Skill('generate') → Skill('verify')
+- Refactor:           Skill('sop-reverse') → Skill('plan') → Skill('generate') → Skill('verify')
+- Before any custom code: Skill('search-first')
 - Completion gate:    ALWAYS invoke Skill('verify') before claiming done
+- Loop detected:      Skill('agent-self-diagnosis') at 3+ repeated calls
 """
 
 # ---------------------------------------------------------------------------

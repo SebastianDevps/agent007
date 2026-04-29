@@ -1,10 +1,32 @@
 ---
 name: api-design-principles
+description: "RESTful API design principles for consistent, versioned, developer-friendly APIs"
 version: 1.0.0
-description: "Diseñar y auditar APIs REST siguiendo mejores prácticas para NestJS con TypeORM. Use when user asks to 'design API', 'review endpoint', or 'audit REST API'."
 invokable: true
 accepts_args: true
 allowed-tools: ["Read", "Grep", "Glob", "Edit", "Write"]
+load_when:
+  - designing_api_endpoints
+  - reviewing_api_contracts
+  - creating_openapi_specs
+inputs:
+  - name: api_scope
+    type: string
+    required: true
+  - name: existing_endpoints
+    type: array
+    required: false
+outputs:
+  - name: api_contract
+    type: structured_report
+    format: "Method | Path | Request | Response | Status codes"
+  - name: openapi_snippet
+    type: string
+    format: "YAML OpenAPI 3.0"
+constraints:
+  - versioning_required_in_all_public_apis
+  - no_breaking_changes_without_version_bump
+  - consistent_error_response_format_enforced
 ---
 
 # API Design Principles - NestJS & TypeORM

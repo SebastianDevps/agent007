@@ -1,6 +1,6 @@
 ---
 name: systematic-debugging
-description: "4-phase mandatory debugging process: Reproduce → Root Cause → Hypothesis → Implementation. Use when user asks to 'debug', 'fix error', 'investigate bug', or mentions 'not working'."
+description: "Reproduce-first debugging protocol — never claim fixed without reproducing the bug"
 invokable: true
 accepts_args: bugDescription
 allowed-tools: ["Read", "Grep", "Glob", "Bash", "Write", "Edit"]
@@ -11,6 +11,31 @@ when:
   - task_type: bug
     risk_level: [low, medium, high, critical]
   - user_mentions: ["bug", "error", "fix", "broken", "not working", "fails"]
+load_when:
+  - debugging_production_issue
+  - investigating_test_failure
+  - diagnosing_unexpected_behavior
+inputs:
+  - name: bug_description
+    type: string
+    required: true
+  - name: error_logs
+    type: string
+    required: false
+  - name: reproduction_steps
+    type: array
+    required: false
+outputs:
+  - name: root_cause_analysis
+    type: structured_report
+    format: "Symptom | Root cause | Evidence | Fix | Verification"
+  - name: reproduction_test
+    type: string
+    format: "Test that fails before fix, passes after"
+constraints:
+  - reproduce_bug_before_fixing
+  - write_failing_test_before_implementing_fix
+  - never_claim_fixed_without_verification_evidence
 ---
 
 # Systematic Debugging - NO FIXES WITHOUT ROOT CAUSE

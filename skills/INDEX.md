@@ -1,7 +1,7 @@
-# Skills INDEX — Agent007 v5
+# Skills INDEX — Agent007 v5.1
 
 > Full registry of all skills. Path is relative to `.claude/skills/`.
-> Updated: 2026-04-02
+> Updated: 2026-04-28
 
 ---
 
@@ -13,6 +13,7 @@
 | `generate` | `pipeline/generate.md` | ✅ | TDD task execution with assumption tracking (was: sop-code-assist) |
 | `verify` | `pipeline/verify.md` | ✅ | Two-pass verification: evidence gate + SDD review (was: verification-before-completion + sop-reviewer) |
 | `brainstorming` | `pipeline/brainstorming.md` | ✅ | Socratic requirements exploration before implementation |
+| `tdd-workflow` | `pipeline/tdd-workflow.md` | ✅ | Red-Green-Refactor gate: failing test required before any implementation |
 | `subagent-driven-development` | `pipeline/subagent-driven-development.md` | ✅ | Dispatch expert subagents per task from plan |
 | `using-git-worktrees` | `pipeline/using-git-worktrees.md` | ✅ | Isolated branch via git worktree |
 | `finishing-a-development-branch` | `pipeline/finishing-a-development-branch.md` | ✅ | Close branch: verify → merge/PR/keep/discard |
@@ -37,6 +38,7 @@
 | `session-manager` | `orchestration/session-manager.md` | ❌ (auto) | Routing, classification, state read/write protocol |
 | `ralph-loop-wrapper` | `orchestration/ralph-loop-wrapper.md` | ❌ (auto) | Infrastructure: wraps task execution in ralph loop |
 | `state-sync` | `orchestration/state-sync.md` | ❌ (auto) | Sync session state: .sdlc/state/session.md ↔ STATE.md |
+| `iterative-retrieval` | `orchestration/iterative-retrieval.md` | ❌ (auto) | Progressive context refinement for subagent spawning: 3-round minimum-context protocol |
 
 ---
 
@@ -60,7 +62,7 @@
 | Skill | Path | Invokable | Description |
 |-------|------|-----------|-------------|
 | `systematic-debugging` | `quality-gates/systematic-debugging/SKILL.md` | ✅ | Root-cause analysis: reproduce → isolate → fix → verify |
-| `architecture-review` | `quality-gates/architecture-review/SKILL.md` | ✅ | Structural review: coupling, cohesion, patterns, anti-patterns |
+| `agent-self-diagnosis` | `quality-gates/agent-self-diagnosis.md` | ✅ | 4-phase loop recovery: Capture → Diagnose → Recover → Report (fires at 3 repeated calls) |
 
 ---
 
@@ -88,12 +90,9 @@
 | `pull-request` | `workflow-utils/pull-request.md` | ✅ | Create structured GitHub PRs |
 | `changelog` | `workflow-utils/changelog.md` | ✅ | Generate changelog from git history |
 | `deep-research` | `workflow-utils/deep-research.md` | ✅ | 4-phase systematic research methodology |
-| `strategic-compact` | _(reemplazado por `/compact` nativo + context-engine.py hook)_ | — | — |
-| `skill-stocktake` | `workflow-utils/skill-stocktake.md` | ✅ | Auditoría periódica de calidad del skill registry |
-| `rules-distill` | `workflow-utils/rules-distill.md` | ✅ | Extrae principios cross-skills y los eleva a rules/ |
-| `context-budget` | `workflow-utils/context-budget.md` | ✅ | Inventario estático de tokens por componente cargado |
-| `search-first` | `workflow-utils/search-first.md` | ✅ | Buscar antes de escribir: adopt→extend→compose→build |
-| `architecture-decision-records` | `workflow-utils/architecture-decision-records.md` | ✅ | Captura decisiones de arquitectura como ADRs versionados |
+| `search-first` | `workflow-utils/search-first.md` | ✅ | Pre-coding gate: library + codebase scan → Adopt/Extend/Compose/Build before any custom implementation |
+| `rules-distill` | `workflow-utils/rules-distill.md` | ✅ | Scans skills for repeated principles, elevates to rules/ with anti-abstraction guard and per-item approval |
+| `skill-stocktake` | `workflow-utils/skill-stocktake.md` | ✅ | Automated skill quality audit: Keep/Improve/Retire/Merge with incremental cache |
 
 ---
 
@@ -135,17 +134,15 @@
 ## Compressed Registry (for embedding in subagent prompts)
 
 ```
-PIPELINE: plan, generate, verify, brainstorming, subagent-driven-development,
+PIPELINE: plan, generate, verify, brainstorming, tdd-workflow, subagent-driven-development,
           using-git-worktrees, finishing-a-development-branch, sop-reverse
 CORE: quality-enforcement*, banned-phrases*, context-awareness*  (* = auto-injected)
-ORCH: session-manager*, ralph-loop-wrapper*, state-sync*
+ORCH: session-manager*, ralph-loop-wrapper*, state-sync*, iterative-retrieval*
 DOMAIN: api-design-principles, architecture-patterns, resilience-patterns,
         nestjs-code-reviewer, security-review, react-best-practices, frontend-design, gsap
-QUALITY-GATES: systematic-debugging, architecture-review
+QUALITY-GATES: systematic-debugging, agent-self-diagnosis
 DEVREL: api-documentation
 PRODUCT: product-discovery
-UTILS: commit, pull-request, changelog, deep-research,
-       skill-stocktake, rules-distill,
-       search-first, architecture-decision-records
-Total: 26 invokable + 6 auto-injected = 32 active skills
+UTILS: commit, pull-request, changelog, deep-research, search-first, rules-distill, skill-stocktake
+Total: 28 invokable + 7 auto-injected = 35 active skills
 ```

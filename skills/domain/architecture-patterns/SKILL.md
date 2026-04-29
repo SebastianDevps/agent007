@@ -1,10 +1,29 @@
 ---
 name: architecture-patterns
+description: "Hexagonal, Clean, and Screaming architecture patterns for maintainable systems"
 version: 1.0.0
-description: "Implementar y auditar patrones arquitectónicos (Clean Architecture, DDD, Bounded Contexts) en NestJS con TypeORM. Use when user asks to 'review architecture', 'implement DDD', or 'refactor to Clean Architecture'."
 invokable: true
 accepts_args: true
 allowed-tools: ["Read", "Grep", "Glob", "Edit", "Write"]
+load_when:
+  - designing_system_architecture
+  - reviewing_architectural_decisions
+  - refactoring_for_scalability
+inputs:
+  - name: system_description
+    type: string
+    required: true
+  - name: constraints
+    type: string
+    required: false
+outputs:
+  - name: architecture_decision
+    type: structured_report
+    format: "Pattern | Rationale | Trade-offs | Implementation steps"
+constraints:
+  - prefer_hexagonal_over_layered_for_complex_domains
+  - domain_layer_must_not_depend_on_infrastructure
+  - ports_and_adapters_for_all_external_dependencies
 ---
 
 # Architecture Patterns - NestJS Clean Architecture & DDD

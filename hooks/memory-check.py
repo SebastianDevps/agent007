@@ -16,9 +16,10 @@ import hashlib
 import json
 import os
 import sys
+import tempfile
 import time
 
-STATE_DIR = "/tmp/agent007-sdd"
+STATE_DIR = os.path.join(tempfile.gettempdir(), "agent007-sdd")
 MANIFEST_STATE_FILE = os.path.join(STATE_DIR, "manifest-hashes.json")
 STALE_DAYS_THRESHOLD = 30  # Suggest re-init if rules > 30 days old
 

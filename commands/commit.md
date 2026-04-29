@@ -3,6 +3,26 @@ name: commit
 version: 2.0
 description: "Generate pipe-delimited commits: Tipo|IdTarea|YYYYMMDD|Descripción"
 accepts_args: true
+preconditions:
+  - changes_staged_or_unstaged
+  - no_linting_errors
+outputs:
+  - name: commit_hash
+    type: string
+    format: "git log --oneline -1 output"
+  - name: commit_message
+    type: string
+    format: "Tipo|IdTarea|YYYYMMDD|Descripción — max 72 chars total"
+steps_count: 4
+triggers:
+  - "commit"
+  - "save"
+  - "checkpoint"
+  - "end of task"
+format:
+  pattern: "Tipo|IdTarea|YYYYMMDD|Descripción"
+  types: [feat, fix, refactor, review, test, docs, chore]
+  example: "feat|PROJ-42|20260428|Add issue-first gate to pull-request flow"
 ---
 
 # commit

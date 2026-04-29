@@ -1,10 +1,32 @@
 ---
 name: resilience-patterns
+description: "Circuit breakers, retries, timeouts, and bulkheads for fault-tolerant systems"
 version: 1.0.0
-description: "Implementar patrones de resiliencia (circuit breakers, retry, health checks) en NestJS sin arquitectura de microservicios. Use when user asks to 'add retry logic', 'implement circuit breaker', or 'improve resilience'."
 invokable: true
 accepts_args: true
 allowed-tools: ["Read", "Grep", "Glob", "Edit", "Write", "Bash"]
+load_when:
+  - designing_external_service_calls
+  - handling_distributed_system_failures
+  - implementing_retry_logic
+inputs:
+  - name: failure_scenario
+    type: string
+    required: true
+  - name: sla_requirements
+    type: string
+    required: false
+outputs:
+  - name: resilience_implementation
+    type: string
+    format: "TypeScript/NestJS with circuit breaker + retry + timeout"
+  - name: failure_runbook
+    type: checklist
+    format: "Condition | Pattern to apply | Configuration values"
+constraints:
+  - every_external_call_needs_timeout
+  - circuit_breaker_required_for_critical_dependencies
+  - retry_with_exponential_backoff_not_fixed_interval
 ---
 
 # Resilience Patterns - NestJS Monolith

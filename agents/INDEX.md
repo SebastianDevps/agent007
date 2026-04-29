@@ -10,3 +10,5 @@
 | `product-expert` | opus | product, roadmap, user story, mvp, backlog, prioritize, rice, acceptance criteria, feature, discovery | product/product-discovery |
 | `refactor-cleaner` | sonnet | dead code, unused, clean up, remove unused, depcheck, knip, ts-prune, prune dependencies, cleanup imports | sop-reverse |
 | `security-expert` | opus | security, auth, jwt, oauth, owasp, vulnerability, permission, encryption, cors, xss, injection | security-review |
+| `architect` | opus | architecture, design, trade-off, scalability, monolith, microservice, ADR, decision, module-boundary, coupling, cohesion, system-design, hexagonal, clean-architecture, DDD, bounded-context | — |
+| `performance-optimizer` | sonnet | performance, profiling, bundle, N+1, render, latency, bottleneck, lighthouse, lcp, cls, tti, memory-leak, cache-strategy, slow, optimize, speed, throughput, query-plan | — |

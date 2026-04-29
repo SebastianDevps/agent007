@@ -26,7 +26,7 @@ import tempfile
 import time
 from typing import Optional
 
-STATE_DIR = "/tmp/agent007-sdd"
+STATE_DIR = os.path.join(tempfile.gettempdir(), "agent007-sdd")
 PID_FILE = os.path.join(STATE_DIR, "test-runner.pid")
 RESULT_FILE = os.path.join(STATE_DIR, "last-test-result.json")
 TTL_SECONDS = 600  # 10 minutes

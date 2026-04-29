@@ -1,0 +1,62 @@
+# Agent007 Skills Index — machine-readable for LLM agents
+# Format: name | invokable | description | trigger terms
+# Updated: 2026-04-28
+
+## pipeline
+
+plan | yes | Decompose task into 2-5min sub-tasks with exact file paths and TDD steps | plan, decompose, break down, tasks, sub-tasks
+generate | yes | Execute a single task: RED→GREEN→REFACTOR cycle + commit | implement, code, write, execute task, generate
+verify | yes | Two-pass verification gate: evidence required before claiming done | verify, check, done, complete, evidence, proof
+brainstorming | yes | Socratic requirements exploration before implementation | brainstorm, requirements, unclear, ambiguous, explore, what should
+tdd-workflow | yes | Red-Green-Refactor gate: failing test required before any implementation | tdd, test first, red green, failing test, test driven
+subagent-driven-development | yes | Dispatch expert subagents per task with parallel wave execution | subagents, parallel, wave, dispatch agents, multi-agent
+using-git-worktrees | yes | Isolated feature branch via git worktree | worktree, branch, isolate, feature branch
+finishing-a-development-branch | yes | Close branch: verify → merge/PR/keep/discard | finish branch, close branch, merge, PR, pull request, done with branch
+sop-reverse | yes | Reverse-engineer existing code before refactoring | reverse engineer, understand code, audit code before refactor
+
+## core (auto-injected)
+
+quality-enforcement | auto | Anti-rationalization and verification rules | always active
+banned-phrases | auto | Quick-ref banned phrases and required replacements | always active
+context-awareness | auto | Task type detection and risk assessment | always active
+
+## orchestration (auto-injected)
+
+session-manager | auto | Routing, classification, session state read/write | always active
+ralph-loop-wrapper | auto | Wraps task execution in autonomous loop until COMPLETE | always active
+state-sync | auto | Sync session state between .sdlc/state/session.md and STATE.md | always active
+iterative-retrieval | auto | Progressive context refinement for subagent spawning: 3-round protocol | always active
+
+## domain
+
+api-design-principles | yes | NestJS REST API design, versioning, validation, and audit | api, rest, nestjs, endpoint, dto, validation, versioning
+architecture-patterns | yes | Clean Architecture, DDD, Bounded Contexts, Hexagonal | architecture, clean architecture, ddd, bounded context, hexagonal, domain
+resilience-patterns | yes | Circuit breakers, retry, health checks, rate limiting | circuit breaker, retry, resilience, health check, rate limit, bulkhead
+nestjs-code-reviewer | yes | NestJS + TypeORM code review with OWASP checks | nestjs review, typeorm review, code review nestjs
+security-review | yes | OWASP Top 10, auth, authorization, sensitive data exposure | security, owasp, auth, jwt, vulnerability, xss, injection, cors
+react-best-practices | yes | React/Next.js optimization, patterns, and best practices | react, next.js, component, hooks, state, performance react
+frontend-design | yes | High-quality UI/UX design and implementation | ui, ux, design, interface, layout, wireframe, figma
+gsap | yes | GSAP animations: tweens, timelines, ScrollTrigger, plugins, React integration | gsap, animation, tween, timeline, scrolltrigger, motion, parallax, scroll animation, usegsap, splittext, flip
+
+## quality-gates
+
+systematic-debugging | yes | Root-cause analysis: reproduce → isolate → fix → verify | debug, bug, error, broken, not working, root cause
+agent-self-diagnosis | yes | 4-phase loop recovery when agent is stuck (fires at 3 repeated calls) | stuck, loop, repeating, not progressing, same error
+
+## devrel
+
+api-documentation | yes | OpenAPI, Swagger, developer portals, API reference docs | documentation, openapi, swagger, api docs, developer portal
+
+## product
+
+product-discovery | yes | User stories, RICE scoring, roadmap planning, MVP scoping | product, roadmap, user story, mvp, backlog, rice, prioritize, discovery
+
+## workflow-utils
+
+commit | yes | Generate pipe-delimited commits: Tipo|IdTarea|YYYYMMDD|Descripción | commit, git commit, message, conventional commit
+pull-request | yes | Create well-structured GitHub PRs with summary and test plan | pull request, pr, github pr, open pr
+changelog | yes | Generate changelog from git history following Keep a Changelog | changelog, release notes, history
+deep-research | yes | 4-phase systematic research methodology with source validation | research, investigate, find out, compare, benchmark, analyze
+search-first | yes | Pre-coding gate: library and codebase scan before any custom implementation | search first, find library, already exists, before coding, adopt extend
+rules-distill | yes | Scan skills for repeated principles, elevate to rules/ with approval | distill rules, extract principles, promote to rules
+skill-stocktake | yes | Automated skill quality audit: Keep/Improve/Retire/Merge | skill audit, review skills, outdated skills, skill quality

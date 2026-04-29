@@ -50,10 +50,20 @@ def find_project_root() -> Path:
     return Path(os.getcwd())
 
 
+SESSION_TTL_SECONDS = 4 * 3600  # reset circuit_broken after 4h of inactivity
+
+
 def load_state(state_path: Path) -> dict:
     try:
         if state_path.exists():
-            return json.loads(state_path.read_text())
+            state = json.loads(state_path.read_text())
+            # Auto-reset if last activity was >4h ago (new session)
+            window = state.get("window", [])
+            if window:
+                last_ts = max(e.get("ts", 0) for e in window)
+                if time.time() - last_ts > SESSION_TTL_SECONDS:
+                    return {"window": [], "circuit_broken": False}
+            return state
     except Exception:
         pass
     return {"window": [], "circuit_broken": False}

@@ -1,0 +1,22 @@
+# Usage telemetry logs (Phase 3 optimization)
+usage.jsonl
+usage.*.jsonl
+
+#claude code files
+.claude/
+# Session state (runtime only)
+.session-state.json
+
+# First-run marker (created by welcome.py on first SessionStart)
+.installed
+
+# Temporary files
+*.tmp
+*.log
+
+# Runtime state — auto-generados, no versionar
+.session-state.json
+ralph-state.json
+context-budget.json
+.sdlc/state/session-*.json
+orchestrator/.sdlc/

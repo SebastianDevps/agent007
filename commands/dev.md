@@ -1,8 +1,32 @@
 ---
 name: dev
-version: 2.0
-description: "Master development command. Classifies the task, selects the optimal workflow path, and executes autonomously using all ecosystem elements (brainstorming, worktrees, plans, subagents, ralph, TDD, review)."
+version: 1.0
+description: "Master development command — classifies task and routes to correct pipeline"
 accepts_args: true
+preconditions:
+  - task_description_provided
+outputs:
+  - name: routed_pipeline
+    type: string
+    format: "simple | medium | complex | bug | refactor"
+  - name: implementation
+    type: string
+    format: "production code following project conventions"
+steps_count: 3
+triggers:
+  - "add"
+  - "implement"
+  - "create"
+  - "build"
+  - "enable"
+  - "fix"
+  - "refactor"
+routing:
+  simple: "Skill(generate) → Skill(verify)"
+  medium: "Skill(plan) → Skill(generate) → Skill(verify) → code-reviewer"
+  complex: "Skill(brainstorming) → worktree → Skill(plan) → iterate → human gate"
+  bug: "systematic-debugging → Skill(generate) → Skill(verify)"
+  refactor: "Skill(reverse-engineer) → Skill(plan) → medium pipeline"
 ---
 
 # /dev — Master Autonomous Development Command

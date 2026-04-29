@@ -43,9 +43,7 @@ PROJECT_ROOT = _find_project_root()
 
 # New paths (v5)
 SESSION_MD_FILE = os.path.join(PROJECT_ROOT, ".sdlc", "state", "session.md")
-PROGRESS_MD_FILE = os.path.join(PROJECT_ROOT, ".sdlc", "state", "progress.md")
 MASTER_GUIDE_FILE = os.path.join(PROJECT_ROOT, "MASTER_GUIDE.md")
-OBSERVATIONS_FILE = os.path.join(PROJECT_ROOT, ".sdlc", "metrics", "observations.jsonl")
 
 # Legacy fallback
 LEGACY_SESSION_JSON = os.path.join(PROJECT_ROOT, ".claude", ".session-state.json")
@@ -58,7 +56,7 @@ LEGACY_STATE_MD = os.path.join(PROJECT_ROOT, ".claude", "STATE.md")
 
 def load_session_state() -> Optional[dict]:
     """Load session state from JSON sidecar if it exists."""
-    for path in [LEGACY_SESSION_JSON]:
+    for path in [LEGACY_SESSION_JSON]:  # legacy only — new session.json is markdown-based
         try:
             if os.path.exists(path):
                 with open(path, "r", encoding="utf-8") as f:
@@ -162,26 +160,6 @@ ninguna
 
 
 # ---------------------------------------------------------------------------
-# Target 2: .sdlc/state/progress.md
-# ---------------------------------------------------------------------------
-
-def update_progress_md(bullets: list) -> None:
-    """Append session summary entry to .sdlc/state/progress.md."""
-    os.makedirs(os.path.dirname(PROGRESS_MD_FILE), exist_ok=True)
-
-    timestamp = datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ")
-    entry_lines = "\n".join(f"  - {b}" for b in bullets)
-    entry = f"\n### Session ended {timestamp}\n{entry_lines}\n"
-
-    if not os.path.exists(PROGRESS_MD_FILE):
-        with open(PROGRESS_MD_FILE, "w", encoding="utf-8") as f:
-            f.write("# Progress Log\n" + entry)
-    else:
-        with open(PROGRESS_MD_FILE, "a", encoding="utf-8") as f:
-            f.write(entry)
-
-
-# ---------------------------------------------------------------------------
 # Target 3: MASTER_GUIDE.md status line
 # ---------------------------------------------------------------------------
 
@@ -246,32 +224,6 @@ def update_legacy_state_md(bullets: list) -> None:
 
 
 # ---------------------------------------------------------------------------
-# Evaluation loop — write to .sdlc/metrics/observations.jsonl
-# ---------------------------------------------------------------------------
-
-def append_observation(state: Optional[dict]) -> None:
-    """Append a success/fail observation for the evaluation loop."""
-    try:
-        os.makedirs(os.path.dirname(OBSERVATIONS_FILE), exist_ok=True)
-
-        task_history = (state or {}).get("taskHistory") or []
-        last_task = task_history[-1] if task_history else {}
-
-        observation = {
-            "timestamp": datetime.now(timezone.utc).strftime("%Y-%m-%dT%H:%M:%SZ"),
-            "taskId": last_task.get("taskId", "unknown"),
-            "skill": last_task.get("skill", "unknown"),
-            "success": last_task.get("status", "unknown") not in ("failed", "error"),
-            "tokenCount": (state or {}).get("tokenCount", 0),
-        }
-
-        with open(OBSERVATIONS_FILE, "a", encoding="utf-8") as f:
-            f.write(json.dumps(observation) + "\n")
-    except Exception:
-        pass  # Never block the stop
-
-
-# ---------------------------------------------------------------------------
 # Main
 # ---------------------------------------------------------------------------
 
@@ -282,10 +234,8 @@ def main() -> None:
         if not (state and is_ralph_active(state)):
             bullets = build_summary_bullets(state)
             update_session_md(bullets)
-            update_progress_md(bullets)
             update_master_guide_status(bullets)
             update_legacy_state_md(bullets)
-            append_observation(state)
     except Exception:
         pass  # Never block the stop
 

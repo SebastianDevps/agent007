@@ -1,10 +1,32 @@
 ---
 name: react-best-practices
-description: "Guía completa de mejores prácticas para desarrollo React/Next.js basada en Vercel Labs. Use when user asks to 'review React code', 'optimize React performance', or 'apply React best practices'."
+description: "React/Next.js patterns for performant, maintainable, accessible components"
 version: 1.0.0
 invokable: true
 accepts_args: true
 allowed-tools: ["Read", "Grep", "Glob"]
+load_when:
+  - writing_react_components
+  - reviewing_react_code
+  - optimizing_react_performance
+inputs:
+  - name: component_requirements
+    type: string
+    required: true
+  - name: existing_design_system
+    type: string
+    required: false
+outputs:
+  - name: component_implementation
+    type: string
+    format: "TypeScript React functional component, hooks, accessible"
+  - name: performance_checklist
+    type: checklist
+    format: "useMemo | useCallback | lazy loading | bundle size"
+constraints:
+  - functional_components_only_no_class_components
+  - accessibility_attributes_required_on_interactive_elements
+  - no_prop_drilling_beyond_2_levels
 ---
 
 # React Best Practices - Guía Completa

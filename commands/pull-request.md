@@ -1,8 +1,26 @@
 ---
 name: pull-request
-version: 1.0
-description: "Create well-structured GitHub PRs with summary, test plan, and reviewers."
+version: 2.0
+description: "Create well-structured GitHub PRs enforcing issue-first discipline"
 accepts_args: true
+preconditions:
+  - linked_issue_exists
+  - issue_has_status_approved
+  - tests_passing
+  - branch_pushed_to_remote
+outputs:
+  - name: pr_url
+    type: url
+    format: "https://github.com/{owner}/{repo}/pull/{N}"
+  - name: pr_checklist
+    type: checklist
+    format: "issue_linked | tests_pass | no_secrets | title_under_70_chars"
+steps_count: 5
+triggers:
+  - "create PR"
+  - "open pull request"
+  - "submit for review"
+  - "finishing-a-development-branch → Push + PR"
 ---
 
 # pull-request
@@ -15,6 +33,23 @@ accepts_args: true
 
 - After `finishing-a-development-branch` selects "Push + PR"
 - When user asks to "create PR", "open pull request", "submit for review"
+
+---
+
+## Step 0 — Verify linked issue (issue-first gate)
+
+Every PR MUST link an approved issue. Verify before proceeding:
+
+```bash
+# Identify the issue number this branch addresses
+# If none exists, create one first with /issue-creation
+gh issue view <N> --json title,labels -q '{title: .title, labels: [.labels[].name]}'
+```
+
+**Gate conditions — STOP if any fail:**
+- [ ] Issue exists and is not closed
+- [ ] Issue has `status:approved` label (maintainer-only — wait if missing)
+- [ ] Issue number is known — you'll add `Closes #<N>` in the PR body
 
 ---
 
@@ -62,6 +97,10 @@ refactor — Extract payment service to shared module
 
 ```bash
 gh pr create --title "tipo — Descripción imperativa" --body "$(cat <<'EOF'
+## Linked Issue
+
+Closes #<N>
+
 ## Summary
 
 - [Bullet 1: qué se implementó y por qué]
@@ -104,6 +143,8 @@ Output the PR URL to user.
 
 ## Checklist before creating
 
+- [ ] Linked issue exists and has `status:approved`
+- [ ] PR body contains `Closes #<N>`
 - [ ] Branch pushed to remote
 - [ ] Tests passing
 - [ ] Title ≤ 70 chars, conventional format

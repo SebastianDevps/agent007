@@ -1,247 +1,208 @@
-# Agent007 v5 — Manual de Uso
+# Agent007 v5.1
 
-> Ecosistema autónomo de desarrollo AI. 8 agentes expertos · 34+ skills activas · 29 hooks · 10 primitivas OpenClaw · 3 comandos de entrada.
+> Intelligent development orchestration for Claude Code.
+> 10 expert agents · 35 skills · 21 deterministic hooks · LLM-native routing · SDD-enforced pipeline
 
 ---
 
-## Los 3 comandos de entrada
+## What it does
 
-### `/dev "tarea"` — Comando maestro
+Agent007 turns Claude Code into a structured engineering team. Instead of prompting one model, you get a full development pipeline: specialized agents routed by intent, quality gates enforced at the tool level (not the instruction level), and a spec-driven workflow that catches design problems before implementation.
 
-Clasifica la tarea automáticamente y elige el camino óptimo:
+**The core bet**: hooks are deterministic, CLAUDE.md rules are probabilistic. Agent007 enforces everything non-negotiable via hooks — safety, anti-reward-hacking, context budgets, loop detection, secret scanning — and uses rules only for preferences and style.
 
-```
-Simple  → implementa directo → verifica → done
-Medium  → plan → subagentes con review → cierre de branch
-Complex → brainstorming → worktree → plan → subagentes + ralph → cierre
-```
+---
 
-**Flags disponibles:**
-
-| Flag | Efecto |
-|---|---|
-| `--simple` | Fuerza implementación directa, sin pipeline |
-| `--full` | Fuerza pipeline completo (brainstorm → worktree → plan → subagents) |
-| `--ralph` | Activa el ralph loop en cada iteración |
-| `--max-iterations N` | Límite de iteraciones (default 20, max 50) |
-| `--verify "cmd"` | Comando de verificación personalizado para ralph |
-| `--no-review` | Salta reviews (solo prototipos) |
-
-**Ejemplos:**
+## Install
 
 ```bash
-# Bug simple → directo, sin pipeline
-/dev "Fix null pointer en UserService.findById()"
-
-# Feature nueva → genera plan, despacha subagentes por tarea
-/dev "Agregar paginación cursor-based al endpoint /users"
-
-# Feature compleja → pipeline completo
-/dev "Implementar módulo de auth JWT + refresh tokens" --full
-
-# Autónomo hasta que tests pasen
-/dev "Implementar sistema de notificaciones" --full --ralph --max-iterations 30 --verify "npm test"
+/plugin marketplace add SebastianDevps/agent007-marketplace
+/plugin install agent007@agent007-marketplace
 ```
+
+Requires Claude Code CLI or the Claude desktop app.
 
 ---
 
-### `/consult "pregunta"` — Consulta experta
+## The 10 expert agents
 
-Auto-selecciona el agente por keywords y responde desde su perspectiva especializada.
+| Agent | Model | Domain |
+|-------|-------|--------|
+| `backend-db-expert` | Opus | APIs, NestJS, TypeORM, PostgreSQL, Redis, microservices |
+| `frontend-ux-expert` | Sonnet | React, Next.js, Tailwind, GSAP, accessibility, Core Web Vitals |
+| `platform-expert` | Sonnet | CI/CD, Docker, Jest, Playwright, Kubernetes, monitoring |
+| `product-expert` | Opus | RICE, user stories, roadmap, MVP scoping, product discovery |
+| `security-expert` | Opus | OWASP Top 10, JWT, threat modeling, GDPR, SOC2 |
+| `code-reviewer` | Sonnet | Code quality — CRITICAL/HIGH/MEDIUM/LOW taxonomy |
+| `loop-operator` | Sonnet | Ralph loop lifecycle, stall detection, cost drift monitoring |
+| `refactor-cleaner` | Sonnet | Dead code detection, batch removal, safe refactoring |
+| `architect` | Opus | System design, ADR, hexagonal/clean architecture, DDD |
+| `performance-optimizer` | Sonnet | Bundle, N+1, Lighthouse, LCP/CLS/TTI, cache strategy |
 
-**Mapeo keywords → agente:**
+Routing is LLM-native: the orchestrator reads agent descriptions and matches by intent — no keyword table to maintain.
 
-| Keywords | Agente |
-|---|---|
-| api, nestjs, database, query, typeorm, cache, schema, microservice, resilience | backend-db-expert |
-| auth, jwt, owasp, vulnerability, cors, xss, injection, encryption | security-expert |
-| react, next, component, tailwind, ux, form, accessibility, gsap, animation | frontend-ux-expert |
-| docker, ci/cd, test, tdd, coverage, kubernetes, deploy, pipeline | platform-expert |
-| roadmap, mvp, backlog, user story, rice, prioritize | product-expert |
+---
 
-**Flags:**
+## Pipeline
 
-| Flag | Cuándo |
-|---|---|
-| `--quick` | Respuesta directa, sin trade-offs |
-| default | Recomendación con análisis (~60 líneas) |
-| `--deep` | Arquitectura, decisiones complejas (~120 líneas) |
-| `--experts X,Y` | Dos opiniones independientes |
+Two paths. No ambiguity.
 
-**Ejemplos:**
+```
+Trivial  → Skill('generate') → Skill('verify') → done
+           (single-file edit, no new behavior, no public surface change)
+
+Substantial → SDD: proposal → spec → design → tasks → apply → verify → archive
+              (new behavior, multi-file, public surface, refactor, any high/critical risk)
+```
+
+When in doubt, SDD. Over-planning a small change costs one extra round. Under-planning a substantial one can cost a week.
+
+---
+
+## 35 active skills
+
+**Pipeline** (9): `plan` · `generate` · `verify` · `brainstorming` · `tdd-workflow` · `subagent-driven-development` · `using-git-worktrees` · `finishing-a-development-branch` · `sop-reverse`
+
+**Core — always active** (3): `quality-enforcement` · `banned-phrases` · `context-awareness`
+
+**Orchestration — always active** (4): `session-manager` · `ralph-loop-wrapper` · `state-sync` · `iterative-retrieval`
+
+**Domain** (8): `api-design-principles` · `architecture-patterns` · `resilience-patterns` · `nestjs-code-reviewer` · `security-review` · `react-best-practices` · `frontend-design` · `gsap`
+
+**Quality gates** (2): `systematic-debugging` · `agent-self-diagnosis`
+
+**DevRel** (1): `api-documentation`
+
+**Product** (1): `product-discovery`
+
+**Workflow utils** (7): `commit` · `pull-request` · `changelog` · `deep-research` · `search-first` · `rules-distill` · `skill-stocktake`
+
+---
+
+## 21 deterministic hooks
+
+| Hook | Trigger | What it enforces |
+|------|---------|-----------------|
+| `memory-check.py` | SessionStart | Detects manifest changes via MD5 |
+| `rtk-bootstrap.py` | SessionStart | Token compression binary setup |
+| `memory-decay.py` | SessionStart | Marks MEMORY.md entries stale at 30d, archives at 60d |
+| `constraint-reinforcement.py` | UserPromptSubmit | Reinjects core rules at every turn |
+| `subagent-context.py` | SubagentStart | Injects project context + skill registry into every subagent |
+| `transcript-policy.py` | SubagentStart | Model-tier directives: haiku → concise, opus → deep-analysis |
+| `state-sync.py` | Stop | Writes session state to `.sdlc/state/session.md` |
+| `context-engine.py` | PreToolUse/Agent + Stop | Blocks Agent spawns at ≥80% context budget |
+| `web-distill.py` | PreToolUse/WebFetch | Strips HTML noise, returns semantic text only (≤10KB) |
+| `tool-policy-guard.py` | PreToolUse/Edit\|Write | Enforces tool_profile per active agent |
+| `sdd-guard.py` | PreToolUse+PostToolUse/Edit\|Write | Blocks reward-hacking (edits that reduce assertions) |
+| `config-guard.py` | PreToolUse/Edit\|Write | Protects settings.json and hooks from accidental edits |
+| `mutation-guard.py` | PreToolUse/Edit\|Write\|Bash | Fingerprints writes, skips exact duplicates silently |
+| `safety-guard.py` | PreToolUse/Bash | Blocks destructive commands (rm -rf, force push, DROP TABLE) |
+| `rtk-rewrite.py` | PreToolUse/Bash | Compresses git/npm/docker commands (~40% token reduction) |
+| `block-no-verify.py` | PreToolUse/Bash | Blocks `git commit --no-verify` |
+| `pre-commit-guard.py` | PreToolUse/Bash | Scans for secrets and .env files before commit |
+| `context-window-guard.py` | PostToolUse | Warns when context window is filling |
+| `tool-loop-detection.py` | PostToolUse | SHA-256 fingerprint loop detection, circuit breaker at 30× |
+| `format-on-save.py` | PostToolUse/Edit\|Write | Auto-formats .ts .tsx .js .jsx .json .css .md |
+| `notify.py` | Notification | macOS/Linux desktop notifications on task completion |
+
+**Hook runtime profiles** — control overhead via `CLAUDE_HOOK_PROFILE`:
+
+| Profile | Active hooks | Use when |
+|---------|-------------|----------|
+| `minimal` | safety-guard, sdd-guard, block-no-verify, pre-commit-guard, config-guard | Rapid prototyping |
+| `standard` (default) | All 21 | Normal sessions |
+| `strict` | All 21 | Pre-merge, security reviews |
 
 ```bash
-/consult "¿Cómo implemento circuit breaker en NestJS?" --quick
-/consult "¿Cursor-based o offset pagination para 10M registros?" --deep
-/consult "¿JWT stateless vs sessions con Redis?" --experts backend,security
+export CLAUDE_HOOK_PROFILE=minimal
 ```
 
 ---
 
-### `/ralph-loop "tarea"` — Loop autónomo hasta completar
+## OpenClaw primitives
 
-Itera hasta detectar `<promise>COMPLETE</promise>`. El Stop hook bloquea salidas prematuras e inyecta continuación automáticamente.
+Five primitives run automatically on every session with no configuration needed:
 
-```bash
-/ralph-loop "Implementar herramienta de gestión de proyectos"
-
-Requisitos:
-- Aplicación Next.js + Tailwind con localStorage
-- Tablero Kanban (columnas: Todo / In Progress / Done)
-- Sin errores de linter
-
-Criterios de éxito:
-- npm test pasa
-- Sin errores de TypeScript
-
---max-iterations 30 --verify "npm test"
-```
+| Primitive | What it does |
+|-----------|-------------|
+| `tool-loop-detection` | SHA-256 fingerprint window (30 calls). Warning at 10, circuit break at 30. 4h TTL auto-reset. |
+| `context-engine` | Hard block at ≥80% context before Agent spawns. Advisory at 60-79%. |
+| `mutation-guard` | Deduplicates writes by content hash. Silent skip on exact duplicates. |
+| `memory-decay` | Marks stale memory entries automatically. No manual cleanup needed. |
+| `web-distill` | All WebFetch calls go through semantic HTML distillation. ~99% noise reduction. |
 
 ---
 
-## Lifecycle completo de desarrollo
+## RTK — Token compression
 
-Hay **5 checkpoints** donde tú decides. Nada avanza sin tu aprobación.
+All eligible Bash commands are rewritten automatically via `rtk-rewrite.py`:
 
-```
-[CP 0] Clasificación automática → muestra routing antes de actuar
-         ↓
-[CP 1] Plan de tareas generado → lo lees y apruebas antes de implementar
-         ↓
-[CP 2] Review por tarea (spec compliance + code quality) → subagente corrige si falla
-         ↓
-[CP 3] Branch finish → 4 opciones: merge / push+PR / keep / discard
-         ↓
-[CP implícito] Stop hook → verifica completitud real antes de permitir salir
-```
+Covered: `git` · `npm` · `pnpm` · `cargo` · `pytest` · `vitest` · `docker` · `kubectl` · `bun` · `npx` · `eslint` · `tsc` · `jest` · `playwright` · `go` · `rspec` · `curl`
+
+Ultra-compact mode auto-applied to: `git log` · `docker ps` · `docker logs` · `kubectl` · `npm list`
 
 ---
 
-## Los 8 agentes expertos
+## Session persistence
 
-| Agente | Modelo | Dominio |
-|---|---|---|
-| `backend-db-expert` | opus | APIs, NestJS, TypeORM, PostgreSQL, Redis, microservicios, queries, schema |
-| `frontend-ux-expert` | sonnet | React, Next.js 14, Tailwind, GSAP, animaciones, TanStack Query, WCAG, Core Web Vitals |
-| `platform-expert` | sonnet | CI/CD, GitHub Actions, Docker, Jest, Playwright, Kubernetes, monitoring |
-| `product-expert` | opus | RICE/ICE, user stories, roadmap, AARRR, MVP scoping, product discovery |
-| `security-expert` | opus | OWASP Top 10, JWT, threat modeling, GDPR, SOC2, penetration testing |
-| `code-reviewer` | sonnet | Revisión de calidad general con taxonomía CRITICAL/HIGH/MEDIUM/LOW |
-| `loop-operator` | sonnet | Gestión del ralph-loop, stall detection, cost drift monitoring |
-| `refactor-cleaner` | sonnet | Dead code detection, batch removal, safe refactoring |
+`.sdlc/state/session.md` is written silently after every task and at session end.
+
+- Active task ≠ "ninguna" → shows resume banner at next session start
+- Active plans in `.sdlc/tasks/active-plan.md`
+- Architecture decisions in `.sdlc/context/`
 
 ---
 
-## Skills de pipeline (invocados por /dev)
+## Entry commands
 
-| Skill | Propósito |
-|---|---|
-| `plan` | Descompone en sub-tareas de 2-5 min con rutas exactas y TDD steps |
-| `generate` | Implementación con TDD cycle: RED → GREEN → REFACTOR |
-| `verify` | Gate mandatorio antes de cualquier claim de "done" (evidencia requerida) |
-| `brainstorming` | Preguntas socráticas una a la vez para clarificar requisitos ambiguos |
-| `subagent-driven-development` | Despacha subagente experto por tarea con wave execution |
-| `using-git-worktrees` | Crea rama aislada `feat/<nombre>` en `.worktrees/` |
-| `finishing-a-development-branch` | Tests + 4 opciones: merge / push+PR / mantener / descartar |
-| `reverse-engineer` | Ingeniería inversa de código existente → escenarios para refactors seguros |
+| Command | What it does |
+|---------|-------------|
+| `/dev "task"` | Auto-classifies and routes: simple → direct, medium → plan+subagents, complex → full pipeline |
+| `/consult "question"` | Routes to the best expert agent by intent. Flags: `--quick` `--deep` `--experts X,Y` |
+| `/ralph-loop "task"` | Autonomous loop until `<promise>COMPLETE</promise>`. Stall detection included. |
+| `/sdd-new "change"` | Starts spec-driven development: proposal → spec → design → tasks → apply → verify |
+| `/sdd-ff "change"` | Fast-forward: runs all planning phases (propose → spec → design → tasks) in sequence |
 
 ---
 
-## Hooks activos (22 total)
-
-Los hooks garantizan calidad a nivel de herramienta, no de instrucción.
-
-| Hook | Evento | Qué hace |
-|---|---|---|
-| `welcome.py` | SessionStart | Banner de estado: versión, skills, agentes, branch, tarea activa |
-| `memory-check.py` | SessionStart | Detecta cambios en manifests via stat+MD5 |
-| `safety-guard.py` | PreToolUse (Bash) | Bloquea comandos destructivos (rm -rf, force push, DROP TABLE) |
-| `sdd-guard.py` | PreToolUse/PostToolUse (Edit/Write) | Bloquea reward-hacking (edits que reducen assertions) |
-| `context-engine.py` | PreToolUse + Stop | Proactive context budget antes de cada Agent spawn |
-| `rtk-rewrite.py` | PreToolUse (Bash) | Comprime comandos para ahorrar tokens (~40% reducción) |
-| `format-on-save.py` | PostToolUse (Edit/Write) | Prettier automático en .ts .tsx .js .jsx .json .css .md |
-| `tool-loop-detection.py` | PostToolUse | Detecta loops repetitivos, circuit breaker a 30× |
-
----
-
-## Técnicas de ahorro de tokens
-
-| Comando | Tokens aprox | Cuándo |
-|---|---|---|
-| `/consult --quick` | ~2K | Respuesta directa |
-| `/consult` | ~5K | Análisis con trade-offs |
-| `/consult --deep` | ~10K | Decisiones de arquitectura |
-| `/dev --simple` | ~3-8K | Bug, cambio de 1 archivo |
-| `/dev` medium | ~15-40K | Feature clara, 3-6 tasks |
-| `/dev --full` | ~40-80K | Feature compleja con brainstorm |
-
-**`/compact` estratégico** — entre fases, no dentro de una:
-
-```
-✅ Después del plan, antes de implementar
-✅ Entre features consecutivas
-❌ A la mitad de un subagent-driven-development
-```
-
----
-
-## Estructura de archivos
+## File structure
 
 ```
 .claude/
-├── agents/                    # 8 agentes expertos (opus/sonnet)
-│   ├── backend-db-expert.md
-│   ├── frontend-ux-expert.md
-│   ├── platform-expert.md
-│   ├── product-expert.md
-│   ├── security-expert.md
-│   ├── code-reviewer.md
-│   ├── loop-operator.md
-│   └── refactor-cleaner.md
-│
-├── commands/                  # Comandos de entrada + slash commands
-│   ├── dev.md
-│   ├── consult.md
-│   ├── prompt-gen.md
-│   └── ...
-│
-├── skills/
-│   ├── pipeline/              # plan, generate, verify, brainstorming, subagent-driven-development...
-│   ├── orchestration/         # ralph-loop-wrapper, session-manager, state-sync
-│   ├── workflow-utils/        # deep-research, commit, pull-request, changelog, search-first...
-│   ├── quality-gates/         # systematic-debugging, architecture-review
-│   ├── domain/                # gsap, react-best-practices, frontend-design, api-design-principles...
-│   ├── product/               # product-discovery
-│   └── devrel/                # api-documentation
-│
-├── hooks/                     # 22 hooks activos
-│   ├── welcome.py             # SessionStart: banner de estado
-│   ├── safety-guard.py        # PreToolUse: bloquea comandos destructivos
-│   ├── sdd-guard.py           # PreToolUse/PostToolUse: anti-reward-hacking
-│   ├── context-engine.py      # PreToolUse+Stop: proactive context budget
-│   ├── rtk-rewrite.py         # PreToolUse: compresión de comandos
-│   └── ...
-│
-├── scripts/
-│   ├── agent007-init.js       # Genera banner de estado para welcome.py
-│   ├── context-budget.js      # Mide uso de contexto
-│   └── ...
-│
-├── rules/                     # Reglas de código (TypeScript, security, git-workflow, patterns)
-├── scenarios/                 # Prompts de escenarios de uso (airpods-landing, etc.)
-├── CLAUDE.md                  # Instrucciones del orquestador (auto-cargado) ← fuente de verdad
-├── GETTING_STARTED.md         # Guía de onboarding para nuevos usuarios
-├── README.md                  # Este archivo
-├── settings.json              # Hooks, permisos, context includes
-└── STATE.md                   # Redirect → .sdlc/state/session.md
+├── agents/          # 10 agent definitions (opus/sonnet)
+├── commands/        # Slash commands (/dev, /consult, /ralph-loop, /sdd-*)
+├── hooks/           # 21 deterministic quality gates
+├── rules/           # Code conventions (TypeScript, security, git, patterns)
+├── scripts/         # CLI utilities (wave-scheduler, context-budget)
+├── skills/          # 35 skills organized by domain
+├── CLAUDE.md        # Orchestrator instructions (auto-loaded) ← source of truth
+├── GETTING_STARTED.md
+├── README.md
+└── settings.json    # Hook registration, permissions, context includes
+
+.sdlc/
+├── context/         # tech-stack.md, conventions.md, project-overview.md
+│                    # (injected into every subagent via subagent-context.py)
+├── state/           # session.md, context-budget.json, loop-state.json
+└── tasks/           # Active plans
 ```
 
 ---
 
-## Persistencia entre sesiones
+## Model routing
 
-`.sdlc/state/session.md` se actualiza silenciosamente al completar cada tarea y al final de cada sesión.
+| Tier | Model | When |
+|------|-------|------|
+| Haiku | `claude-haiku-4-5-20251001` | Classification, boilerplate, narrow single-file edits |
+| Sonnet | `claude-sonnet-4-6` | Implementation, refactors, API design, debugging — default |
+| Opus | `claude-opus-4-6` | Architecture, root-cause analysis, multi-file invariants, security |
 
-- Si "Tarea Activa" ≠ "ninguna" → muestra banner de retomada al inicio
-- Planes activos en `.sdlc/tasks/active-plan.md`
-- Decisiones arquitectónicas en `.sdlc/context/`
+Agent defaults: Opus → backend-db-expert, product-expert, security-expert, architect · Sonnet → all others.
+
+---
+
+## Requirements
+
+- Claude Code CLI (any tier) or Claude desktop app
+- Python 3.8+ (for hook scripts)
+- macOS, Linux, or Windows (WSL recommended for hooks)

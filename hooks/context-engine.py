@@ -56,7 +56,8 @@ MODEL_WINDOWS = {
     "claude-haiku-4-5-20251001": 200_000,
 }
 DEFAULT_WINDOW = 200_000
-COMPACT_THRESHOLD = 0.80   # 80% → recommend compact before spawn
+BLOCK_THRESHOLD = 0.80     # ≥80% → block spawn (hard gate)
+WARN_THRESHOLD  = 0.60     # 60-79% → advisory only
 CHARS_PER_TOKEN = 4        # rough estimate
 
 
@@ -133,23 +134,31 @@ def handle_pre_tool_use(data, project_root):
     }
     save_budget_state(state_path, budget_state)
 
-    response = {"continue": True}
-
-    if percent >= COMPACT_THRESHOLD * 100:
-        msg = (
-            f"[context-engine] ⚠️  Context at {percent:.0f}% before Agent spawn.\n"
-            f"  Estimated: {estimated_tokens:,} / {model_budget:,} tokens\n"
-            f"  Recommendation: run /compact or Skill('strategic-compact') before spawning subagent\n"
-            f"  to prevent context rot in the subagent's inherited context.\n"
-            f"  Spawn ID: {spawn_id}"
-        )
-        print(msg)
+    if estimated_tokens > 0 and percent >= BLOCK_THRESHOLD * 100:
+        # Hard block — context too high for a safe spawn
+        response = {
+            "decision": "block",
+            "reason": (
+                f"[context-engine] 🔴 SPAWN BLOCKED — Context at {percent:.0f}% "
+                f"({estimated_tokens:,}/{model_budget:,} tokens).\n"
+                f"Run /compact before spawning a subagent to prevent context rot.\n"
+                f"Spawn ID: {spawn_id}"
+            ),
+        }
+    elif estimated_tokens > 0 and percent >= WARN_THRESHOLD * 100:
+        # Advisory — warn but allow
+        response = {
+            "continue": True,
+            "hookSpecificOutput": {
+                "additionalContext": (
+                    f"[context-engine] ⚠️ Context at {percent:.0f}% before Agent spawn "
+                    f"({estimated_tokens:,}/{model_budget:,} tokens). "
+                    f"Consider /compact soon. Spawn ID: {spawn_id}"
+                )
+            },
+        }
     else:
-        if estimated_tokens > 0:
-            print(
-                f"[context-engine] Context at {percent:.0f}% "
-                f"({estimated_tokens:,}/{model_budget:,} tokens) — OK for spawn {spawn_id}"
-            )
+        response = {"continue": True}
 
     print(json.dumps(response))
 

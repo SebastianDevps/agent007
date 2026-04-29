@@ -1,7 +1,33 @@
 ---
 name: consult
-version: 4.0
-description: Consulta inteligente a agentes expertos con auto-selección y skills injection
+version: 1.0
+description: "Route question to the correct expert agent based on keyword matching"
+accepts_args: true
+preconditions:
+  - question_provided
+outputs:
+  - name: expert_recommendation
+    type: structured_report
+    format: "Recommendation | Key considerations | Implementation steps"
+  - name: decisions_md
+    type: string
+    format: ".sdlc/context/DECISIONS.md — only for concrete technical decisions"
+steps_count: 3
+triggers:
+  - "should I"
+  - "recommend"
+  - "best practice"
+  - "compare"
+  - "explain"
+routing:
+  backend-db-expert: [api, endpoint, architecture, nestjs, database, query, sql, typeorm, redis, migration]
+  security-expert: [security, auth, jwt, oauth, owasp, vulnerability, encryption, cors, xss]
+  frontend-ux-expert: [react, next, component, ui, ux, design, accessibility, tailwind, gsap]
+  platform-expert: [deploy, docker, ci/cd, test, tdd, pipeline, kubernetes, monitoring]
+  product-expert: [product, roadmap, user story, mvp, backlog, prioritize, rice, feature]
+flags:
+  --deep: "120 lines max, read all agent skills in full"
+  --quick: "25 lines max, skip skills loading"
 ---
 
 # /consult — Expert Consultation
