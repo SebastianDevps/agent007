@@ -79,7 +79,13 @@ fi
 # Last resort
 [ -z "$MODEL" ] && MODEL="claude"
 
-# Map full model id → short label
+# Detect 1M context window variant (e.g. claude-opus-4-7[1m])
+IS_1M=0
+case "$MODEL" in
+  *"[1m]"*|*"1m"*) IS_1M=1 ;;
+esac
+
+# Map full model id → short label (with 1m suffix if applicable)
 case "$MODEL" in
   *opus-4-7*|*opus-4.7*)        MODEL_LABEL="opus 4.7"   ;;
   *opus-4-6*|*opus-4.6*)        MODEL_LABEL="opus 4.6"   ;;
@@ -91,6 +97,12 @@ case "$MODEL" in
   claude)                        MODEL_LABEL="?"          ;;
   *)                             MODEL_LABEL="${MODEL##*-}" ;;
 esac
+[ "$IS_1M" = "1" ] && MODEL_LABEL="$MODEL_LABEL (1m)"
+
+# Default budget per model family (used when payload doesn't carry tokens_total
+# or when the persisted snapshot is stale relative to the current model).
+DEFAULT_BUDGET=200000
+[ "$IS_1M" = "1" ] && DEFAULT_BUDGET=1000000
 
 # Debug: if we couldn't detect the model AND stdin had content, log it once so
 # we can update the schema mapping later. This file is self-cleaning (overwritten).
@@ -138,6 +150,13 @@ if [ -n "${CLAUDE_MAX_TOKENS:-}" ] && [ "$CLAUDE_MAX_TOKENS" -gt 0 ] 2>/dev/null
   TOKENS_BUDGET="$CLAUDE_MAX_TOKENS"
 fi
 
+# If the persisted budget is the generic 200k default but we know the real
+# model has a 1M window, override it. This fixes the case where tokens.json
+# was written before we detected the 1m variant.
+if [ "$IS_1M" = "1" ] && [ "$TOKENS_BUDGET" -le 200000 ]; then
+  TOKENS_BUDGET="$DEFAULT_BUDGET"
+fi
+
 # Compute %
 if [ "$TOKENS_BUDGET" -gt 0 ] && [ "$TOKENS_USED" -gt 0 ]; then
   PCT=$(( TOKENS_USED * 100 / TOKENS_BUDGET ))
@@ -153,10 +172,12 @@ elif [ "$PCT" -ge 60 ]; then
   PRESSURE=" ⚠"
 fi
 
-# Tokens display, K-formatted
+# Tokens display, K/M-formatted
 fmt_k() {
   local n=$1
-  if [ "$n" -ge 1000 ]; then
+  if [ "$n" -ge 1000000 ]; then
+    awk -v n="$n" 'BEGIN { v = n/1000000; printf (v == int(v) ? "%dM" : "%.1fM"), v }'
+  elif [ "$n" -ge 1000 ]; then
     awk -v n="$n" 'BEGIN { printf "%.0fk", n/1000 }'
   else
     echo "$n"
