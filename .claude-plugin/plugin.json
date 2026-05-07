@@ -1,5 +1,5 @@
 {
   "name": "agent007",
-  "version": "6.0.1",
+  "version": "6.0.2",
   "description": "8 expert agents, 44 skills, 26 deterministic hooks — frontend executor with anti-convergence gate, SDD pipeline, persistent telemetry, cross-session recovery, statusLine real-time, CI propia, debt register vacío. Python 3.9+ compatible. Cross-platform (macOS/Linux/Windows)."
 }
