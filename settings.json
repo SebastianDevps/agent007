@@ -241,6 +241,10 @@
   },
   "maxOutputTokens": 64000,
   "maxFileReadTokens": 100000,
+  "statusLine": {
+    "type": "command",
+    "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && bash \"$HOOK_ROOT/.claude/scripts/lifecycle/statusline.sh\""
+  },
   "experimental": {
     "agentTeams": true
   }

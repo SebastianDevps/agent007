@@ -111,6 +111,28 @@ def evaluate(fixture: Path, expected: dict, decision: str, reason: str, exit_cod
     return TestResult(name, True)
 
 
+def setup_state(spec: dict) -> Path | None:
+    """If fixture declares setup_state_file/_content, write it and return the path
+    so we can clean up afterward. Returns None if no setup needed."""
+    rel = spec.get("setup_state_file")
+    content = spec.get("setup_state_content")
+    if not rel or content is None:
+        return None
+    path = ROOT / rel
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(content), encoding="utf-8")
+    return path
+
+
+def teardown_state(path):
+    if path is None:
+        return
+    try:
+        path.unlink()
+    except OSError:
+        pass
+
+
 def run_one(fixture: Path) -> TestResult:
     try:
         spec = json.loads(fixture.read_text(encoding="utf-8"))
@@ -119,9 +141,20 @@ def run_one(fixture: Path) -> TestResult:
     hook = spec.get("hook")
     if not hook:
         return TestResult(fixture.stem, False, "fixture missing 'hook' field")
-    rc, stdout, stderr = run_hook(hook, spec.get("stdin") or {}, spec.get("env") or {})
+    state_path = setup_state(spec)
+    try:
+        rc, stdout, stderr = run_hook(hook, spec.get("stdin") or {}, spec.get("env") or {})
+    finally:
+        teardown_state(state_path)
     if rc < 0:
         return TestResult(fixture.stem, False, stderr.strip() or "hook execution failed")
+    # Surface tracebacks even when stdout is fine — this is the bug class we missed before
+    if "Traceback" in stderr:
+        return TestResult(
+            fixture.stem, False,
+            "hook printed Traceback to stderr (silent fail-open):\n    " +
+            "\n    ".join(stderr.strip().splitlines()[:5])
+        )
     decision, reason = parse_decision(stdout)
     return evaluate(fixture, spec.get("expect") or {}, decision, reason, rc)
 

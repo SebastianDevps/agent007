@@ -55,6 +55,8 @@ When in doubt, choose SDD. Over-planning a small change costs less than under-pl
 
 **Save proactively (do NOT wait to be asked):** decisions, bugs (with root cause), conventions, gotchas, user preferences, configuration changes.
 
+**topic_key convention (method-of-loci):** use `<domain>/<area>/<sub>` so future searches are surgical, not flat. Examples: `plugin/refactor/v6`, `skill/frontend/discovery-gate`, `bug/hooks/mutation-fingerprint`, `agent/frontend-ux/builder-mode`. Never bury under generic keys like `notes` or `memory`.
+
 **Temporal validity (MemPalace-style):** when saving content that replaces a prior decision, link via `superseded_by:{old_id}`. `mem_search` filters superseded by default. Stop using "delete by age" — use logical invalidation.
 
 **Session close (mandatory before "done"/"listo"):** `mem_session_summary` with Goal, Discoveries, Accomplished, Next Steps, Relevant Files.

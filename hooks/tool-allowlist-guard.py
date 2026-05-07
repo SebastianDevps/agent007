@@ -33,6 +33,8 @@ Profile gating:
     PROFILE=minimal → no-op
 """
 
+from __future__ import annotations
+
 import fnmatch
 import json
 import os

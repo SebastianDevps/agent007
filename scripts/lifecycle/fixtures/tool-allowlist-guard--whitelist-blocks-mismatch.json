@@ -1,0 +1,17 @@
+{
+  "_setup": "This fixture creates .claude/state/active-skill.json before running the hook so we exercise the load_active_skill() path. The hook should BLOCK because the command does not match the skill's allowed-tools whitelist. This is the path that broke under Python 3.9 (PEP 604 syntax) and silent-failed.",
+  "hook": "tool-allowlist-guard",
+  "stdin": {
+    "tool_name": "Bash",
+    "tool_input": { "command": "rm -rf /important-data" }
+  },
+  "setup_state_file": ".claude/state/active-skill.json",
+  "setup_state_content": {
+    "name": "test-skill-with-whitelist",
+    "allowed_tools": ["Bash(git status)", "Bash(npm test*)"]
+  },
+  "expect": {
+    "decision": "block",
+    "reason_contains": "test-skill-with-whitelist"
+  }
+}
