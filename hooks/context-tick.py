@@ -115,6 +115,23 @@ def extract_context_tokens(payload: dict):
         return None, None
 
 
+def extract_model(payload: dict) -> str:
+    """Pull model id from payload — Claude Code may put it in several places.
+    Falls back to env."""
+    candidates = [
+        payload.get("model"),
+        payload.get("model_id"),
+        (payload.get("model_info") or {}).get("id") if isinstance(payload.get("model_info"), dict) else None,
+        (payload.get("session") or {}).get("model") if isinstance(payload.get("session"), dict) else None,
+        (payload.get("hook_event_data") or {}).get("model") if isinstance(payload.get("hook_event_data"), dict) else None,
+        os.environ.get("CLAUDE_MODEL", ""),
+    ]
+    for c in candidates:
+        if c and isinstance(c, str):
+            return c
+    return ""
+
+
 def persist_tokens(root: Path, used, total, model: str) -> None:
     """Write a small snapshot file the statusLine reads. Single file, atomic
     overwrite — fast (<5ms). statusline.sh reads this every status refresh."""
@@ -182,7 +199,7 @@ def main() -> None:
                 ev["reference_load"] = True
         append_event(root, ev)
         # Side-effect: persist a snapshot for statusline.sh to read
-        persist_tokens(root, used, total, os.environ.get("CLAUDE_MODEL", ""))
+        persist_tokens(root, used, total, extract_model(payload))
     elif event_type == "stop":
         append_event(root, {
             **base,

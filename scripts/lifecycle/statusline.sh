@@ -37,14 +37,66 @@ STATE_DIR="$ROOT/.sdlc/state"
 BUDGET_JSON="$STATE_DIR/context-budget.json"
 JSONL="$STATE_DIR/context-budget.jsonl"
 
-MODEL="${CLAUDE_MODEL:-sonnet}"
-MODEL_SHORT="${MODEL##*-}"  # claude-sonnet-4-6 → 4-6, claude-opus-4-7 → 4-7
+# Read stdin (Claude Code passes JSON to statusLine commands, similar to hooks).
+# The schema is not officially documented but commonly includes: model, session_id,
+# cwd, transcript_path. Fall back gracefully if stdin is empty.
+STDIN_JSON=""
+if [ ! -t 0 ]; then
+  STDIN_JSON=$(cat 2>/dev/null || echo "")
+fi
+
+# Extract model from stdin → tokens.json → env, with sensible fallback
+MODEL=""
+if [ -n "$STDIN_JSON" ] && command -v python3 >/dev/null 2>&1; then
+  MODEL=$(echo "$STDIN_JSON" | python3 -c "
+import json, sys
+try:
+    d = json.loads(sys.stdin.read())
+    # Try multiple paths Claude Code may use
+    print(
+        d.get('model', '') or
+        d.get('model_id', '') or
+        (d.get('model_info') or {}).get('id', '') or
+        (d.get('session') or {}).get('model', '') or
+        ''
+    )
+except Exception:
+    print('')
+" 2>/dev/null)
+fi
+# Fallback: tokens.json snapshot (written by context-tick.py)
+if [ -z "$MODEL" ] && [ -f "$STATE_DIR/tokens.json" ] && command -v python3 >/dev/null 2>&1; then
+  MODEL=$(python3 -c "
+import json
+try:
+    print(json.load(open('$STATE_DIR/tokens.json')).get('model', ''))
+except Exception:
+    print('')
+" 2>/dev/null)
+fi
+# Fallback: env (legacy)
+[ -z "$MODEL" ] && MODEL="${CLAUDE_MODEL:-}"
+# Last resort
+[ -z "$MODEL" ] && MODEL="claude"
+
+# Map full model id → short label
 case "$MODEL" in
-  *opus*)   MODEL_LABEL="opus"   ;;
-  *sonnet*) MODEL_LABEL="sonnet" ;;
-  *haiku*)  MODEL_LABEL="haiku"  ;;
-  *)        MODEL_LABEL="$MODEL_SHORT" ;;
+  *opus-4-7*|*opus-4.7*)        MODEL_LABEL="opus 4.7"   ;;
+  *opus-4-6*|*opus-4.6*)        MODEL_LABEL="opus 4.6"   ;;
+  *opus*)                        MODEL_LABEL="opus"       ;;
+  *sonnet-4-6*|*sonnet-4.6*)    MODEL_LABEL="sonnet 4.6" ;;
+  *sonnet*)                      MODEL_LABEL="sonnet"     ;;
+  *haiku-4-5*|*haiku-4.5*)      MODEL_LABEL="haiku 4.5"  ;;
+  *haiku*)                       MODEL_LABEL="haiku"      ;;
+  claude)                        MODEL_LABEL="?"          ;;
+  *)                             MODEL_LABEL="${MODEL##*-}" ;;
 esac
+
+# Debug: if we couldn't detect the model AND stdin had content, log it once so
+# we can update the schema mapping later. This file is self-cleaning (overwritten).
+if [ "$MODEL_LABEL" = "?" ] && [ -n "$STDIN_JSON" ]; then
+  echo "$STDIN_JSON" > "$STATE_DIR/statusline-stdin-debug.json" 2>/dev/null || true
+fi
 
 # Token source priority (PRIMARY → fallback):
 #   1. .sdlc/state/tokens.json — written by context-tick.py from PostToolUse payload (real value)
