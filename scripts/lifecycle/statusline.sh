@@ -111,14 +111,57 @@ if [ "$MODEL_LABEL" = "?" ] && [ -n "$STDIN_JSON" ]; then
 fi
 
 # Token source priority (PRIMARY → fallback):
-#   1. .sdlc/state/tokens.json — written by context-tick.py from PostToolUse payload (real value)
-#   2. .sdlc/state/context-budget.json — written by context-engine.py (snapshot at Agent spawn)
-#   3. env vars (legacy, NOT standard in Claude Code)
+#   1. transcript_path from stdin — read latest message.usage from the JSONL.
+#      This is the SINGLE SOURCE OF TRUTH and works in any project (no per-project
+#      state file needed). The harness passes transcript_path on every refresh.
+#   2. .sdlc/state/tokens.json — written by context-tick.py (legacy fallback)
+#   3. .sdlc/state/context-budget.json — written by context-engine.py
+#   4. env vars (legacy, NOT standard in Claude Code)
 TOKENS_USED=0
 TOKENS_BUDGET=200000
 TOKENS_FILE="$STATE_DIR/tokens.json"
 
-if [ -f "$TOKENS_FILE" ] && command -v python3 >/dev/null 2>&1; then
+# 1. Try reading directly from transcript_path in stdin (most reliable, works anywhere)
+if [ -n "$STDIN_JSON" ] && command -v python3 >/dev/null 2>&1; then
+  read -r TOKENS_USED < <(
+    echo "$STDIN_JSON" | python3 -c "
+import json, sys, os
+try:
+    d = json.loads(sys.stdin.read())
+    tp = d.get('transcript_path', '')
+    if not tp or not os.path.exists(tp):
+        print(0); raise SystemExit
+    size = os.path.getsize(tp)
+    with open(tp, 'rb') as f:
+        f.seek(max(0, size - 262144))
+        tail = f.read().decode('utf-8', errors='replace')
+    lines = tail.splitlines()
+    if len(lines) > 1 and size > 262144: lines = lines[1:]
+    for line in reversed(lines):
+        if not line.strip(): continue
+        try:
+            ev = json.loads(line)
+        except Exception:
+            continue
+        msg = ev.get('message') or {}
+        if not isinstance(msg, dict): continue
+        u = msg.get('usage')
+        if not isinstance(u, dict): continue
+        ipt = int(u.get('input_tokens') or 0)
+        cct = int(u.get('cache_creation_input_tokens') or 0)
+        crt = int(u.get('cache_read_input_tokens') or 0)
+        total = ipt + cct + crt
+        if total > 0:
+            print(total); raise SystemExit
+    print(0)
+except Exception:
+    print(0)
+" 2>/dev/null
+  ) || TOKENS_USED=0
+fi
+
+# 2. Fallback: tokens.json (per-project, written by context-tick.py)
+if [ "${TOKENS_USED:-0}" -eq 0 ] && [ -f "$TOKENS_FILE" ] && command -v python3 >/dev/null 2>&1; then
   read -r TOKENS_USED TOKENS_BUDGET < <(
     python3 - <<PY 2>/dev/null
 import json
@@ -129,7 +172,7 @@ except Exception:
     print(0, 200000)
 PY
   ) || { TOKENS_USED=0; TOKENS_BUDGET=200000; }
-elif [ -f "$BUDGET_JSON" ] && command -v python3 >/dev/null 2>&1; then
+elif [ "${TOKENS_USED:-0}" -eq 0 ] && [ -f "$BUDGET_JSON" ] && command -v python3 >/dev/null 2>&1; then
   read -r TOKENS_USED TOKENS_BUDGET < <(
     python3 - <<PY 2>/dev/null
 import json
