@@ -95,24 +95,62 @@ def detect_reference_load(tool_name: str, file_path: str) -> bool:
 
 
 def extract_context_tokens(payload: dict):
-    """Pull tokens used / total from PostToolUse payload (Claude Code passes
-    `context_window` in the payload — this is the only reliable source since
-    CLAUDE_CONTEXT_TOKENS is NOT a standard env var)."""
-    ctx = payload.get("context_window") or {}
-    if not isinstance(ctx, dict):
+    """Real source of tokens: payload['transcript_path'] is a JSONL with one
+    line per message. Each assistant message has message.usage with:
+       input_tokens + cache_creation_input_tokens + cache_read_input_tokens
+    The sum is the CURRENT context size on that turn. We tail the file and
+    use the most recent usage block.
+
+    NOTE: PostToolUse payload itself does NOT carry context_window — earlier
+    versions of this hook assumed it did, that was wrong. Confirmed empirically
+    against Claude Code v0.x.
+
+    Returns (used, total) or (None, None) if unavailable."""
+    transcript = payload.get("transcript_path") or ""
+    if not transcript or not os.path.exists(transcript):
         return None, None
-    used = ctx.get("tokens_used")
-    total = ctx.get("tokens_total")
-    if used is None and ctx.get("tokens_remaining") is not None and total:
-        try:
-            used = int(total) - int(ctx["tokens_remaining"])
-        except (TypeError, ValueError):
-            pass
     try:
-        return (int(used) if used is not None else None,
-                int(total) if total is not None else None)
-    except (TypeError, ValueError):
+        size = os.path.getsize(transcript)
+        # Tail the last ~256KB — usage block is in every assistant message
+        read_from = max(0, size - 262_144)
+        with open(transcript, "rb") as f:
+            f.seek(read_from)
+            tail_bytes = f.read()
+        # Decode lossy and split into lines; skip first partial line
+        lines = tail_bytes.decode("utf-8", errors="replace").splitlines()
+        if read_from > 0 and lines:
+            lines = lines[1:]
+        # Walk lines in reverse to find newest message.usage
+        for line in reversed(lines):
+            if not line.strip():
+                continue
+            try:
+                ev = json.loads(line)
+            except json.JSONDecodeError:
+                continue
+            msg = ev.get("message")
+            if not isinstance(msg, dict):
+                continue
+            usage = msg.get("usage")
+            if not isinstance(usage, dict):
+                continue
+            ipt = int(usage.get("input_tokens") or 0)
+            cct = int(usage.get("cache_creation_input_tokens") or 0)
+            crt = int(usage.get("cache_read_input_tokens") or 0)
+            used = ipt + cct + crt
+            if used > 0:
+                return used, None  # total is inferred from model in caller
         return None, None
+    except (OSError, ValueError):
+        return None, None
+
+
+def infer_context_total(model: str) -> int:
+    """Map model id to its context window size. Defaults to 200k."""
+    m = (model or "").lower()
+    if "[1m]" in m or "1m" in m:
+        return 1_000_000
+    return 200_000
 
 
 def extract_model(payload: dict) -> str:
@@ -181,10 +219,14 @@ def main() -> None:
             or {}
         )
         file_target = inp.get("file_path") or inp.get("path") or ""
-        # Pull tokens from payload (the real source) with env fallback for legacy
+        # Pull real tokens from the transcript JSONL referenced in payload
         used, total = extract_context_tokens(payload)
         if used is None:
             used = env_int("CLAUDE_CONTEXT_TOKENS", 0)
+        # Total context window: inferred from model since transcript doesn't carry it
+        model = extract_model(payload)
+        if not total:
+            total = infer_context_total(model)
         ev = {
             **base,
             "type": "tool_use",
@@ -199,7 +241,7 @@ def main() -> None:
                 ev["reference_load"] = True
         append_event(root, ev)
         # Side-effect: persist a snapshot for statusline.sh to read
-        persist_tokens(root, used, total, extract_model(payload))
+        persist_tokens(root, used, total, model)
     elif event_type == "stop":
         append_event(root, {
             **base,
