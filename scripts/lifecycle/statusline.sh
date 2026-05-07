@@ -46,13 +46,29 @@ case "$MODEL" in
   *)        MODEL_LABEL="$MODEL_SHORT" ;;
 esac
 
-# Pull tokens used / budget from budget JSON if present
+# Token source priority (PRIMARY → fallback):
+#   1. .sdlc/state/tokens.json — written by context-tick.py from PostToolUse payload (real value)
+#   2. .sdlc/state/context-budget.json — written by context-engine.py (snapshot at Agent spawn)
+#   3. env vars (legacy, NOT standard in Claude Code)
 TOKENS_USED=0
 TOKENS_BUDGET=200000
-if [ -f "$BUDGET_JSON" ] && command -v python3 >/dev/null 2>&1; then
+TOKENS_FILE="$STATE_DIR/tokens.json"
+
+if [ -f "$TOKENS_FILE" ] && command -v python3 >/dev/null 2>&1; then
   read -r TOKENS_USED TOKENS_BUDGET < <(
     python3 - <<PY 2>/dev/null
-import json, sys
+import json
+try:
+    d = json.load(open("$TOKENS_FILE"))
+    print(d.get("tokens_used", 0), d.get("tokens_total", 200000))
+except Exception:
+    print(0, 200000)
+PY
+  ) || { TOKENS_USED=0; TOKENS_BUDGET=200000; }
+elif [ -f "$BUDGET_JSON" ] && command -v python3 >/dev/null 2>&1; then
+  read -r TOKENS_USED TOKENS_BUDGET < <(
+    python3 - <<PY 2>/dev/null
+import json
 try:
     d = json.load(open("$BUDGET_JSON"))
     print(d.get("estimated_tokens", 0), d.get("model_budget", 200000))
@@ -62,7 +78,7 @@ PY
   ) || { TOKENS_USED=0; TOKENS_BUDGET=200000; }
 fi
 
-# Override from env if available (more accurate)
+# Optional env overrides (legacy / advanced)
 if [ -n "${CLAUDE_CONTEXT_TOKENS:-}" ] && [ "$CLAUDE_CONTEXT_TOKENS" -gt 0 ] 2>/dev/null; then
   TOKENS_USED="$CLAUDE_CONTEXT_TOKENS"
 fi

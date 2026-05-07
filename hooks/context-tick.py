@@ -94,6 +94,47 @@ def detect_reference_load(tool_name: str, file_path: str) -> bool:
     return tool_name == "Read" and "/references/" in (file_path or "")
 
 
+def extract_context_tokens(payload: dict):
+    """Pull tokens used / total from PostToolUse payload (Claude Code passes
+    `context_window` in the payload — this is the only reliable source since
+    CLAUDE_CONTEXT_TOKENS is NOT a standard env var)."""
+    ctx = payload.get("context_window") or {}
+    if not isinstance(ctx, dict):
+        return None, None
+    used = ctx.get("tokens_used")
+    total = ctx.get("tokens_total")
+    if used is None and ctx.get("tokens_remaining") is not None and total:
+        try:
+            used = int(total) - int(ctx["tokens_remaining"])
+        except (TypeError, ValueError):
+            pass
+    try:
+        return (int(used) if used is not None else None,
+                int(total) if total is not None else None)
+    except (TypeError, ValueError):
+        return None, None
+
+
+def persist_tokens(root: Path, used, total, model: str) -> None:
+    """Write a small snapshot file the statusLine reads. Single file, atomic
+    overwrite — fast (<5ms). statusline.sh reads this every status refresh."""
+    if used is None or total is None or total <= 0:
+        return
+    snap = {
+        "ts": now_iso(),
+        "tokens_used": used,
+        "tokens_total": total,
+        "pct": round(used / total * 100, 1),
+        "model": model,
+    }
+    try:
+        path = root / ".sdlc" / "state" / "tokens.json"
+        path.parent.mkdir(parents=True, exist_ok=True)
+        path.write_text(json.dumps(snap), encoding="utf-8")
+    except OSError:
+        pass
+
+
 def main() -> None:
     payload = parse_payload()
     root = project_root()
@@ -123,17 +164,25 @@ def main() -> None:
             or {}
         )
         file_target = inp.get("file_path") or inp.get("path") or ""
+        # Pull tokens from payload (the real source) with env fallback for legacy
+        used, total = extract_context_tokens(payload)
+        if used is None:
+            used = env_int("CLAUDE_CONTEXT_TOKENS", 0)
         ev = {
             **base,
             "type": "tool_use",
             "tool": tool,
-            "tokens_now": env_int("CLAUDE_CONTEXT_TOKENS", 0),
+            "tokens_now": used or 0,
         }
+        if total:
+            ev["tokens_total"] = total
         if file_target:
             ev["file"] = file_target
             if detect_reference_load(tool, file_target):
                 ev["reference_load"] = True
         append_event(root, ev)
+        # Side-effect: persist a snapshot for statusline.sh to read
+        persist_tokens(root, used, total, os.environ.get("CLAUDE_MODEL", ""))
     elif event_type == "stop":
         append_event(root, {
             **base,
