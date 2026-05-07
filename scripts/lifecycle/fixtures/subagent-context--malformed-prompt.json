@@ -1,0 +1,10 @@
+{
+  "_setup": "active-prompt.json is corrupted JSON — hook must ignore silently and not crash.",
+  "hook": "subagent-context",
+  "stdin": {},
+  "setup_state_file": ".sdlc/state/active-prompt.json",
+  "setup_state_content_raw": "this is { not valid JSON",
+  "expect": {
+    "decision": "allow"
+  }
+}

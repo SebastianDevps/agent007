@@ -70,6 +70,44 @@ def find_current_task_spec(project_root: str) -> str:
     return ""
 
 
+def read_active_prompt(project_root):
+    """Inject /prompt-gen v4 spec into the subagent (if fresh).
+
+    Reads .sdlc/state/active-prompt.json. Honors the spec's ttl_seconds
+    (default 7200 = 2h). Returns formatted block or "" if absent/expired/invalid.
+    """
+    path = os.path.join(project_root, ".sdlc", "state", "active-prompt.json")
+    if not os.path.exists(path):
+        return ""
+    try:
+        import time
+        from datetime import datetime, timezone
+        with open(path, "r", encoding="utf-8") as f:
+            data = json.load(f)
+        ts_raw = data.get("generated_at", "")
+        if not ts_raw:
+            return ""
+        try:
+            ts = datetime.fromisoformat(ts_raw.replace("Z", "+00:00")).timestamp()
+        except (ValueError, TypeError):
+            return ""
+        ttl = int(data.get("ttl_seconds", 7200))
+        if time.time() - ts > ttl:
+            return ""
+        spec = data.get("spec_xml", "")
+        if not spec or len(spec) > 4000:
+            spec = (spec or "")[:4000]
+        target = data.get("target", "?")
+        tier = data.get("tier", "?")
+        return (
+            f"\n## Active Prompt Spec (from /prompt-gen v4)\n\n"
+            f"Target: {target} · Tier: {tier} · Generated: {ts_raw}\n\n"
+            f"```xml\n{spec}\n```"
+        )
+    except (OSError, ValueError, json.JSONDecodeError):
+        return ""
+
+
 # ---------------------------------------------------------------------------
 # Skill registry (v5 naming)
 # ---------------------------------------------------------------------------
@@ -166,6 +204,11 @@ def main() -> None:
     task_spec = find_current_task_spec(project_root)
     if task_spec:
         sections.append(task_spec)
+
+    # Inject active prompt-spec (written by /prompt-gen v4)
+    active_prompt = read_active_prompt(project_root)
+    if active_prompt:
+        sections.append(active_prompt)
 
     # Inject MASTER_GUIDE.md conventions (summary section)
     master_guide = os.path.join(project_root, "MASTER_GUIDE.md")

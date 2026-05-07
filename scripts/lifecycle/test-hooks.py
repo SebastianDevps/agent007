@@ -75,7 +75,9 @@ def run_hook(hook_name: str, stdin_payload: dict, env_overrides: dict) -> tuple[
 
 
 def parse_decision(stdout: str) -> tuple[str, str]:
-    """Map hook stdout JSON to ('block'|'allow', reason)."""
+    """Map hook stdout JSON to ('block'|'allow', reason).
+    For 'allow' results, returns hookSpecificOutput.additionalContext as reason
+    (so reason_contains can assert injected blocks)."""
     stdout = stdout.strip()
     if not stdout:
         return "allow", ""  # silent exit = allow
@@ -86,11 +88,12 @@ def parse_decision(stdout: str) -> tuple[str, str]:
     if isinstance(out, dict):
         if out.get("decision") == "block":
             return "block", str(out.get("reason", ""))
+        # Surface additionalContext as the "reason" so fixtures can assert it
+        ac = (out.get("hookSpecificOutput") or {}).get("additionalContext", "")
         if out.get("continue") is True:
-            return "allow", ""
-        # `{}` or `{"hookSpecificOutput": ...}` = silent allow (no decision = pass)
+            return "allow", str(ac)
         if "decision" not in out and out.get("continue") is None:
-            return "allow", ""
+            return "allow", str(ac)
     return "unknown", stdout
 
 
@@ -113,14 +116,19 @@ def evaluate(fixture: Path, expected: dict, decision: str, reason: str, exit_cod
 
 def setup_state(spec: dict) -> Path | None:
     """If fixture declares setup_state_file/_content, write it and return the path
-    so we can clean up afterward. Returns None if no setup needed."""
+    so we can clean up afterward. Returns None if no setup needed.
+    Supports `setup_state_content_raw` (string) for malformed-input scenarios."""
     rel = spec.get("setup_state_file")
     content = spec.get("setup_state_content")
-    if not rel or content is None:
+    raw = spec.get("setup_state_content_raw")
+    if not rel or (content is None and raw is None):
         return None
     path = ROOT / rel
     path.parent.mkdir(parents=True, exist_ok=True)
-    path.write_text(json.dumps(content), encoding="utf-8")
+    if raw is not None:
+        path.write_text(str(raw), encoding="utf-8")
+    else:
+        path.write_text(json.dumps(content), encoding="utf-8")
     return path
 
 

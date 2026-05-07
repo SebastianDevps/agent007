@@ -13,6 +13,12 @@ requires_context:
   - task_description
   - success_criteria
   - max_iteration_limit
+contract_source: |
+  Al inicio del loop, leer `.sdlc/state/active-prompt.json` (escrito por
+  `/prompt-gen v4`). Tratar el `spec_xml` como CONTRATO. Si el loop empieza
+  a desviarse del scope declarado en `<phases>` → STOP y exigir re-generación
+  del spec, no improvisar. Esto evita el "loop derive" típico cuando no hay
+  contrato vinculante.
   - token_budget
 outputs:
   - name: completion_report

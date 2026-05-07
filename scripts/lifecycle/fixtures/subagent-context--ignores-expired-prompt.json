@@ -1,0 +1,19 @@
+{
+  "_setup": "Active prompt-spec exists but generated_at is far in the past — hook must NOT inject it (TTL exceeded).",
+  "hook": "subagent-context",
+  "stdin": {},
+  "setup_state_file": ".sdlc/state/active-prompt.json",
+  "setup_state_content": {
+    "version": 4,
+    "generated_at": "2020-01-01T00:00:00Z",
+    "target": "subagent",
+    "tier": "standard",
+    "intent_slug": "expired",
+    "spec_xml": "<prompt_spec>EXPIRED</prompt_spec>",
+    "summary_oneline": "expired",
+    "ttl_seconds": 60
+  },
+  "expect": {
+    "decision": "allow"
+  }
+}

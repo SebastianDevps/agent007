@@ -1,0 +1,20 @@
+{
+  "_setup": "Active prompt-spec exists and is fresh — hook should inject it as ## Active Prompt Spec section.",
+  "hook": "subagent-context",
+  "stdin": {},
+  "setup_state_file": ".sdlc/state/active-prompt.json",
+  "setup_state_content": {
+    "version": 4,
+    "generated_at": "2099-12-31T23:59:59Z",
+    "target": "subagent",
+    "tier": "premium",
+    "intent_slug": "test-fixture",
+    "spec_xml": "<prompt_spec version=\"4\"><identity>test</identity></prompt_spec>",
+    "summary_oneline": "test",
+    "ttl_seconds": 7200
+  },
+  "expect": {
+    "decision": "allow",
+    "reason_contains": "Active Prompt Spec"
+  }
+}

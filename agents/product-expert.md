@@ -54,6 +54,13 @@ forbidden:
   - make_feasibility_judgments_defer_to_engineering
 skills:
   - product/product-discovery
+output_format: |
+  Cuando produzcas un brief ejecutable, emite el envelope `<prompt_spec>` canónico
+  (Anthropic XML conventions) en vez de markdown libre. Schema en
+  `.claude/commands/prompt-gen.md` Step 5. Persistilo a
+  `.sdlc/state/active-prompt.json` para que `subagent-context.py` inyecte el
+  spec a cada subagente delegado. Esto convierte tu output en contrato
+  ejecutable, no opinion.
 tools:
   - Read
   - Grep

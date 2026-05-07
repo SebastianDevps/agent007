@@ -1,7 +1,7 @@
 ---
 name: prompt-gen
-version: 3.0.0
-description: "Convierte intención vaga del usuario en un prompt de precisión quirúrgica. Conduce entrevista de calidad antes de generar. Prioriza siempre: investigar → planificar → construir. El resultado que busca el usuario siempre importa más que la velocidad de entrega."
+version: 4.0.0
+description: "Convierte intención vaga en un prompt-spec XML canónico (Anthropic conventions). Persiste en .sdlc/state/active-prompt.json para que subagent-context.py lo inyecte a cada delegación. Prioriza investigar → planificar → construir."
 accepts_args: true
 ---
 
@@ -204,134 +204,158 @@ FASE FINAL — QUALITY GATE
 
 ---
 
-## Step 4 — Construir el prompt (10 componentes)
+## Step 4 — Construir el prompt (5 componentes canónicos Anthropic)
 
-### Componente 1: Identity
-Primera línea, prosa directa, fuera de XML. Stack real + proyecto específico.
+> Convergimos al set canónico de [Anthropic XML conventions](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/use-xml-tags). Antes había 10 componentes parcialmente solapados — ahora 5 + 2 opcionales.
 
-```
-❌ "You are an expert developer."
-✅ "Eres un frontend engineer especializado en Next.js 14 + GSAP 3 + Tailwind,
-   construyendo una landing page premium para AirPods Pro.
-   El nivel de referencia es apple.com/airpods-pro."
-```
-
-### Componente 2: `<task_context>`
-Decisiones ya tomadas + razones. El agente no debe re-evaluar lo que ya se decidió.
+### 1. `<identity>` (obligatorio)
+Una línea prosa: rol + stack + referente de calidad.
 
 ```xml
-<task_context>
-  <referente>[URL o descripción del nivel de calidad objetivo]</referente>
-  <stack>[tecnologías reales]</stack>
-  <decisions>
-    - [decisión 1]: [razón]
-    - [decisión 2]: [razón]
-  </decisions>
-  <anti_fail>[qué haría que el resultado sea inaceptable — de la entrevista]</anti_fail>
-</task_context>
+<identity>Frontend engineer en Next.js 14 + GSAP 3, construyendo landing AirPods Pro nivel apple.com/airpods-pro.</identity>
 ```
 
-### Componente 3: `<constraints>`
-Cada constraint incluye la razón. Sin razón el agente no puede generalizar a edge cases.
+### 2. `<context>` (obligatorio)
+Reemplaza `task_context` viejo. Incluye decisiones ya tomadas, stack, anti-fail, y `<task_input>$ARGUMENTS</task_input>` literal.
 
 ```xml
-<constraints>
-  <constraint>
-    <rule>Investigar antes de implementar</rule>
-    <reason>Un agente que construye sin contexto produce resultados promedio.
-    La investigación define la diferencia entre 'funciona' y 'impresiona'.</reason>
-  </constraint>
-  <constraint>
-    <rule>Velocidad de entrega NO es criterio de éxito</rule>
-    <reason>El usuario prefiere un resultado excepcional que tarda más
-    sobre uno mediocre que termina rápido.</reason>
-  </constraint>
-  <!-- constraints técnicos específicos del proyecto -->
-</constraints>
-```
-
-### Componente 4: `<behavioral_guidelines>`
-
-| Tipo de tarea | Guideline |
-|---------------|-----------|
-| Implementación visual | "Si el resultado se ve genérico, iterar hasta que se vea premium. No declarar done por completar tareas técnicas." |
-| Implementación técnica | "Leer antes de editar. Verificar con comando antes de afirmar. Commit después de cada tarea." |
-| Code review | "Cada hallazgo: archivo + línea + evidencia + severidad + fix concreto." |
-| Debugging | "Reproducir primero. Nunca proponer fix sin reproducción." |
-
-### Componente 5: `<task_specific_instructions>`
-Fases en modo imperativo con criterios de completitud verificables.
-
-**Verbos obligatorios**: Investiga / Documenta / Implementa / Verifica / Itera
-
-| ❌ Rechazar | ✅ Usar |
-|------------|---------|
-| "considera implementar" | "Implementa" |
-| "podrías agregar" | "Agrega" |
-| "sería bueno" | "Crea" |
-| "se recomienda" | "Aplica" |
-| "intenta hacer" | "Ejecuta" |
-
-### Componentes 6-10
-`<output_format>` / `<examples>` / `<thinking>` / `{{variables}}` / `<meta_instructions>`
-
-Ver v2.0.0 para referencia de estos componentes — sin cambios en v3.
-
----
-
-## Step 5 — Output según target
-
-### `--target dev` (default) — ≤400 palabras
-
-```
-/dev "[objetivo concreto en modo imperativo — con nivel de calidad explícito]"
-
-[Identity: una oración prosa con stack + referente de calidad]
-
 <context>
-  <referente>[URL o descripción]</referente>
-  <stack>[tecnologías]</stack>
-  <anti_fail>[qué haría que el resultado sea inaceptable]</anti_fail>
+  <referente url="...">Nivel objetivo</referente>
+  <stack>...</stack>
   <decisions>
-    - [decisión]: [razón]
+    <decision reason="...">...</decision>
   </decisions>
+  <anti_fail>Qué haría inaceptable el resultado</anti_fail>
+  <task_input>$ARGUMENTS</task_input>
 </context>
-
-<constraints>
-  - Investigar antes de implementar — porque sin contexto el resultado es promedio
-  - Velocidad NO es criterio — calidad sí
-  - [constraints técnicos con razones]
-</constraints>
-
-<phases>
-  FASE 0 — INVESTIGACIÓN: [qué investigar, dónde, qué documentar]
-  FASE 1 — IMPLEMENTACIÓN: [fases concretas con verificación]
-  FASE FINAL — QUALITY GATE: [criterios técnicos + criterios visuales si Premium]
-</phases>
-
-<success_criteria>
-  Técnico:
-  - [comando]: exit 0
-  Visual (si Premium):
-  - [pregunta de quality self-check 1]
-  - [pregunta de quality self-check 2]
-</success_criteria>
-
-[quality_modifier según tier]
 ```
 
-### `--target subagent` y `--target session`
-XML completo con los 10 componentes. Todas las secciones dinámicas con `{{variables}}`.
+### 3. `<constraints>` (obligatorio)
+Cada constraint con `reason=`. Verbos imperativos. Anti-patterns a enforzar (Code Sovereignty + Stop-Loss del repo `affaan-m/everything-claude-code`):
+
+```xml
+<constraints>
+  <constraint reason="Sin contexto el resultado es promedio">Investigar antes de implementar</constraint>
+  <constraint reason="Calidad sobre velocidad">Velocidad NO es criterio de éxito</constraint>
+  <constraint reason="Code Sovereignty — el spec define el scope">Nunca tocar archivos fuera de los listados en <phases></constraint>
+  <constraint reason="Self-check sin evidencia es teatro">Cada item de visual debe tener output o screenshot, no solo "sí"</constraint>
+</constraints>
+```
+
+### 4. `<phases>` (obligatorio)
+Fases con `gate=` verificable. Verbos imperativos: **Investiga / Documenta / Implementa / Verifica / Itera**.
+
+```xml
+<phases>
+  <phase id="0" name="Investigación" gate="RESEARCH.md escrito">...</phase>
+  <phase id="1" name="Planificación" gate="PLAN.md con archivos y dependencias">...</phase>
+  <phase id="2" name="Implementación" gate="cmd: pnpm test → exit 0">...</phase>
+  <phase id="final" name="Quality Gate" gate="self-check completo con evidencia">...</phase>
+</phases>
+```
+
+### 5. `<success_criteria>` (obligatorio)
+Técnico (con `cmd=`) + visual (preguntas auto-evaluables).
+
+```xml
+<success_criteria>
+  <technical><check cmd="pnpm build">exit 0</check></technical>
+  <visual>
+    <check>¿El resultado se compara favorablemente con [referente]?</check>
+    <check>¿Hay algo que con 30min más se podría mejorar?</check>
+  </visual>
+</success_criteria>
+```
+
+### 6. `<example>` (opcional, recomendado para tier Premium)
+Anthropic recomienda 1-3 ejemplos input→ideal_output dentro del prompt.
+
+### 7. `<self_check>` (opcional pero crítico en Premium)
+Verbos: "Considera / Evalúa / Razona a través de" — **NO usar "think"** (Opus 4.7+ con extended thinking off).
+
+```xml
+<self_check>
+  Antes de declarar COMPLETE: responder honestamente las preguntas en <visual>.
+  Si alguna es negativa: iterar. Considera el resultado contra el referente.
+</self_check>
+```
+
+**Verbos rechazados** (mismo set que v3): "considera implementar" / "podrías" / "sería bueno" / "se recomienda" / "intenta" → reemplazar por imperativos directos.
 
 ---
 
-## Step 6 — Guardar (`--save`)
+## Step 5 — Output: envelope `<prompt_spec>` canónico
 
-```
-Guardado en: .claude/prompts/<intent-slug>-YYYYMMDD.md
+**Una sola plantilla**. Solo cambian `<phases>` y `<task_input>` según target.
+
+```xml
+<prompt_spec version="4" target="dev|subagent|session" tier="minimal|standard|thorough|premium">
+  <identity>...</identity>
+
+  <context>
+    <referente url="...">...</referente>
+    <stack>...</stack>
+    <decisions>
+      <decision reason="...">...</decision>
+    </decisions>
+    <anti_fail>...</anti_fail>
+    <task_input>$ARGUMENTS</task_input>
+  </context>
+
+  <constraints>
+    <constraint reason="...">...</constraint>
+  </constraints>
+
+  <phases>
+    <phase id="0" name="Investigación" gate="...">...</phase>
+    <phase id="1" name="Planificación" gate="...">...</phase>
+    <phase id="2" name="Implementación" gate="...">...</phase>
+    <phase id="final" name="Quality Gate" gate="self-check">...</phase>
+  </phases>
+
+  <success_criteria>
+    <technical><check cmd="...">exit 0</check></technical>
+    <visual>
+      <check>...</check>
+    </visual>
+  </success_criteria>
+
+  <self_check>...</self_check>
+
+  <example>
+    <input>...</input>
+    <ideal_output>...</ideal_output>
+  </example>
+</prompt_spec>
 ```
 
-Incluye: metadata + entrevista de calidad + prompt generado completo.
+**Diferencia por target**:
+- `dev`: prefijo `/dev "..."` antes del envelope, `<task_input>` con el objetivo concreto
+- `subagent`: `<task_input>` describe la tarea delegada al subagent
+- `session`: `<task_input>` es el goal de toda la sesión
+
+---
+
+## Step 6 — Persistir + guardar opcional
+
+**Persistencia automática (siempre, no flag)**: tras generar el spec, escribir a `.sdlc/state/active-prompt.json` con `os.replace()` atómico:
+
+```json
+{
+  "version": 4,
+  "generated_at": "<ISO 8601 UTC>",
+  "target": "dev|subagent|session",
+  "tier": "minimal|standard|thorough|premium",
+  "intent_slug": "<short slug>",
+  "spec_xml": "<prompt_spec ...>...</prompt_spec>",
+  "summary_oneline": "<una oración del goal>",
+  "ttl_seconds": 7200
+}
+```
+
+`subagent-context.py` lee este archivo y lo inyecta a cada subagente delegado. TTL 2h: pasado eso, el hook lo ignora (no contamina sesiones futuras).
+
+**`--save` (opcional)**: además de la persistencia state, guarda el `.md` legible en `.claude/prompts/<intent-slug>-YYYYMMDD.md` con metadata + entrevista + spec completo.
 
 ---
 
@@ -352,6 +376,10 @@ Incluye: metadata + entrevista de calidad + prompt generado completo.
 ✓ "Velocidad no es criterio" explícito en Premium y Thorough
 ✓ Sin prefill en assistant turn
 ✓ Documentos largos antes de instrucciones específicas
+✓ Tags XML del set canónico Anthropic (identity/context/constraints/phases/success_criteria)
+✓ <task_input>$ARGUMENTS</task_input> presente
+✓ Persistido en .sdlc/state/active-prompt.json (atomic write)
+✓ NO usar palabra "think" — usar "considera/evalúa/razona"
 ```
 
 ---

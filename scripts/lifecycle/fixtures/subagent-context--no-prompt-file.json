@@ -1,0 +1,8 @@
+{
+  "_setup": "No active-prompt.json — hook works normally (does not crash, no Active Prompt Spec section).",
+  "hook": "subagent-context",
+  "stdin": {},
+  "expect": {
+    "decision": "allow"
+  }
+}
