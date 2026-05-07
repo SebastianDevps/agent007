@@ -1,6 +1,16 @@
 ---
 name: subagent-driven-development
 description: "Executes implementation plans by spawning fresh subagents per task with wave-based parallel execution and Yield Pattern. Eliminates context rot: orchestrator stays under 40% context; each subagent receives a minimal, targeted prompt."
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Write
+  - Edit
+  - Bash(git status*)
+  - Bash(git diff*)
+  - Bash(git log*)
+  - Bash(node*)
 invokable: true
 accepts_args: true
 version: 3.0
@@ -9,8 +19,7 @@ source: Agent007 v5 — Yield Pattern upgrade (OpenClaw-inspired)
 
 # Subagent-Driven Development (Yield Edition)
 
-**Purpose**: Execute an implementation plan with fresh context per task, using parallel wave
-execution with the Yield Pattern for async fork-join coordination.
+**Purpose**: Execute an implementation plan with fresh context per task, using parallel wave execution with the Yield Pattern for async fork-join coordination.
 
 **When to activate**: After `plan`. File `docs/changes/<feature>/tasks.md` exists with `depends_on` per task.
 
@@ -18,11 +27,10 @@ execution with the Yield Pattern for async fork-join coordination.
 
 ## Core Concept: Yield Pattern
 
-**Before (sequential)**: Dispatch task A → wait → dispatch task B → wait → dispatch task C
-**After (yield)**: Identify independent tasks → spawn N agents in parallel → yield → receive all results → advance
+- **Sequential**: Dispatch A → wait → dispatch B → wait → dispatch C
+- **Yield**: Identify independent tasks → spawn N agents in parallel → yield → receive all → advance
 
-The orchestrator spawns multiple subagents simultaneously (Claude Code's `Agent` tool),
-then awaits all results before advancing to the next wave. This is async fork-join without blocking.
+Orchestrator spawns multiple subagents simultaneously (`Agent` tool), then awaits all results before advancing. Async fork-join without blocking.
 
 ---
 
@@ -69,38 +77,16 @@ For each wave:
 
 ```
 Wave N — Yield Pattern:
-  ├── Identify tasks with no unmet dependencies → this wave's task set
-  │
-  ├── SPAWN (parallel, max 5 simultaneous Agent calls):
-  │     Launch ALL tasks in the wave in ONE response message:
-  │       Agent(prompt: buildSubagentPrompt(task), subagent_type: domain_agent)
-  │       Agent(prompt: buildSubagentPrompt(task), subagent_type: domain_agent)
-  │       ...  (up to 5 concurrent)
-  │     ← Multiple Agent() calls in ONE message = true parallelism
-  │
+  ├── Identify tasks with no unmet dependencies → wave's task set
+  ├── SPAWN (max 5 parallel) — multiple Agent() calls in ONE message:
+  │     Agent(prompt: buildSubagentPrompt(task), subagent_type: domain_agent)
   ├── UPDATE session.json lifecycle → "wait"
-  │     waitJson: { pendingSubagents: [task ids], waveStartedAt: now }
-  │
-  ├── YIELD — await all agent results:
-  │     Each subagent emits: <promise>COMPLETE</promise> or <promise>FAIL</promise>
-  │     Orchestrator receives all results before advancing
-  │
+  │     waitJson: { pendingSubagents: [ids], waveStartedAt: now }
+  ├── YIELD — await all agent results (each emits <promise>COMPLETE/FAIL</promise>)
   ├── WAVE COMPLETE — Update session.json:
-  │     lifecycle → "execute"
-  │     stateJson.currentWave += 1
-  │     stateJson.completedFiles += new files from this wave
-  │     waitJson → {}
-  │     revision += 1
-  │
-  ├── If ANY task FAIL:
-  │     Retry (same task) up to 3×
-  │     4th failure → ESCALATE TO HUMAN — do not retry infinitely
-  │
-  ├── If spawn fails with rate-limit, model overload, or timeout error:
-  │     python3 .claude/hooks/provider-rotation.py --mark-failure <model>
-  │     → provider-rotation hook will recommend failover on next spawn automatically
-  │     → after recovery: python3 .claude/hooks/provider-rotation.py --mark-success <model>
-  │
+  │     lifecycle → "execute"; currentWave++; completedFiles += new; waitJson → {}; revision++
+  ├── If ANY task FAIL: retry same task up to 3×; 4th → ESCALATE TO HUMAN
+  ├── If spawn fails (rate-limit, overload, timeout): retry with lower model tier (opus→sonnet→haiku); log failure
   └── Advance to Wave N+1 ONLY when ALL tasks in Wave N are COMPLETE
 ```
 

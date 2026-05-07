@@ -1,0 +1,15 @@
+{
+  "hook": "path-existence-guard",
+  "stdin": {
+    "tool_name": "Edit",
+    "tool_input": {
+      "file_path": "/tmp/agent007-test-nonexistent-XYZ-9876.tsx",
+      "old_string": "x",
+      "new_string": "y"
+    }
+  },
+  "expect": {
+    "decision": "block",
+    "reason_contains": "does not exist"
+  }
+}

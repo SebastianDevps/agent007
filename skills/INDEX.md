@@ -54,6 +54,14 @@
 | `react-best-practices` | `domain/react-best-practices/SKILL.md` | ✅ | React/Next.js optimization and best practices |
 | `frontend-design` | `domain/frontend-design/SKILL.md` | ✅ | High-quality UI/UX design and implementation |
 | `gsap` | `domain/gsap/SKILL.md` | ✅ | GSAP monolítico: tweens, timelines, ScrollTrigger, plugins, React, utils, performance |
+| `discovery-before-code` | `domain/discovery-before-code/SKILL.md` | ✅ | Anti-convergence gate: forces referent fetch + style choice + state design + tokens BEFORE any visual code |
+| `shadcn-component-install` | `domain/shadcn-component-install/SKILL.md` | ✅ | Install shadcn/ui via CLI with mandatory dry-run preview (info → search → docs → diff → install) |
+| `a11y-contrast-check` | `domain/a11y-contrast-check/SKILL.md` | ✅ | Run Node.js script to verify WCAG AA color contrast on TS/TSX/CSS files. Exits 1 if <4.5:1 |
+| `design-tokens-extract` | `domain/design-tokens-extract/SKILL.md` | ✅ | WebFetch a referent URL → extract palette/typography/spacing → write `tokens.css` or `tokens.json` (W3C format) |
+| `design-system-doc` | `domain/design-system-doc/SKILL.md` | ✅ | Generate canonical 9-section DESIGN.md (atmosphere, color, typography, components, layout, depth, guardrails, responsive, agent prompts) |
+| `page-transitions-barba` | `domain/page-transitions-barba/SKILL.md` | ✅ | Setup barba.js + GSAP page transitions (Vite/Next Pages/Astro/plain). Anti-pattern: forbidden in Next.js App Router |
+| `ios-hig-mobile` | `domain/ios-hig-mobile/SKILL.md` | ✅ | Mobile-first components following Apple HIG (tab bars, sheets, Dynamic Type, Safe Areas, haptics) for web |
+| `spline-3d-embed` | `domain/spline-3d-embed/SKILL.md` | ✅ | Embed Spline 3D scenes safely: lazy-load, perf-gated, mobile-aware, prefers-reduced-motion respected |
 
 ---
 
@@ -63,6 +71,7 @@
 |-------|------|-----------|-------------|
 | `systematic-debugging` | `quality-gates/systematic-debugging/SKILL.md` | ✅ | Root-cause analysis: reproduce → isolate → fix → verify |
 | `agent-self-diagnosis` | `quality-gates/agent-self-diagnosis.md` | ✅ | 4-phase loop recovery: Capture → Diagnose → Recover → Report (fires at 3 repeated calls) |
+| `performance-profiling` | `quality-gates/performance-profiling/SKILL.md` | ✅ | Measure-first performance diagnosis (replaces former performance-optimizer agent). Profile → isolate → handoff |
 
 ---
 
@@ -139,10 +148,13 @@ PIPELINE: plan, generate, verify, brainstorming, tdd-workflow, subagent-driven-d
 CORE: quality-enforcement*, banned-phrases*, context-awareness*  (* = auto-injected)
 ORCH: session-manager*, ralph-loop-wrapper*, state-sync*, iterative-retrieval*
 DOMAIN: api-design-principles, architecture-patterns, resilience-patterns,
-        nestjs-code-reviewer, security-review, react-best-practices, frontend-design, gsap
-QUALITY-GATES: systematic-debugging, agent-self-diagnosis
+        nestjs-code-reviewer, security-review, react-best-practices, frontend-design, gsap,
+        discovery-before-code, shadcn-component-install, a11y-contrast-check,
+        design-tokens-extract, design-system-doc, page-transitions-barba,
+        ios-hig-mobile, spline-3d-embed, karpathy
+QUALITY-GATES: systematic-debugging, agent-self-diagnosis, performance-profiling
 DEVREL: api-documentation
 PRODUCT: product-discovery
 UTILS: commit, pull-request, changelog, deep-research, search-first, rules-distill, skill-stocktake
-Total: 28 invokable + 7 auto-injected = 35 active skills
+Total: 36 invokable + 7 auto-injected = 43 active skills (v6)
 ```

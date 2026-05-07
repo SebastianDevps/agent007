@@ -1,6 +1,12 @@
 ---
 name: sop-reverse
 description: "Reverse engineer an existing codebase to create scenarios and SOPs. Enables SDD on codebases built without it."
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Write
+  - Edit
 invokable: true
 version: 1.0.0
 ---

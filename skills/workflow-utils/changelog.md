@@ -1,20 +1,55 @@
 ---
 name: changelog
-description: "Generate structured changelog from git history. Groups commits by type, filters noise, produces Keep a Changelog format."
+description: "Generate structured changelog from git history. Groups commits by type, filters noise, produces Keep a Changelog format. Single source of truth — no /commands wrapper."
 invokable: true
 accepts_args: true
-version: 1.0.0
+version: 2.0.0
 when:
   keywords: ["changelog", "release notes", "what changed", "history"]
+allowed-tools:
+  - Bash(git log *)
+  - Bash(git tag *)
+  - Read
+  - Edit
+  - Write
 ---
 
-# Changelog — Structured Release Notes Generator
+# changelog
 
-## What It Does
+Generate a release changelog by reading git history and organizing by Agent007 commit type.
 
-Generates a formatted changelog by reading git history and grouping commits by type following the Agent007 pipe-delimited format (`Tipo|IdTarea|YYYYMMDD|Desc`).
+## When to invoke
 
-## Output Format
+- Preparing a release
+- User asks "what changed since last release?"
+- After completing a multi-task feature branch
+
+## Step 1 — Determine scope
+
+```bash
+git tag --sort=-creatordate | head -5      # Latest tags
+git log --oneline <last-tag>..HEAD          # Commits since last release
+```
+
+If no tags:
+```bash
+git log --oneline -30
+```
+
+## Step 2 — Parse and group
+
+Group by Agent007 type (`Tipo|IdTarea|YYYYMMDD|Desc`):
+
+| Tipo | Changelog section |
+|------|-------------------|
+| `feat` | ### Added |
+| `fix` | ### Fixed |
+| `refactor`, `perf` | ### Changed |
+| `docs` | ### Documentation |
+| `revert` | ### Reverted |
+| `test`, `chore`, `ci`, `build` | (omit unless `--all`) |
+
+## Step 3 — Format output
 
 Follows [Keep a Changelog](https://keepachangelog.com) v1.0.0:
 
@@ -22,40 +57,30 @@ Follows [Keep a Changelog](https://keepachangelog.com) v1.0.0:
 ## [version] — YYYY-MM-DD
 
 ### Added
-- feat|...|Description
+- Implement user authentication with JWT refresh rotation
 
 ### Fixed
-- fix|...|Description
+- Resolve null pointer in UserService.findById when email missing
 
 ### Changed
-- refactor|...|Description
-
-### Removed
-- (removed features)
+- Optimize bulk insert queries — 3x performance improvement
 ```
 
-## Protocol
+## Step 4 — Write (optional)
 
-### Step 1 — Determine scope
+Ask: "¿Escribo esto en `CHANGELOG.md`?"
 
-```bash
-git log --oneline <base>..<head>
-```
+If yes:
+- Prepend new section above existing content
+- NEVER overwrite existing entries
 
-If no base provided, default to last tag or last 20 commits.
+## Flags
 
-### Step 2 — Parse and group
-
-Group commits by Tipo:
-- `feat` → Added
-- `fix` → Fixed
-- `refactor` / `perf` → Changed
-- `docs` → Documentation
-- `test` / `chore` / `ci` → (omit from user-facing changelog unless requested)
-
-### Step 3 — Format and deliver
-
-Output the changelog section. Ask if user wants to write it to `CHANGELOG.md`.
+| Flag | Effect |
+|------|--------|
+| `--all` | Include test/chore/ci/build commits |
+| `--since <tag-or-sha>` | Custom start point |
+| `--version X.Y.Z` | Use specific version header |
 
 ## Invocation
 

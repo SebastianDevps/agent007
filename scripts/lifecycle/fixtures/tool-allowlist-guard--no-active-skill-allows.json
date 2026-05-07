@@ -1,0 +1,10 @@
+{
+  "hook": "tool-allowlist-guard",
+  "stdin": {
+    "tool_name": "Bash",
+    "tool_input": { "command": "git status" }
+  },
+  "expect": {
+    "decision": "allow"
+  }
+}

@@ -1,6 +1,17 @@
 ---
 name: finishing-a-development-branch
 description: "Completes a development branch: verify tests, then offer merge/PR/keep/discard. Use after all tasks in subagent-driven-development are done."
+allowed-tools:
+  - Read
+  - Bash(git status*)
+  - Bash(git diff*)
+  - Bash(git log*)
+  - Bash(git branch*)
+  - Bash(git checkout*)
+  - Bash(git merge*)
+  - Bash(git push*)
+  - Bash(git worktree*)
+  - Bash(gh pr*)
 invokable: true
 accepts_args: false
 version: 1.0

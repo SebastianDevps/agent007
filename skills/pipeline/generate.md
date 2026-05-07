@@ -1,6 +1,20 @@
 ---
 name: generate
 description: "TDD code generation cycle: RED (failing test) → GREEN (minimal code) → REFACTOR. Executes one task at a time from tasks.md. Use when implementing a single planned task or a simple change with no prior plan."
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Write
+  - Edit
+  - Bash(npm test*)
+  - Bash(pnpm test*)
+  - Bash(yarn test*)
+  - Bash(pytest*)
+  - Bash(go test*)
+  - Bash(cargo test*)
+  - Bash(jest*)
+  - Bash(vitest*)
 invokable: true
 accepts_args: true
 version: 1.0.0
@@ -9,6 +23,8 @@ when:
     risk_level: [low, medium, high, critical]
   - after: plan
   - pipeline: [simple, medium, complex]
+references:
+  - references/tdd-task-execution.md
 ---
 
 # Generate — TDD Code Generation
@@ -116,7 +132,7 @@ Después de cada cambio:
 
 ---
 
-## Phase 4 — Commit Atómico
+## Phase 4 — Commit Atómico + Reflection Retry
 
 Después de GREEN (o REFACTOR si aplica):
 
@@ -128,11 +144,8 @@ Skill('commit')
 
 Un commit por tarea. No agrupar múltiples tareas en un commit.
 
----
+### Output PASS
 
-## Output Esperado
-
-Al completar emitir:
 ```
 ✅ TASK-NNN: <title>
    RED  → test falló correctamente
@@ -143,70 +156,32 @@ Al completar emitir:
 <promise>COMPLETE</promise>
 ```
 
-Si falla, aplicar **reflection retry** con forced-enumeration (patrón Aider + OpenHands):
+### Output FAIL — Reflection Retry
 
-```
-# Intento 1 FAIL → reflection retry estándar
-reflected_message = f"""
-{output_literal_del_verify_cmd}
+Si falla en cualquier intento, aplicar **reflection retry con forced-enumeration**.
+Protocolo completo (3 intentos, mensajes textuales para cada attempt) en:
 
-Intento 1/3 falló.
-Root cause: {diagnosis}
-Fix concreto: {fix_sugerido}
-"""
-→ volver a Phase 1 con reflected_message
+→ `references/tdd-task-execution.md`
 
-# Intento 2 FAIL → forced-enumeration (OBLIGATORIO — no saltear)
-#
-# El retry 2 tiene la misma distribución de sampling que el retry 1 → mismo resultado probable.
-# La enumeración forzada cambia el enfoque antes del tercer intento.
-reflected_message = f"""
-{output_literal_del_verify_cmd}
-
-Intento 2/3 falló. El fix anterior no funcionó.
-
-ANTES de intentar cualquier corrección, enumerar EXACTAMENTE 3 causas raíz candidatas
-en orden de probabilidad:
-
-1. [causa más probable] — probabilidad: X%
-2. [segunda causa] — probabilidad: Y%
-3. [tercera causa] — probabilidad: Z%
-
-Causa elegida: [la #1]
-Fix targeting esa causa específica: {fix_para_causa_1}
-"""
-→ volver a Phase 1 con reflected_message (fix debe apuntar a causa #1)
-
-# Intento 3 FAIL → usar causa #2 (no la misma que intento 2)
-reflected_message = f"""
-{output_literal_del_verify_cmd}
-
-Intento 3/3. La causa #1 ({causa_1}) fue descartada.
-Implementando fix para causa #2: {fix_para_causa_2}
-"""
-```
-
-Si falla después de 3 intentos:
-```
-❌ TASK-NNN: <title>
-   Intentos: 3/3
-   Último error: <output del verify_cmd>
-   Archivos modificados: <lista>
-
-<promise>FAIL</promise>
-```
+Resumen: attempt 1 = standard reflection · attempt 2 = forced enumeration de 3 causas raíz (OBLIGATORIO) · attempt 3 = pivot a causa #2 · 3/3 fail → escalar a humano con `<promise>FAIL</promise>`.
 
 ---
 
-## Guardrails
+## Anti-patterns (NEVER)
 
-- ❌ NUNCA escribir código sin test fallando primero (SDD Iron Law)
-- ❌ No modificar el test para que pase — modificar el código
-- ❌ No implementar más de lo que pide el test (YAGNI)
-- ❌ No leer archivos no relacionados con la tarea actual
-- ❌ No usar `any` en TypeScript
-- ❌ No hardcodear secrets o magic numbers con significado de negocio
+- ❌ Escribir código sin test fallando primero (rompe SDD Iron Law)
+- ❌ Modificar el test para que pase — modificar el código en su lugar
+- ❌ Implementar más de lo que pide el test (YAGNI)
+- ❌ Leer archivos no relacionados con la tarea actual (context bloat)
+- ❌ Usar `any` en TypeScript
+- ❌ Hardcodear secrets o magic numbers con significado de negocio
+- ❌ Saltear forced-enumeration en attempt 2 (mismo sampling → mismo resultado)
+- ❌ Reintentar más de 3 veces — escalar al humano
+
+## Required (ALWAYS)
+
 - ✅ Verificar con el comando exacto de la tarea, no `npm test` genérico
+- ✅ El reflected_message incluye output literal + root cause + fix concreto
 
 ---
 

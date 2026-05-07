@@ -1,0 +1,13 @@
+{
+  "hook": "mutation-guard",
+  "stdin": {
+    "tool_name": "Write",
+    "tool_input": {
+      "file_path": "/tmp/agent007-test-nonexistent-dir-XYZ-12345/file.md",
+      "content": "hello"
+    }
+  },
+  "expect": {
+    "decision": "allow"
+  }
+}

@@ -2,16 +2,29 @@
 name: nestjs-code-reviewer
 version: 1.0.0
 description: "Revisa código NestJS + TypeORM siguiendo mejores prácticas, detecta vulnerabilidades OWASP y anti-patterns. Use when user asks to 'review code', 'audit module', or 'check security'."
+canonical-sources:
+  - url: https://docs.nestjs.com/
+    when: "for NestJS official documentation"
+  - url: https://typeorm.io/
+    when: "for TypeORM documentation"
+  - url: https://owasp.org/www-project-top-ten/
+    when: "for OWASP Top 10 references"
 invokable: true
 accepts_args: true
 allowed-tools: ["Read", "Grep", "Bash"]
+references:
+  - references/architecture-patterns.md
+  - references/security-owasp.md
+  - references/performance-typescript.md
+  - references/SECURITY_CHECKLIST.md
+  - references/TYPEORM_ANTIPATTERNS.md
 ---
 
 # NestJS Code Reviewer
 
 Skill especializado para revisar código de aplicaciones NestJS con TypeORM y PostgreSQL, enfocado en calidad, seguridad y arquitectura.
 
-## 🎯 When to Use This Skill
+## When to Use
 
 Activa este skill cuando el usuario:
 - Pida "revisar código", "code review", "auditar"
@@ -19,216 +32,38 @@ Activa este skill cuando el usuario:
 - Pregunte "¿está bien este código?", "¿hay bugs?"
 - Solicite validación de seguridad o performance
 
-## 📋 Review Checklist
+---
 
-### 1. Arquitectura NestJS
+## Review Checklist (6 layers)
 
-**Controllers**:
-```typescript
-// ❌ MAL: Lógica de negocio en controlador
-@Post()
-async create(@Body() dto: CreateUserDto) {
-  const user = await this.userRepository.save(dto);
-  await this.emailService.send(user.email);
-  return user;
-}
+Cada layer tiene su archivo de referencia con ejemplos antes/después.
 
-// ✅ BIEN: Delegar a servicios
-@Post()
-async create(@Body() dto: CreateUserDto) {
-  return this.userService.create(dto);
-}
-```
+| # | Layer | Foco | Reference |
+|---|-------|------|-----------|
+| 1 | Arquitectura NestJS | Controllers delegan, DTOs validan, DI por constructor | `references/architecture-patterns.md` |
+| 2 | TypeORM | N+1, transacciones, índices, repositorios | `references/architecture-patterns.md` + `references/TYPEORM_ANTIPATTERNS.md` |
+| 3 | Seguridad OWASP Top 10 | SQLi, AuthN/Z, sensitive data, mass assignment | `references/security-owasp.md` + `references/SECURITY_CHECKLIST.md` |
+| 4 | Performance | Connection pooling, caching, paginación obligatoria | `references/performance-typescript.md` |
+| 5 | TypeScript Quality | Sin `any`, errores tipados de NestJS, async/await correcto | `references/performance-typescript.md` |
+| 6 | Testing | >80% coverage en servicios críticos, integration + E2E | `references/performance-typescript.md` |
 
-**Validaciones**:
-- ✅ Todos los DTOs deben usar `class-validator` decorators
-- ✅ Usar `ValidationPipe` global con `whitelist: true`
-- ❌ No validar manualmente con if/else en controladores
-
-**Inyección de Dependencias**:
-- ✅ Usar constructor injection, no property injection
-- ✅ Inyectar interfaces/abstracciones, no implementaciones concretas
-- ❌ No usar `@Inject()` a menos que sea necesario (circular deps)
+**Regla**: leer las referencias relevantes antes de aplicar el checklist al módulo. No improvisar criterios — usar los snippets como ground truth.
 
 ---
 
-### 2. TypeORM Best Practices
-
-**Queries N+1**:
-```typescript
-// ❌ MAL: N+1 queries
-const users = await this.userRepository.find();
-for (const user of users) {
-  user.orders = await this.orderRepository.find({ userId: user.id });
-}
-
-// ✅ BIEN: Eager loading con relations
-const users = await this.userRepository.find({
-  relations: ['orders']
-});
-```
-
-**Transacciones**:
-```typescript
-// ❌ MAL: Sin transacción en operaciones múltiples
-await this.userRepository.save(user);
-await this.profileRepository.save(profile);
-
-// ✅ BIEN: Usar transacciones
-await this.dataSource.transaction(async (manager) => {
-  await manager.save(User, user);
-  await manager.save(Profile, profile);
-});
-```
-
-**Índices**:
-- ✅ Columnas con `@Index()` en campos de búsqueda frecuente
-- ✅ `@Unique()` para constraints de unicidad
-- ❌ No crear índices en columnas booleanas o de baja cardinalidad
-
-**Repository Patterns**:
-- ✅ Usar custom repositories para queries complejas
-- ❌ No escribir SQL crudo a menos que sea absolutamente necesario
-- ✅ Preferir QueryBuilder para queries dinámicas
-
----
-
-### 3. Seguridad (OWASP Top 10)
-
-**SQL Injection** (A03:2021):
-```typescript
-// ❌ CRÍTICO: SQL injection
-await this.repo.query(`SELECT * FROM users WHERE id = ${userId}`);
-
-// ✅ SEGURO: Parámetros preparados
-await this.repo.query('SELECT * FROM users WHERE id = $1', [userId]);
-```
-
-**Auth & AuthZ** (A01:2021):
-```typescript
-// ❌ MAL: Sin guards
-@Delete(':id')
-async delete(@Param('id') id: string) { ... }
-
-// ✅ BIEN: Guards + validación de ownership
-@UseGuards(JwtAuthGuard, OwnershipGuard)
-@Delete(':id')
-async delete(@Param('id') id: string, @CurrentUser() user: User) { ... }
-```
-
-**Sensitive Data Exposure** (A02:2021):
-- ❌ No retornar passwords en respuestas (usar `@Exclude()` en entities)
-- ✅ Usar bcrypt/argon2 para hash (min 10 rounds)
-- ✅ Variables sensibles en `.env`, nunca hardcodeadas
-
-**Mass Assignment**:
-```typescript
-// ❌ VULNERABLE: Acepta cualquier campo
-@Post()
-create(@Body() data: any) {
-  return this.repo.save(data); // Puede modificar "isAdmin"
-}
-
-// ✅ SEGURO: DTO estricto + whitelist
-@Post()
-create(@Body() dto: CreateUserDto) { // Solo campos permitidos
-  return this.service.create(dto);
-}
-```
-
----
-
-### 4. Performance
-
-**Database Connections**:
-- ✅ Usar connection pooling (default en TypeORM)
-- ❌ No abrir conexiones manualmente sin cerrarlas
-- ✅ Configurar `max` y `idleTimeoutMillis` en producción
-
-**Caching**:
-```typescript
-// ✅ BIEN: Cache para datos estáticos
-@Injectable()
-export class ProductService {
-  @Cacheable({ ttl: 300 })
-  async findAll() { ... }
-}
-```
-
-**Pagination**:
-```typescript
-// ❌ MAL: Sin paginación
-async findAll() {
-  return this.repo.find(); // Puede retornar millones
-}
-
-// ✅ BIEN: Paginación obligatoria
-async findAll(page: number, limit: number) {
-  return this.repo.find({
-    skip: (page - 1) * limit,
-    take: Math.min(limit, 100) // Max 100
-  });
-}
-```
-
----
-
-### 5. TypeScript Quality
-
-**Tipos estrictos**:
-- ❌ No usar `any` (excepto en casos extremos)
-- ✅ Usar `unknown` para tipos desconocidos
-- ✅ Habilitar `strict: true` en tsconfig.json
-
-**Error Handling**:
-```typescript
-// ❌ MAL: Errores genéricos
-throw new Error('Something failed');
-
-// ✅ BIEN: Excepciones de NestJS
-throw new NotFoundException(`User #${id} not found`);
-throw new BadRequestException('Invalid email format');
-```
-
-**Async/Await**:
-- ✅ Siempre usar try/catch en async functions
-- ✅ No olvidar `await` (puede causar bugs silenciosos)
-- ❌ No mezclar callbacks con promises
-
----
-
-### 6. Testing
-
-**Cobertura mínima**:
-- ✅ Unit tests para servicios críticos (>80% coverage)
-- ✅ Integration tests para endpoints
-- ✅ E2E tests para flujos principales
-
-**Mocks**:
-```typescript
-// ✅ BIEN: Mock de dependencias
-const mockRepository = {
-  find: jest.fn().mockResolvedValue([]),
-  save: jest.fn()
-};
-```
-
----
-
-## 🔍 Cómo Usar Este Skill
+## Cómo Usar Este Skill
 
 ### Paso 1: Identificar archivos a revisar
 ```bash
-# Buscar archivos relevantes
-grep -r "class.*Controller" src/
-grep -r "class.*Service" src/
-grep -r "@Entity" src/
+rg "class.*Controller" src/
+rg "class.*Service" src/
+rg "@Entity" src/
 ```
 
 ### Paso 2: Leer código y aplicar checklist
-- Lee cada archivo con `Read tool`
-- Compara contra los patrones de arriba
-- Identifica violaciones (❌) y buenas prácticas (✅)
+- Leer cada archivo con `Read tool`
+- Comparar contra los patrones en las referencias
+- Identificar violaciones (❌) y buenas prácticas (✅)
 
 ### Paso 3: Generar reporte
 ```markdown
@@ -246,7 +81,7 @@ grep -r "@Entity" src/
 ```
 
 ### Paso 4: Sugerir código mejorado
-Para cada issue, provee un snippet corregido usando el formato:
+Para cada issue, snippet corregido en formato:
 ```typescript
 // Archivo: src/path/to/file.ts:línea
 
@@ -262,30 +97,12 @@ Para cada issue, provee un snippet corregido usando el formato:
 
 ---
 
-## 📚 Referencias Adicionales
-
-Para análisis profundo, consulta:
-- `references/NESTJS_PATTERNS.md` - Patrones arquitectónicos avanzados
-- `references/TYPEORM_ANTIPATTERNS.md` - Anti-patterns comunes TypeORM
-- `references/SECURITY_CHECKLIST.md` - Checklist completo OWASP
-
----
-
-## 🚫 Limitaciones
-
-Este skill NO cubre:
-- Performance profiling (usa Clinic.js o 0x)
-- Dependency vulnerabilities (usa `npm audit`)
-- Infrastructure/DevOps (usa otro skill)
-
----
-
-## 🎯 Output Format
+## Output Format
 
 ```markdown
 # Code Review: [Módulo/Feature]
 
-## 📊 Resumen
+## Resumen
 - Archivos revisados: X
 - Issues críticos: Y
 - Mejoras sugeridas: Z
@@ -300,13 +117,43 @@ Este skill NO cubre:
 ## ✅ Aspectos Positivos
 [buenas prácticas encontradas]
 
-## 📝 Sugerencias de Refactor
+## Sugerencias de Refactor
 [código antes/después]
 ```
 
 ---
 
-## 💡 Tips para el Agente
+## Anti-patterns (NEVER)
+
+- ❌ Aprobar PR con `any` salvo justificación explícita y documentada
+- ❌ Aprobar SQL crudo construido con template literals (`${}`) — siempre parámetros preparados
+- ❌ Marcar como OK un endpoint sin guards en operaciones que mutan estado
+- ❌ Aprobar `@Body() data: any` en POST/PATCH — siempre DTO con `class-validator`
+- ❌ Marcar como OK lógica de negocio dentro del controller
+- ❌ Aceptar código que retorna passwords / secrets / tokens en la respuesta (usar `@Exclude()`)
+- ❌ Aprobar `find()` sin paginación en endpoints de listado
+- ❌ Aceptar imports estáticos de servicios — siempre constructor injection
+- ❌ Saltar criterios sin leer la reference correspondiente — improvisar pierde rigor
+
+## Required (ALWAYS)
+
+- ✅ Reportar `file:line` para cada hallazgo
+- ✅ Explicar el "por qué" del issue, no solo el "qué"
+- ✅ Sugerir snippet antes/después en cada refactor crítico
+- ✅ Priorizar OWASP sobre estilo
+
+---
+
+## Limitaciones
+
+Este skill NO cubre:
+- Performance profiling (usa Clinic.js o 0x)
+- Dependency vulnerabilities (usa `npm audit`)
+- Infrastructure/DevOps (usa otro skill)
+
+---
+
+## Tips para el Agente
 
 1. **Prioriza seguridad**: Issues OWASP son críticos
 2. **Sé específico**: Siempre menciona `file:line`

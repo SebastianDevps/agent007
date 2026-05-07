@@ -108,6 +108,12 @@ def main() -> None:
         file_path = tool_input.get("file_path", "")
         content = tool_input.get("content", "")
         if file_path and content:
+            # Defensive: if parent dir doesn't exist, path-existence-guard will block.
+            # Don't fingerprint a write that can't succeed — otherwise the retry
+            # (after mkdir) is mistaken as duplicate.
+            parent = Path(file_path).parent if Path(file_path).is_absolute() else (project_root / file_path).parent
+            if not parent.exists():
+                sys.exit(0)
             fingerprint = build_write_fingerprint(file_path, content)
             key = file_path
 
@@ -116,6 +122,10 @@ def main() -> None:
         old_string = tool_input.get("old_string", "")
         new_string = tool_input.get("new_string", "")
         if file_path and (old_string or new_string):
+            # Defensive: if target file doesn't exist, path-existence-guard will block.
+            target = Path(file_path) if Path(file_path).is_absolute() else (project_root / file_path)
+            if not target.exists():
+                sys.exit(0)
             fingerprint = build_edit_fingerprint(file_path, old_string, new_string)
             key = f"edit:{file_path}"
 

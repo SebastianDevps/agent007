@@ -1,0 +1,10 @@
+{
+  "hook": "path-existence-guard",
+  "stdin": {
+    "tool_name": "Bash",
+    "tool_input": { "command": "ls" }
+  },
+  "expect": {
+    "decision": "allow"
+  }
+}

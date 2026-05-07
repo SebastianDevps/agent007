@@ -1,0 +1,12 @@
+{
+  "hook": "session-recover",
+  "stdin": {
+    "event": "SessionStart"
+  },
+  "env": {
+    "SESSION_RECOVER_HOURS": "0"
+  },
+  "expect": {
+    "decision": "allow"
+  }
+}

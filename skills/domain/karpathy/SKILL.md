@@ -1,6 +1,10 @@
 ---
 name: karpathy-guidelines
 description: "Behavioral guidelines to reduce common LLM coding mistakes before writing any code"
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
 license: MIT
 load_when:
   - writing_code

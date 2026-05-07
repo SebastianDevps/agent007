@@ -1,95 +1,124 @@
 ---
 name: search-first
-description: "Buscar antes de escribir: ejecuta búsqueda estructurada antes de crear cualquier utility, helper, o abstracción. Matriz de decisión: adopt→extend→compose→build."
+description: "Pre-coding gate — before writing any custom implementation, forces a structured search: library scan, codebase scan, decision matrix. Proceed to Build only if all alternatives are ruled out."
 invokable: true
-accepts_args: true
+accepts_args: implementation_goal
+allowed-tools: ["Bash", "Grep", "Glob", "Read", "WebSearch"]
+auto-activate: before any "create new" or "implement from scratch" task
 version: 1.0.0
 when:
-  keywords: ["search first", "before creating", "before writing", "find existing", "don't reinvent", "utility", "helper", "abstraction"]
+  - task_type: feature
+  - signal: ["create", "implement", "build", "add", "write a", "new module", "from scratch"]
+constraints:
+  - check_libraries_before_coding
+  - check_codebase_before_coding
+  - document_why_custom_if_custom
 ---
 
-# Search-First — Buscar Antes de Escribir
+# Search First — Pre-Coding Gate
 
-**Propósito**: Evitar reinventar la rueda — el time-waster más común en desarrollo asistido por IA. Antes de escribir cualquier utility, helper, abstracción, o integración, ejecutar búsqueda estructurada.
+**Purpose**: Prevent reinventing wheels. `deep-research` is reactive — the user asks for it. This gate fires automatically before any new implementation begins and answers three questions before a single line of production code is written.
 
-**Regla**: Solo se pasa a `build` cuando los pasos 0–3 no producen nada utilizable.
+**Hard rule**: If the decision is BUILD and no search evidence is documented, the implementation is not allowed to start.
 
 ---
 
-## Búsqueda Estructurada (4 fuentes en orden)
+## Step 1 — Library Scan
 
-### 0. ¿Ya existe en el repo?
+Search the relevant package registry for existing solutions:
+
+- **Node/TypeScript**: `npm search <keyword>` or WebSearch `site:npmjs.com <keyword>`
+- **Python**: WebSearch `site:pypi.org <keyword>`
+- **Go**: WebSearch `site:pkg.go.dev <keyword>`
+
+Search criteria — a library qualifies as a candidate if it:
+- Has active maintenance (last publish < 12 months or activity on repo).
+- Has > 100 weekly downloads or > 50 GitHub stars (not abandonware).
+- Covers at least 80% of the required behavior.
+
+Document every candidate found. Do not discard candidates without a stated reason.
+
+---
+
+## Step 2 — Codebase Scan
+
+Search the project for existing implementations before adding a new one:
 
 ```bash
-# Buscar por nombre/concepto
-grep -r "functionName\|ConceptKeyword" src/ --include="*.ts" -l
-
-# Buscar utilidades similares
-find src/ -name "*.utils.ts" -o -name "*.helper.ts" | head -20
+rg "<keyword>" --type ts -l          # find files mentioning the concept
+rg "<keyword>" --type ts -C 3        # see context around matches
 ```
 
-**Si existe**: usar directamente o extender. Parar aquí.
+Look for:
+- Utility functions solving the same problem.
+- Services or helpers with overlapping responsibility.
+- Patterns already established in the codebase that can be extended.
 
-### 1. npm / PyPI / pkg manager
-
-```bash
-# Para Node.js
-npm search <keyword> --prefer-online
-
-# Evaluar criterios: MIT/Apache license, >1k weekly downloads, <2 years sin actualizar
-```
-
-### 2. MCP servers disponibles
-
-Revisar `~/.claude/settings.json` → `mcpServers`:
-¿Hay algún MCP que ya provee esta capacidad?
-
-Ejemplo: antes de escribir código para interactuar con GitHub API, verificar si `github-mcp` está activo.
-
-### 3. Skills del registro
-
-```
-grep -r "<keyword>" .claude/skills/ --include="*.md" -l
-```
-
-¿Hay un skill que ya cubre este patrón?
-
-### 4. GitHub code search (último recurso)
-
-Solo si los pasos 0–3 no produjeron nada.
+A codebase match means an existing abstraction can be extended or composed instead of rebuilt.
 
 ---
 
-## Matriz de Decisión
+## Step 3 — Decision Matrix
 
-| Resultado de búsqueda | Acción |
-|----------------------|--------|
-| Match exacto + MIT/Apache | **Adopt**: instalar y usar directamente |
-| Match parcial (80% de lo necesario) | **Extend**: fork/subclass/wrap |
-| 3+ opciones débiles pero complementarias | **Compose**: combinar dos paquetes pequeños |
-| Nada relevante | **Build**: ahora sí, escribir desde cero |
+Classify the result into one of four outcomes:
 
----
+| Decision | Meaning | Condition |
+|----------|---------|-----------|
+| **Adopt** | Use the library as-is | Library covers >= 80% of need, no integration risk |
+| **Extend** | Wrap or configure existing code | Library or codebase code covers 60–80%, a thin adapter closes the gap |
+| **Compose** | Combine two existing pieces | Two smaller items together solve the problem |
+| **Build** | Custom implementation | Nothing found that fits, or fit requires more work than building clean |
 
-## Criterios de evaluación de librerías
-
-Antes de adoptar una dependencia externa:
-
-- [ ] Licencia: MIT, Apache 2.0, BSD — nunca GPL en código cerrado
-- [ ] Mantenimiento: commit en últimos 12 meses
-- [ ] Popularidad: >1,000 npm downloads/semana o >100 GitHub stars
-- [ ] Tamaño: bundle size razonable para el contexto (web vs backend)
-- [ ] Dependencias transitivas: no traer 50 dependencias para una función simple
+**If BUILD**: document what was found and why it does not fit. This is required — not optional. No undocumented custom implementations.
 
 ---
 
-## Cuándo Activar este Skill
+## Output Format
 
-Este skill debe ejecutarse **automáticamente** durante `Skill('plan')` cuando el plan incluye crear cualquier:
-- Utility function / helper
-- HTTP client / API wrapper
-- Cache layer
-- Parser / formatter
-- Validation logic
+Every invocation of this skill ends with a single structured output line before implementation proceeds:
 
-El planner debería incluir una fase "Search-First" antes de diseñar la implementación.
+```
+SEARCH_RESULT: [Adopt|Extend|Compose|Build]
+FOUND: <library name, version — OR — internal file path>
+REASON: <why this decision>
+```
+
+Examples:
+
+```
+SEARCH_RESULT: Adopt
+FOUND: zod@3.22.4
+REASON: Covers schema validation with TypeScript inference. Already in package.json.
+
+SEARCH_RESULT: Build
+FOUND: joi@17 (too heavy, pulls 12 deps), yup@1 (API doesn't support discriminated unions)
+REASON: Neither library supports the discriminated union validation pattern required. Custom validator is ~30 lines and has zero deps.
+
+SEARCH_RESULT: Extend
+FOUND: src/shared/http/base-client.ts
+REASON: Existing HTTP client covers auth injection; need to add retry logic only.
+```
+
+---
+
+## Anti-Patterns — Reject Immediately
+
+| Signal | Action |
+|--------|--------|
+| "I'll just write it quickly" | STOP — run the scan first |
+| No SEARCH_RESULT line in output | STOP — gate not satisfied; do not write implementation |
+| BUILD decision with no FOUND evidence | STOP — document what was searched |
+| Library found but dismissed without reason | STOP — state the rejection reason explicitly |
+| Codebase already has a helper; new one added anyway | STOP — extend or compose the existing one |
+
+---
+
+## Integration with Pipeline
+
+This gate runs between routing and `Skill('generate')`:
+
+```
+routing → search-first → [Adopt/Extend/Compose: integrate] OR [Build: generate → verify]
+```
+
+For SDD flows, the SEARCH_RESULT is included in the proposal artifact so the design phase knows whether a library or existing code was chosen.

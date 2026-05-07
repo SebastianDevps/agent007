@@ -1,0 +1,10 @@
+{
+  "hook": "context-tick",
+  "stdin": {
+    "event": "SessionStart",
+    "session_id": "test-session-A1"
+  },
+  "expect": {
+    "decision": "allow"
+  }
+}

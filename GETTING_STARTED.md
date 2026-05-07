@@ -1,6 +1,6 @@
 # Getting Started — Agent007 v5.1
 
-> Este plugin convierte Claude Code en un sistema autónomo de desarrollo de software con 8 agentes expertos, 34+ skills y 22 hooks de calidad.
+> Este plugin convierte Claude Code en un sistema autónomo de desarrollo de software con 10 agentes expertos, 35 skills y 18 hooks de calidad.
 
 ---
 
@@ -98,12 +98,7 @@ El plugin necesita conocer tu stack para dar respuestas precisas. Edita estos do
 
 ### Verificar que los hooks funcionan
 
-Al iniciar una nueva sesión de Claude Code, deberías ver en el banner:
-```
-Agent007 v5.1 | 35 skills | 10 agents | branch: main | RTK: ✓ | Task: none
-```
-
-Si no aparece, verifica que Node.js y Python3 están disponibles en tu PATH.
+Al iniciar una nueva sesión, verificá que los hooks de seguridad responden correctamente intentando un comando destructivo — `safety-guard.py` debe bloquearlo.
 
 ---
 
@@ -152,8 +147,8 @@ El sistema tiene **5 checkpoints** donde tú decides si continuar:
 
 ## Si algo no funciona
 
-1. **El banner no aparece al iniciar** → Node.js no está en PATH o hay un error en `welcome.py`
-2. **El agente no usa el agente correcto** → agrega keywords del dominio a tu pregunta
+1. **El agente no elige el agente correcto** → describí el dominio más claramente; el routing es LLM-nativo y lee las descriptions de los agentes
+2. **El agente no elige el agente correcto** → revisá los `triggers[]` en el frontmatter del agente correspondiente
 3. **Los hooks bloquean un comando que debería ser seguro** → revisa `hooks/safety-guard.py` y ajusta las reglas
 4. **El ralph-loop no termina** → agrega `--max-iterations 10` y `--verify "npm test"` para acotar
 

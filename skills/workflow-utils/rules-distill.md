@@ -1,87 +1,94 @@
 ---
 name: rules-distill
-description: "Extrae principios recurrentes de múltiples skills y los eleva a rules/. Cierra el loop entre skill accumulation y rules maintenance. Requiere aprobación explícita antes de escribir."
+description: "Scans all skill files, finds principles appearing in 2+ skills, and proposes whether they should be elevated to rules/. Requires explicit user approval before writing anything."
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Write
+  - Edit
 invokable: true
 accepts_args: false
 version: 1.0.0
-when:
-  keywords: ["rules distill", "extract rules", "update rules", "rules from skills", "principles"]
+constraints:
+  - require_approval_before_writing
+  - anti-abstraction-guard
+  - minimum_2_sources
 ---
 
-# Rules Distill — Principios Cross-Skills → Rules/
+# Rules Distill
 
-**Propósito**: Cerrar el loop entre skills y rules. A medida que se acumulan skills, emergen principios que deberían elevarse a reglas siempre-activas. Sin este proceso, skills y rules divergen.
+Slash command: `/rules-distill`
 
----
-
-## ¿Cuándo Ejecutar?
-
-- Después de agregar 3+ skills nuevos relacionados
-- Cuando se observa una regla implícita repetida en múltiples skills
-- Periódicamente (ej. cada mes)
+Scans skills for repeated principles and proposes promotions to permanent `rules/` files.
+Nothing is written without explicit user approval per item.
 
 ---
 
-## Phase 1 — Inventario
+## Step 1 — Scan
 
-1. Listar todos los skills en `skills/INDEX.md`
-2. Listar todas las reglas activas en `rules/`
-3. Por cada skill invokable, leer su sección de Guardrails o restricciones
+Read every file matching `.claude/skills/**/*.md`.
 
----
+For each file, extract statements that function as constraints, rules, or principles:
+- Lines starting with `-`, `*`, or numbered lists inside constraint sections
+- Frontmatter `constraints:` entries
+- Imperative sentences in body sections ("Always X", "Never Y", "Require Z")
 
-## Phase 2 — Extracción de Candidatos
-
-Un principio **califica** para elevarse a rule si:
-- Aparece en **2+ skills** (mismo principio, distintas formulaciones)
-- Es **accionable**: "haz X" / "nunca hagas Y" (no abstracto)
-- Tiene **riesgo de violación claro**: sabemos qué pasa si se incumple
-- **No está ya cubierto** en `rules/`
-
-Para cada candidato, proponer una de estas acciones:
-
-| Acción | Descripción |
-|--------|-------------|
-| `Append` | Agregar al rules/ file existente más relevante |
-| `Revise` | Actualizar una rule existente que es parcial |
-| `New Section` | Agregar sección a un rules/ file |
-| `New File` | Crear nuevo rules/ file para este dominio |
-| `Already Covered` | La rule ya existe — no hacer nada |
-| `Too Specific` | El principio aplica solo a un skill, no elevarlo |
+Ignore: examples, output format descriptions, phase names, and narrative explanations.
 
 ---
 
-## Phase 3 — Propuesta (Requiere Aprobación)
+## Step 2 — Group
 
-Presentar al usuario la lista completa de candidatos con la acción propuesta:
+Group extracted statements by semantic similarity. Two statements are semantically similar if they enforce the same behavior, even with different wording.
+
+Discard any group that appears in only one skill.
+
+---
+
+## Step 3 — Anti-Abstraction Guard
+
+For each group, apply this filter before proceeding:
+
+Reject the group if the principle is:
+- Vague enough to apply to everything ("write clean code", "be thorough", "think carefully")
+- Not actionable (cannot be verified as followed or violated)
+- Already present verbatim in an existing `rules/` file
+
+A principle passes the guard only if it is specific, testable, and not already captured.
+
+---
+
+## Step 4 — Present Proposals
+
+For each group that passed the guard, output one line:
 
 ```
-Candidato: "Siempre buscar antes de escribir utilities nuevos"
-Aparece en: search-first.md, plan.md, brainstorming.md
-Acción propuesta: Append → rules/patterns.md
-Sección: ## Search Before Build
-Contenido propuesto:
-  "Before writing any utility, helper, or abstraction, execute a structured
-   search: codebase → npm/PyPI → MCP servers → GitHub. Decision:
-   exact match → Adopt; partial → Extend; multiple weak → Compose; none → Build."
+PRINCIPLE: [exact principle text]
+SOURCES: [skill1.md, skill2.md, ...]
+ACTION: [Append to rules/X.md | New file rules/Y.md]
+STATUS: Pending approval
 ```
 
-**El usuario debe aprobar explícitamente antes de cualquier write.**
-Respuesta válida: "sí, procede" / "aprobado" / "proceed with all".
+After listing all proposals, ask:
+> "Which of these should I promote? Reply with the numbers or 'none'. I will write them one at a time."
 
 ---
 
-## Phase 4 — Ejecución (Solo Tras Aprobación)
+## Step 5 — Write (one at a time, after approval)
 
-Para cada candidato aprobado:
-1. Editar el archivo target con la nueva regla
-2. Si es New File: crear `rules/<dominio>.md` con frontmatter apropiado
-3. Agregar referencia en `CLAUDE.md` si el file es nuevo
-4. Verificar que la nueva regla no contradiga reglas existentes
+For each approved item:
+1. If `ACTION` is "Append": read the target file first, then append the principle under the appropriate heading.
+2. If `ACTION` is "New file": create the file with a title, the principle, and a brief rationale.
+3. Confirm to the user after each write before proceeding to the next.
+
+Never batch-write all approved items in one pass. One write, one confirmation.
 
 ---
 
-## Guardrail Máximo
+## What This Skill Does NOT Do
 
-**NUNCA modificar `rules/` sin aprobación explícita del usuario.**
-Este skill es de análisis y propuesta. La escritura es opt-in.
+- It does not modify skill files
+- It does not delete anything
+- It does not write without explicit per-item approval
+- It does not promote vague principles regardless of how many skills contain them

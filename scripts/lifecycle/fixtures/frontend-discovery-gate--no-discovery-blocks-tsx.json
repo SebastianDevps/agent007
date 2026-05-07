@@ -1,0 +1,17 @@
+{
+  "hook": "frontend-discovery-gate",
+  "stdin": {
+    "tool_name": "Write",
+    "tool_input": {
+      "file_path": "src/components/Foo.tsx",
+      "content": "export const Foo = () => <div>hi</div>;"
+    }
+  },
+  "env": {
+    "FRONTEND_DISCOVERY_BYPASS": "0"
+  },
+  "expect": {
+    "decision": "block",
+    "reason_contains": "discovery-before-code"
+  }
+}

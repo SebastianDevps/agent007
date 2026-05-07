@@ -14,6 +14,14 @@
           {
             "type": "command",
             "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/memory-decay.py"
+          },
+          {
+            "type": "command",
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/context-tick.py"
+          },
+          {
+            "type": "command",
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/session-recover.py"
           }
         ]
       }
@@ -53,6 +61,10 @@
           {
             "type": "command",
             "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/context-engine.py"
+          },
+          {
+            "type": "command",
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/context-tick.py"
           }
         ]
       }
@@ -77,8 +89,21 @@
         ]
       },
       {
+        "matcher": "Edit|Write|Read",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/path-existence-guard.py"
+          }
+        ]
+      },
+      {
         "matcher": "Edit|Write",
         "hooks": [
+          {
+            "type": "command",
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/frontend-discovery-gate.py"
+          },
           {
             "type": "command",
             "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/tool-policy-guard.py"
@@ -100,6 +125,10 @@
       {
         "matcher": "Bash",
         "hooks": [
+          {
+            "type": "command",
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/tool-allowlist-guard.py"
+          },
           {
             "type": "command",
             "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/safety-guard.py"
@@ -133,6 +162,10 @@
           {
             "type": "command",
             "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/tool-loop-detection.py"
+          },
+          {
+            "type": "command",
+            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/context-tick.py"
           }
         ]
       },
@@ -190,6 +223,7 @@
   "context": {
     "include": [
       ".claude/CLAUDE.md",
+      ".claude/CONTEXT.md",
       ".claude/STATE.md",
       "plugins/**/*.md",
       "docs/**/*.md"

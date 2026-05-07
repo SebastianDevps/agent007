@@ -1,0 +1,13 @@
+{
+  "hook": "frontend-discovery-gate",
+  "stdin": {
+    "tool_name": "Write",
+    "tool_input": {
+      "file_path": "src/components/Foo.test.tsx",
+      "content": "test('hi', () => {});"
+    }
+  },
+  "expect": {
+    "decision": "allow"
+  }
+}

@@ -1,6 +1,15 @@
 ---
 name: issue-creation
 description: "Enforce issue-first discipline — no PR without an approved issue"
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Bash(gh issue*)
+  - Bash(gh label*)
+  - Bash(gh api*)
+  - Bash(git status*)
+  - Bash(git log*)
 license: Apache-2.0
 adapted-from: gentleman-programming/gentle-ai
 version: "1.0"

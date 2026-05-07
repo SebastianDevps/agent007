@@ -1,0 +1,14 @@
+{
+  "hook": "mutation-guard",
+  "stdin": {
+    "tool_name": "Edit",
+    "tool_input": {
+      "file_path": "/tmp/agent007-test-nonexistent-XYZ-99999.ts",
+      "old_string": "a",
+      "new_string": "b"
+    }
+  },
+  "expect": {
+    "decision": "allow"
+  }
+}

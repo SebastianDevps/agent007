@@ -1,0 +1,13 @@
+{
+  "hook": "frontend-discovery-gate",
+  "stdin": {
+    "tool_name": "Write",
+    "tool_input": {
+      "file_path": "src/util.ts",
+      "content": "export const x = 1;"
+    }
+  },
+  "expect": {
+    "decision": "allow"
+  }
+}

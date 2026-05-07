@@ -1,0 +1,13 @@
+# Line-cap exemptions for verify.sh (check 4)
+#
+# Format: <path-relative-to-repo-root>\t<line-count-when-recorded>\t<reason>
+# Lines starting with `#` and blank lines are ignored.
+#
+# Rules:
+#   - Anything in this list yields a WARNING, not a FAIL, in verify.sh
+#   - Anything NOT in this list and exceeding 200 lines FAILS
+#   - When you split a file below the cap, REMOVE its line here
+#   - Adding a new entry requires a real reason — no "we'll do it later"
+#
+# This is not a free pass. It is a debt register.
+

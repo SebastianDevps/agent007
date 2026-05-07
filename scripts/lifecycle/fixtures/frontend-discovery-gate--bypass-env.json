@@ -1,0 +1,16 @@
+{
+  "hook": "frontend-discovery-gate",
+  "stdin": {
+    "tool_name": "Write",
+    "tool_input": {
+      "file_path": "src/components/Bar.tsx",
+      "content": "export const Bar = () => null;"
+    }
+  },
+  "env": {
+    "FRONTEND_DISCOVERY_BYPASS": "1"
+  },
+  "expect": {
+    "decision": "allow"
+  }
+}

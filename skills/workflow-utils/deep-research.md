@@ -1,38 +1,119 @@
 ---
 name: deep-research
-description: "4-phase systematic research methodology: Scope → Gather → Synthesize → Deliver. For technical investigations, library comparisons, architecture decisions."
+description: "Systematic 4-phase research methodology: Scope → Gather → Synthesize → Deliver. Single source of truth — no /commands wrapper."
 invokable: true
 accepts_args: true
-version: 1.0.0
+version: 2.0.0
 when:
   keywords: ["research", "investigate", "explore", "compare", "analyze options", "deep-research"]
+allowed-tools:
+  - WebSearch
+  - WebFetch
+  - Grep
+  - Read
+  - Bash(rg *)
+  - Bash(fd *)
 ---
 
-# Deep Research — 4-Phase Systematic Research
+# deep-research
 
-Delegates to the `/deep-research` command. See `.claude/commands/deep-research.md` for the full protocol.
+Systematic research for technical and product questions. Use when external source validation is required.
 
-## 4 Phases
+## When to invoke
 
-### Phase 1 — Scope
-Define the research question precisely. Identify: what we need to know, what we already know, success criteria for the research.
+- New technologies, libraries, or APIs
+- Comparing architectural approaches
+- Best practices for a domain
+- Gathering evidence before recommending
+- Any question requiring external source validation
 
-### Phase 2 — Gather
-Systematic collection from multiple sources:
-- Official docs
-- GitHub issues / discussions
-- Benchmarks / empirical data
-- Known trade-offs / anti-patterns
+## Phase 1 — Problem Definition
 
-### Phase 3 — Synthesize
-Cross-reference sources. Resolve contradictions. Apply to our specific context (stack, constraints, team).
+Before searching, write:
 
-### Phase 4 — Deliver
-Structured output:
-- Executive summary (1 paragraph)
-- Recommendation with rationale
-- Trade-offs considered
-- Sources with confidence level
+```
+RESEARCH QUESTION: [exact question]
+SCOPE: [in / out of scope]
+SUCCESS CRITERIA: [what does a good answer look like?]
+KNOWN CONTEXT: [what we already know]
+UNKNOWNS: [what specifically needs verification]
+```
+
+Do NOT start searching until this is written.
+
+## Phase 2 — Source Discovery
+
+### Priority order
+1. **Official documentation** — vendor docs, RFC/PEP
+2. **Primary sources** — original papers, GitHub repos, release notes
+3. **High-quality secondary** — engineering blogs (Stripe, Netflix, Uber, GitHub)
+4. **Community consensus** — Stack Overflow (high vote count), GitHub issues
+5. **Benchmarks** — with disclosed methodology
+
+### Methods
+```bash
+WebSearch("query with current year 2026")
+WebFetch(url, "extract [specific information needed]")
+Grep("pattern", path)
+```
+
+### Source quality checklist
+- [ ] Source dated (prefer < 2 years for fast-moving tech)?
+- [ ] Author credible (engineer, maintainer, researcher)?
+- [ ] Evidence provided (benchmarks, code, examples)?
+- [ ] Cross-referenced with 2+ sources?
+
+## Phase 3 — Synthesis
+
+### Findings table
+
+| Question | Answer | Source | Confidence |
+|----------|--------|--------|------------|
+| [q1] | [answer] | [url/file] | high/medium/low |
+
+### Confidence levels
+- **high** — multiple authoritative sources agree
+- **medium** — one authoritative source, no primary docs
+- **low** — community opinion, no direct evidence, or conflicting
+
+### Conflicts
+List contradictions discovered. Explain which source to trust and why.
+
+### Gaps
+List what could NOT be verified.
+
+## Phase 4 — Output
+
+```markdown
+## Research: [Topic]
+
+### Bottom Line
+[Conclusion first — 2-3 sentences max]
+
+### Evidence
+[Findings table from Phase 3]
+
+### Recommendation
+[Concrete action based on evidence]
+
+### Caveats
+[Confidence gaps, conflicting sources, what might change]
+
+### Sources
+- [Source 1](url) — [why trusted]
+- [Source 2](url) — [why trusted]
+```
+
+## Anti-patterns
+
+| Anti-pattern | Correct behavior |
+|---|---|
+| Searching without a question | Define question first (Phase 1) |
+| Trusting single source | Cross-reference 2+ authoritative |
+| Fabricating citations | Only cite sources actually fetched |
+| Confidence without evidence | Use confidence levels |
+| "Typically" / "usually" | Find docs and cite |
+| Outdated info | Note pub date, flag if > 2 years |
 
 ## Invocation
 

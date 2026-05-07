@@ -1,6 +1,15 @@
 ---
 name: using-git-worktrees
 description: "Creates an isolated git worktree for feature development. Ensures clean baseline before starting. Use before writing-plans for any medium/complex feature."
+allowed-tools:
+  - Read
+  - Bash(git worktree*)
+  - Bash(git branch*)
+  - Bash(git status*)
+  - Bash(git checkout*)
+  - Bash(git fetch*)
+  - Bash(git pull*)
+  - Bash(git log*)
 invokable: true
 accepts_args: true
 version: 1.0

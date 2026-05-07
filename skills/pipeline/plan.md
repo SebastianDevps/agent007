@@ -1,6 +1,12 @@
 ---
 name: plan
 description: "Decomposes an approved DECISIONS.md into atomic 2-5 minute tasks with TDD steps, file paths, and dependencies. Produces docs/changes/<feature>/tasks.md consumed by subagent-driven-development. Use when user asks to 'plan', 'break down', or after brainstorming approves a spec."
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Write
+  - Edit
 invokable: true
 accepts_args: true
 version: 1.0.0

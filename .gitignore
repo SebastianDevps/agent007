@@ -19,4 +19,16 @@ usage.*.jsonl
 ralph-state.json
 context-budget.json
 .sdlc/state/session-*.json
+.sdlc/state/
 orchestrator/.sdlc/
+
+# Local-only settings (may contain secrets, ENV overrides, machine paths)
+settings.local.json
+
+# Telemetry / runtime logs (auto-generated, not part of plugin distribution)
+metrics/
+state/
+
+# Python cache
+**/__pycache__/
+*.pyc

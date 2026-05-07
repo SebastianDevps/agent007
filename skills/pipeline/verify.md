@@ -1,6 +1,24 @@
 ---
 name: verify
 description: "Verification gate: runs tests, build, and lint then validates output against acceptance criteria. Must pass before any 'done' claim. Use after generate or at end of any task. Returns PASS with evidence or FAIL with diagnosis."
+allowed-tools:
+  - Read
+  - Grep
+  - Glob
+  - Bash(npm test*)
+  - Bash(npm run*)
+  - Bash(pnpm test*)
+  - Bash(pnpm run*)
+  - Bash(yarn test*)
+  - Bash(pytest*)
+  - Bash(go test*)
+  - Bash(cargo test*)
+  - Bash(jest*)
+  - Bash(vitest*)
+  - Bash(tsc*)
+  - Bash(eslint*)
+  - Bash(git status*)
+  - Bash(git diff*)
 invokable: true
 accepts_args: true
 version: 1.0.0
@@ -9,6 +27,9 @@ when:
     risk_level: [low, medium, high, critical]
   - after: generate
   - pipeline: [simple, medium, complex]
+references:
+  - references/evidence-gate.md
+  - references/sdd-review.md
 ---
 
 # Verify — Evidence-Based Verification Gate
@@ -24,20 +45,17 @@ when:
 
 ---
 
-## 6-Gate Pre-PR Checklist
+## 6-Gate Pre-PR Checklist (resumen)
 
-Antes de reclamar que un cambio está listo, todos los gates deben pasar:
+Todos los gates deben pasar antes de declarar listo:
 
 ```
-Gate 1: BUILD     → npm run build / tsc --noEmit → 0 errors
-Gate 2: TYPES     → TypeScript strict, 0 type errors
-Gate 3: LINT      → eslint/prettier → 0 errors (warnings documentados)
-Gate 4: TESTS     → suite completa → ≥80% coverage, 0 failed
-Gate 5: SECURITY  → no secrets en diff, no console.log, no vulnerabilidades OWASP obvias
-Gate 6: DIFF      → revisar diff completo buscando cambios no intencionales o missing error handling
+Gate 1: BUILD     Gate 4: TESTS (≥80% coverage)
+Gate 2: TYPES     Gate 5: SECURITY
+Gate 3: LINT      Gate 6: DIFF review
 ```
 
-**Cadencia recomendada**: ejecutar los 6 gates al final de cada tarea completada, no solo al final del feature completo.
+Detalle completo (criterios por gate, plantillas) → `references/evidence-gate.md`.
 
 Un gate bloqueado = FAIL. No avanzar hasta resolver.
 
@@ -49,21 +67,7 @@ Leer en orden de prioridad:
 
 1. `verify_cmd` de la tarea actual en `tasks.md` → usar este
 2. Scripts disponibles en `package.json` → inferir el correcto
-3. Fallback estándar:
-
-```bash
-# TypeScript / Node.js
-npm run build && npm test && npm run lint
-
-# Si hay test específico de la tarea
-npm test -- --testPathPattern="<archivo-relevante>"
-
-# Python
-python -m pytest tests/ -v
-
-# Sin framework de tests
-node <archivo> && echo "EXIT: $?"
-```
+3. Fallback estándar (TypeScript / Python / sin framework) → `references/evidence-gate.md`
 
 ---
 
@@ -87,121 +91,73 @@ Ejecutar el comando completo y capturar output **literal**:
 
 ## Phase 3 — Validar Acceptance Criteria
 
-Para cada criterio en el bloque `acceptance_criteria` de la tarea:
-
-```
-Criterio: "Returns 404 when user does not exist"
-Evidencia: test "should return 404 when user does not exist" → PASSED ✅
-
-Criterio: "Response includes error message"
-Evidencia: test "should include error field in 404 response" → PASSED ✅
-```
-
-Si un criterio no tiene test que lo cubra → FLAG como gap (no FAIL automático, pero documentar).
+Para cada criterio en `acceptance_criteria` de la tarea, mapear test → evidencia.
+Si un criterio no tiene test que lo cubra → FLAG como gap (documentar, no FAIL automático).
+Plantilla detallada → `references/sdd-review.md`.
 
 ---
 
 ## Phase 4 — Emitir Veredicto
 
-### PASS
+### PASS — resumen
 
 ```
 ✅ Verify PASS — TASK-NNN: <title>
-
-Evidence:
-  [npm test] → 42 passed, 0 failed (2.3s)
-  [npm run build] → Compiled successfully
-  [npm run lint] → 0 problems
-
-Acceptance Criteria:
-  ✅ <criterio 1> → cubierto por test "<nombre del test>"
-  ✅ <criterio 2> → cubierto por test "<nombre del test>"
-
+Evidence: [npm test] → 42 passed, 0 failed | [build] → ok | [lint] → 0 problems
+Acceptance: ✅ <criterio> cubierto por <test>
 Ready for: [next task | code-reviewer | finishing-a-development-branch]
 ```
 
-### FAIL
+### FAIL — resumen
 
 ```
-❌ Verify FAIL — TASK-NNN: <title>  [Intento X/3]
-
-Evidence:
-  [npm test] → 38 passed, 4 FAILED (3.1s)
-  
-  FAILED: UserService > findById > should return null when not found
-    Expected: null
-    Received: undefined
-    at src/users/user.service.spec.ts:47
-
-Root cause: [diagnosis directo — qué línea, qué función, qué falló]
-Fix required: [acción concreta para resolver]
-
-→ Retornando a Skill('generate') con este feedback [intento X/3]
+❌ Verify FAIL — TASK-NNN [Intento X/3]
+Evidence: [npm test] → 38 passed, 4 FAILED — output literal
+Root cause: <file:line:function — qué falló>
+Fix required: <acción concreta>
+→ Retornando a Skill('generate') con feedback [intento X/3]
 ```
 
-Si 3 intentos fallaron:
-```
-❌ Verify FAIL — 3/3 intentos agotados
+### FAIL 3/3 → escalar a humano con mini-handoff
 
-No se pudo hacer pasar: <lista de tests fallando>
-Escalando a humano. Contexto en: .sdlc/handoffs/<workflow-id>/<task-id>-handoff.md
-
-<promise>FAIL</promise>
-```
+Plantillas completas (PASS, FAIL, FAIL 3/3) → `references/evidence-gate.md`.
 
 ---
 
-## Phase 5 — Generar Mini-Handoff (si viene de subagent-driven-development)
+## Phase 5 — Mini-Handoff (si viene de subagent-driven-development)
 
-Si el workflow_id está disponible, escribir:
-`.sdlc/handoffs/<workflow-id>/<task-id>-handoff.md`
+Escribir `.sdlc/handoffs/<workflow-id>/<task-id>-handoff.md` con `task_id`, `status`, `files_modified`, `evidence`, `notes`.
 
-```markdown
-## Mini-Handoff
-task_id: TASK-NNN
-status: COMPLETE | FAIL
-files_modified:
-  - src/path/to/file.ts
-evidence: "[npm test] → 42 passed, 0 failed"
-notes: [cualquier decisión de implementación no obvia]
-```
-
----
-
-## Guardrails
-
-- ❌ NUNCA afirmar PASS sin ejecutar el comando y mostrar output real
-- ❌ NUNCA aceptar "debería funcionar" como evidencia
-- ❌ No hacer PASS si hay tests en skip/pending no justificados
-- ❌ No ignorar errores de TypeScript (`tsc --noEmit` debe pasar)
-- ❌ **Linter loop guard**: Do NOT loop more than 3 times fixing linter errors on the same file. On the third attempt, stop and escalate to the user — do not keep iterating.
-- ✅ El output del comando es la única fuente de verdad
-- ✅ Si el verify_cmd no existe en el proyecto → reportar y pedir al usuario que lo defina
+Formato exacto → `references/sdd-review.md`.
 
 ---
 
 ## Reflection Retry Protocol (patrón Aider)
 
-El error no dispara un "retry genérico" — **el output literal del error se convierte en el siguiente input** al implementador. El modelo se corrige con contexto real.
+El error no dispara un retry genérico — **el output literal se convierte en input** al siguiente intento. Hasta 3 intentos con escalación creciente:
 
-```
-Intento 1 FAIL:
-  reflected_message = "[npm test output literal]\n\nRoot cause: <diagnosis>\nFix required: <acción concreta>"
-  → pasar reflected_message como input a Skill('generate') intento 2
+- Intento 1 FAIL → standard reflection (output literal + root cause + fix concreto)
+- Intento 2 FAIL → cambiar enfoque (previous approach failed because…)
+- Intento 3 FAIL → ESCALAR A HUMANO — no reintentar
 
-Intento 2 FAIL:
-  reflected_message = "[nuevo output literal]\n\nPrevious approach failed because: <razón>\nTry instead: <enfoque alternativo>"
-  → pasar reflected_message como input a Skill('generate') intento 3
+Detalle completo (mensajes textuales por attempt) → `references/sdd-review.md`.
 
-Intento 3 FAIL → ESCALAR A HUMANO — no reintentar
-```
+---
 
-**Regla clave**: el `reflected_message` siempre incluye:
-1. Output del comando literal (líneas de error, no resumen)
-2. Root cause diagnosticado (línea exacta, función, archivo)
-3. Fix sugerido concreto (o enfoque alternativo si ya se intentó)
+## Anti-patterns (NEVER)
 
-Si el mismo error se repite 2 veces seguidas → el fix no está funcionando, cambiar enfoque completamente antes del intento 3.
+- ❌ Afirmar PASS sin ejecutar el comando y mostrar output real
+- ❌ Aceptar "debería funcionar" / "probably" / "should work" como evidencia (FAIL automático)
+- ❌ PASS con tests skip/pending no justificados
+- ❌ Ignorar errores de TypeScript (`tsc --noEmit` debe pasar)
+- ❌ Loop más de 3 veces fixing linter errors en el mismo archivo (linter loop guard) — escalar al usuario
+- ❌ Resumir el output del comando — usar la línea exacta
+
+## Required (ALWAYS)
+
+- ✅ El output del comando es la única fuente de verdad
+- ✅ Si el verify_cmd no existe en el proyecto → reportar y pedir al usuario que lo defina
+- ✅ Mostrar evidencia citable: `[cmd] → [output literal]`
 
 ---
 

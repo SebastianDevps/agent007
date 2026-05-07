@@ -1,0 +1,13 @@
+{
+  "hook": "path-existence-guard",
+  "stdin": {
+    "tool_name": "Write",
+    "tool_input": {
+      "file_path": ".sdlc/state/foo-test.json",
+      "content": "{}"
+    }
+  },
+  "expect": {
+    "decision": "allow"
+  }
+}
