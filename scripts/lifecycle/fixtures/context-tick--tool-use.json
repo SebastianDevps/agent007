@@ -3,7 +3,7 @@
   "stdin": {
     "tool_name": "Read",
     "tool_input": {
-      "file_path": ".claude/skills/domain/frontend-design/references/process.md"
+      "file_path": ".claude/skills/domain-frontend-design/references/process.md"
     },
     "session_id": "test-session-A2"
   },

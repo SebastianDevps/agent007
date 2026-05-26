@@ -35,7 +35,7 @@ PluginClaude/
 |---|---|---|
 | Invoke a skill | `.claude/skills/INDEX.md` | Trigger keywords → skill path |
 | Add a new skill | `.claude/skills/<category>/<name>.md` or `<name>/SKILL.md` | Use `Skill('skill-creator')` |
-| Add deterministic enforcement | `.claude/hooks/` + `.claude/settings.json` | See `rules/hooks-authoring.md` |
+| Add deterministic enforcement | `.claude/harness/` + `.claude/settings.json` | See `rules/hooks-authoring.md` |
 | Modify routing | `.claude/CLAUDE.md` `<routing>` section | Don't put rules here that should be hooks |
 | Update project conventions | `.claude/rules/<topic>.md` | Loaded lazily by skills that need them |
 | Run an agent | `.claude/agents/<name>.md` | Trigger keywords + tools allowlist |
@@ -46,15 +46,17 @@ PluginClaude/
 
 ## Skill categories
 
-| Category | Path | Loading | Examples |
-|---|---|---|---|
-| `core/` | `skills/core/` | auto-inject (always on) | quality-enforcement, banned-phrases, context-awareness |
-| `pipeline/` | `skills/pipeline/` | invokable on demand | plan, generate, verify, tdd-workflow |
-| `orchestration/` | `skills/orchestration/` | auto-inject | session-manager, state-sync, iterative-retrieval |
-| `domain/` | `skills/domain/<name>/SKILL.md` | invokable | api-design-principles, security-review, react-best-practices |
-| `quality-gates/` | `skills/quality-gates/` | invokable | systematic-debugging, agent-self-diagnosis |
-| `workflow-utils/` | `skills/workflow-utils/` | invokable | commit, pull-request, changelog, deep-research |
-| `product/` `devrel/` | dedicated dirs | invokable | product-discovery, api-documentation |
+All skills now live flat at `skills/<name>/SKILL.md` (depth-2). Category is encoded as a name prefix.
+
+| Prefix | Loading | Examples |
+|---|---|---|
+| (none — pipeline) | invokable | plan, generate, verify, tdd-workflow, brainstorming |
+| (none — orchestration) | invokable | sdd-debate, sdd-verify-diff, consult-decide, consult-critique |
+| `domain-*` | invokable | domain-api-design-principles, domain-security-review, domain-react-best-practices |
+| `quality-gates-*` | invokable | quality-gates-systematic-debugging, quality-gates-performance-profiling |
+| `product-*` / `devrel-*` | invokable | product-product-discovery, devrel-api-documentation |
+| (workflow utils) | invokable | commit, pull-request, changelog, deep-research, search-first, rules-distill, skill-stocktake |
+| (rules — was `core/`) | auto-inject (always on) | `rules/banned-phrases.md`, `rules/context-awareness.md`, `rules/quality-enforcement.md` |
 
 ---
 
@@ -80,7 +82,7 @@ PluginClaude/
 |---|---|
 | `.claude/settings.json` | Wires hooks to events. Breaking this breaks everything. |
 | `.claude/CLAUDE.md` | The identity prompt. Always-loaded. |
-| `.claude/skills/core/*.md` | Auto-injected. Bugs leak everywhere. |
+| `.claude/rules/*.md` (auto-inject set: banned-phrases, context-awareness, quality-enforcement) | Auto-injected. Bugs leak everywhere. |
 | `.sdlc/state/session.md` | Active task state. Concurrent writes corrupt it. |
 
 ---

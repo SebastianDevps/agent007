@@ -11,7 +11,7 @@ canonical-sources:
   - url: https://www.w3.org/TR/WCAG22/#contrast-minimum
     when: "for the exact contrast ratio formula"
 allowed-tools:
-  - Bash(node .claude/skills/domain/a11y-contrast-check/scripts/check-contrast.js *)
+  - Bash(node .claude/skills/domain-a11y-contrast-check/scripts/check-contrast.js *)
   - Read
   - Grep
   - Glob
@@ -44,7 +44,7 @@ The script is dependency-free Node.js (stdlib only). It runs in any project that
 Run on the specific files you just modified:
 
 ```bash
-node .claude/skills/domain/a11y-contrast-check/scripts/check-contrast.js \
+node .claude/skills/domain-a11y-contrast-check/scripts/check-contrast.js \
   src/components/Button.tsx src/styles/theme.css
 ```
 
