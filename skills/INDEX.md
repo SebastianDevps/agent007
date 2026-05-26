@@ -1,142 +1,111 @@
-# Skills INDEX — Agent007 v5.1
+# Skills INDEX — Agent007 v6 (flat layout)
 
-> Full registry of all skills. Path is relative to `.claude/skills/`.
-> Updated: 2026-04-28
-
----
-
-## pipeline/ — Development Flow
-
-| Skill | Path | Invokable | Description |
-|-------|------|-----------|-------------|
-| `plan` | `pipeline/plan.md` | ✅ | Unified planning: decompose to 2-5min tasks (was: writing-plans + sop-planning) |
-| `generate` | `pipeline/generate.md` | ✅ | TDD task execution with assumption tracking (was: sop-code-assist) |
-| `verify` | `pipeline/verify.md` | ✅ | Two-pass verification: evidence gate + SDD review (was: verification-before-completion + sop-reviewer) |
-| `brainstorming` | `pipeline/brainstorming.md` | ✅ | Socratic requirements exploration before implementation |
-| `tdd-workflow` | `pipeline/tdd-workflow.md` | ✅ | Red-Green-Refactor gate: failing test required before any implementation |
-| `subagent-driven-development` | `pipeline/subagent-driven-development.md` | ✅ | Dispatch expert subagents per task from plan |
-| `using-git-worktrees` | `pipeline/using-git-worktrees.md` | ✅ | Isolated branch via git worktree |
-| `finishing-a-development-branch` | `pipeline/finishing-a-development-branch.md` | ✅ | Close branch: verify → merge/PR/keep/discard |
-| `sop-reverse` | `pipeline/sop-reverse.md` | ✅ | Reverse-engineer existing code before refactoring |
+> Full registry of all skills. Path is relative to `Agent007/skills/`.
+> All skills are at depth-1 (`<name>/SKILL.md`). Prefix convention: `<category>-<name>/SKILL.md` for namespaced skills.
+> Updated: 2026-05-26 (flatten-skills-to-anthropic-spec migration — mirror from `.claude/`)
 
 ---
 
-## core/ — Quality Enforcement (Always Active)
+## All Skills (alphabetical)
 
-| Skill | Path | Invokable | Description |
-|-------|------|-----------|-------------|
-| `quality-enforcement` | `core/quality-enforcement.md` | ❌ (auto) | Anti-rationalization + verification rules |
-| `banned-phrases` | `core/banned-phrases.md` | ❌ (auto) | Quick-ref: banned phrases → required replacements |
-| `context-awareness` | `core/context-awareness.md` | ❌ (auto) | Task type detection, risk assessment, routing logic |
+| Skill name | Path | Category | Invokable | Description |
+|---|---|---|---|---|
+| `adr-review` | `adr-review/SKILL.md` | pipeline | ✅ | Periodic check on existing ADRs for aging |
+| `adr-write` | `adr-write/SKILL.md` | pipeline | ✅ | Record architectural decisions with multi-change implications |
+| `agent-self-diagnosis` | `agent-self-diagnosis/SKILL.md` | quality-gates | ✅ | 4-phase loop recovery: Capture → Diagnose → Recover → Report |
+| `brainstorming` | `brainstorming/SKILL.md` | pipeline | ✅ | Socratic requirements exploration before implementation |
+| `changelog` | `changelog/SKILL.md` | workflow-utils | ✅ | Generate changelog from git history |
+| `commit` | `commit/SKILL.md` | workflow-utils | ✅ | Pipe-delimited commit: Tipo\|IdTarea\|YYYYMMDD\|Desc |
+| `consult-critique` | `consult-critique/SKILL.md` | orchestration | ✅ (via `/consult`) | Planning-only adversarial review of pasted proposals |
+| `consult-decide` | `consult-decide/SKILL.md` | orchestration | ✅ (via `/consult`) | Planning-only dual-blind-proposer for option decisions |
+| `deep-research` | `deep-research/SKILL.md` | workflow-utils | ✅ | 4-phase systematic research methodology |
+| `devrel-api-documentation` | `devrel-api-documentation/SKILL.md` | devrel | ✅ | OpenAPI, Swagger, developer portals, API reference |
+| `domain-a11y-contrast-check` | `domain-a11y-contrast-check/SKILL.md` | domain | ✅ | Run Node.js script to verify WCAG AA color contrast. Exits 1 if <4.5:1 |
+| `domain-api-design-principles` | `domain-api-design-principles/SKILL.md` | domain | ✅ | NestJS REST API design and audit |
+| `domain-architecture-patterns` | `domain-architecture-patterns/SKILL.md` | domain | ✅ | Clean Architecture, DDD, Bounded Contexts |
+| `domain-design-system-doc` | `domain-design-system-doc/SKILL.md` | domain | ✅ | Generate canonical 9-section DESIGN.md |
+| `domain-design-tokens-extract` | `domain-design-tokens-extract/SKILL.md` | domain | ✅ | WebFetch a referent URL → extract palette/typography/spacing → write tokens |
+| `domain-discovery-before-code` | `domain-discovery-before-code/SKILL.md` | domain | ✅ | Anti-convergence gate: referent fetch + style choice + state design BEFORE code |
+| `domain-frontend-design` | `domain-frontend-design/SKILL.md` | domain | ✅ | High-quality UI/UX design and implementation |
+| `domain-gsap` | `domain-gsap/SKILL.md` | domain | ✅ | GSAP: tweens, timelines, ScrollTrigger, plugins, React, utils, performance |
+| `domain-ios-hig-mobile` | `domain-ios-hig-mobile/SKILL.md` | domain | ✅ | Mobile-first components following Apple HIG for web |
+| `domain-karpathy` | `domain-karpathy/SKILL.md` | domain | ✅ | Karpathy behavioral contracts deep-dive |
+| `domain-nestjs-code-reviewer` | `domain-nestjs-code-reviewer/SKILL.md` | domain | ✅ | NestJS + TypeORM code review + OWASP |
+| `domain-page-transitions-barba` | `domain-page-transitions-barba/SKILL.md` | domain | ✅ | Setup barba.js + GSAP page transitions |
+| `domain-react-best-practices` | `domain-react-best-practices/SKILL.md` | domain | ✅ | React/Next.js optimization and best practices |
+| `domain-resilience-patterns` | `domain-resilience-patterns/SKILL.md` | domain | ✅ | Circuit breakers, retry, health checks |
+| `domain-security-review` | `domain-security-review/SKILL.md` | domain | ✅ | OWASP Top 10, auth, authorization, sensitive data |
+| `domain-shadcn-component-install` | `domain-shadcn-component-install/SKILL.md` | domain | ✅ | Install shadcn/ui via CLI with mandatory dry-run preview |
+| `domain-spline-3d-embed` | `domain-spline-3d-embed/SKILL.md` | domain | ✅ | Embed Spline 3D scenes safely: lazy-load, perf-gated, mobile-aware |
+| `finishing-a-development-branch` | `finishing-a-development-branch/SKILL.md` | pipeline | ✅ | Close branch: verify → merge/PR/keep/discard |
+| `generate` | `generate/SKILL.md` | pipeline | ✅ | TDD task execution with assumption tracking |
+| `issue-creation` | `issue-creation/SKILL.md` | pipeline | ✅ | Create structured GitHub issues |
+| `plan` | `plan/SKILL.md` | pipeline | ✅ | Unified planning: decompose to 2-5min tasks |
+| `prd-author` | `prd-author/SKILL.md` | pipeline | ✅ | Stakeholder-facing requirements authoring |
+| `product-product-discovery` | `product-product-discovery/SKILL.md` | product | ✅ | User stories, RICE, roadmap, MVP scoping |
+| `pull-request` | `pull-request/SKILL.md` | workflow-utils | ✅ | Create structured GitHub PRs |
+| `quality-gates-performance-profiling` | `quality-gates-performance-profiling/SKILL.md` | quality-gates | ✅ | Measure-first performance diagnosis. Profile → isolate → handoff |
+| `quality-gates-systematic-debugging` | `quality-gates-systematic-debugging/SKILL.md` | quality-gates | ✅ | Root-cause analysis: reproduce → isolate → fix → verify |
+| `retrospective` | `retrospective/SKILL.md` | pipeline | ✅ | Post-archive lessons capture |
+| `rules-distill` | `rules-distill/SKILL.md` | workflow-utils | ✅ | Scans skills for repeated principles, elevates to rules/ |
+| `sdd-debate` | `sdd-debate/SKILL.md` | orchestration | ❌ (auto) | Dual blind proposers + state-machine convergence. Auto-fires when `triage.json.debate_required` is true (v7.1) |
+| `sdd-verify-diff` | `sdd-verify-diff/SKILL.md` | orchestration | ❌ (auto) | Per-file adversarial review fan-out. Auto-fires when `triage.json.per_diff_verify_required` is true (v7.1) |
+| `search-first` | `search-first/SKILL.md` | workflow-utils | ✅ | Pre-coding gate: library + codebase scan → Adopt/Extend/Compose/Build |
+| `skill-stocktake` | `skill-stocktake/SKILL.md` | workflow-utils | ✅ | Automated skill quality audit: Keep/Improve/Retire/Merge |
+| `sop-reverse` | `sop-reverse/SKILL.md` | pipeline | ✅ | Reverse-engineer existing code before refactoring |
+| `subagent-driven-development` | `subagent-driven-development/SKILL.md` | pipeline | ✅ | Dispatch expert subagents per task from plan |
+| `tdd-workflow` | `tdd-workflow/SKILL.md` | pipeline | ✅ | Red-Green-Refactor gate: failing test required before any implementation |
+| `using-git-worktrees` | `using-git-worktrees/SKILL.md` | pipeline | ✅ | Isolated branch via git worktree |
+| `verify` | `verify/SKILL.md` | pipeline | ✅ | Two-pass verification: evidence gate + SDD review |
 
----
-
-## orchestration/ — Session Management
-
-| Skill | Path | Invokable | Description |
-|-------|------|-----------|-------------|
-| `session-manager` | `orchestration/session-manager.md` | ❌ (auto) | Routing, classification, state read/write protocol |
-| `ralph-loop-wrapper` | `orchestration/ralph-loop-wrapper.md` | ❌ (auto) | Infrastructure: wraps task execution in ralph loop |
-| `state-sync` | `orchestration/state-sync.md` | ❌ (auto) | Sync session state: .sdlc/state/session.md ↔ STATE.md |
-| `iterative-retrieval` | `orchestration/iterative-retrieval.md` | ❌ (auto) | Progressive context refinement for subagent spawning: 3-round minimum-context protocol |
-
----
-
-## domain/ — Domain-Specific Expertise
-
-| Skill | Path | Invokable | Description |
-|-------|------|-----------|-------------|
-| `api-design-principles` | `domain/api-design-principles/SKILL.md` | ✅ | NestJS REST API design and audit |
-| `architecture-patterns` | `domain/architecture-patterns/SKILL.md` | ✅ | Clean Architecture, DDD, Bounded Contexts |
-| `resilience-patterns` | `domain/resilience-patterns/SKILL.md` | ✅ | Circuit breakers, retry, health checks |
-| `nestjs-code-reviewer` | `domain/nestjs-code-reviewer/SKILL.md` | ✅ | NestJS + TypeORM code review + OWASP |
-| `security-review` | `domain/security-review/SKILL.md` | ✅ | OWASP Top 10, auth, authorization, sensitive data |
-| `react-best-practices` | `domain/react-best-practices/SKILL.md` | ✅ | React/Next.js optimization and best practices |
-| `frontend-design` | `domain/frontend-design/SKILL.md` | ✅ | High-quality UI/UX design and implementation |
-| `gsap` | `domain/gsap/SKILL.md` | ✅ | GSAP monolítico: tweens, timelines, ScrollTrigger, plugins, React, utils, performance |
-| `discovery-before-code` | `domain/discovery-before-code/SKILL.md` | ✅ | Anti-convergence gate: forces referent fetch + style choice + state design + tokens BEFORE any visual code |
-| `shadcn-component-install` | `domain/shadcn-component-install/SKILL.md` | ✅ | Install shadcn/ui via CLI with mandatory dry-run preview (info → search → docs → diff → install) |
-| `a11y-contrast-check` | `domain/a11y-contrast-check/SKILL.md` | ✅ | Run Node.js script to verify WCAG AA color contrast on TS/TSX/CSS files. Exits 1 if <4.5:1 |
-| `design-tokens-extract` | `domain/design-tokens-extract/SKILL.md` | ✅ | WebFetch a referent URL → extract palette/typography/spacing → write `tokens.css` or `tokens.json` (W3C format) |
-| `design-system-doc` | `domain/design-system-doc/SKILL.md` | ✅ | Generate canonical 9-section DESIGN.md (atmosphere, color, typography, components, layout, depth, guardrails, responsive, agent prompts) |
-| `page-transitions-barba` | `domain/page-transitions-barba/SKILL.md` | ✅ | Setup barba.js + GSAP page transitions (Vite/Next Pages/Astro/plain). Anti-pattern: forbidden in Next.js App Router |
-| `ios-hig-mobile` | `domain/ios-hig-mobile/SKILL.md` | ✅ | Mobile-first components following Apple HIG (tab bars, sheets, Dynamic Type, Safe Areas, haptics) for web |
-| `spline-3d-embed` | `domain/spline-3d-embed/SKILL.md` | ✅ | Embed Spline 3D scenes safely: lazy-load, perf-gated, mobile-aware, prefers-reduced-motion respected |
-
----
-
-## quality-gates/ — Quality & Debugging
-
-| Skill | Path | Invokable | Description |
-|-------|------|-----------|-------------|
-| `systematic-debugging` | `quality-gates/systematic-debugging/SKILL.md` | ✅ | Root-cause analysis: reproduce → isolate → fix → verify |
-| `agent-self-diagnosis` | `quality-gates/agent-self-diagnosis.md` | ✅ | 4-phase loop recovery: Capture → Diagnose → Recover → Report (fires at 3 repeated calls) |
-| `performance-profiling` | `quality-gates/performance-profiling/SKILL.md` | ✅ | Measure-first performance diagnosis (replaces former performance-optimizer agent). Profile → isolate → handoff |
-
----
-
-## devrel/ — Developer Relations & Documentation
-
-| Skill | Path | Invokable | Description |
-|-------|------|-----------|-------------|
-| `api-documentation` | `devrel/api-documentation/SKILL.md` | ✅ | OpenAPI, Swagger, developer portals, API reference |
+Total: 47 SKILL.md files at depth-2.
 
 ---
 
-## product/ — Product Discovery
+## Auto-loaded orchestration patterns (NOT invokable as skills)
 
-| Skill | Path | Invokable | Description |
-|-------|------|-----------|-------------|
-| `product-discovery` | `product/product-discovery/SKILL.md` | ✅ | User stories, RICE, roadmap, MVP scoping |
+These were previously bare `.md` files under `skills/orchestration/`. They are auto-injected context for the orchestrator, not invoked via `Skill('<name>')`. Relocated to `docs/orchestration/`:
 
----
+| File | Purpose |
+|------|---------|
+| `docs/orchestration/iterative-retrieval.md` | Progressive context refinement for subagent spawning: 3-round minimum-context protocol |
+| `docs/orchestration/ralph-loop-wrapper.md` | Infrastructure: wraps task execution in ralph loop |
+| `docs/orchestration/session-manager.md` | Routing, classification, state read/write protocol |
 
-## workflow-utils/ — Utilities
-
-| Skill | Path | Invokable | Description |
-|-------|------|-----------|-------------|
-| `commit` | `workflow-utils/commit.md` | ✅ | Pipe-delimited commit: Tipo\|IdTarea\|YYYYMMDD\|Desc |
-| `pull-request` | `workflow-utils/pull-request.md` | ✅ | Create structured GitHub PRs |
-| `changelog` | `workflow-utils/changelog.md` | ✅ | Generate changelog from git history |
-| `deep-research` | `workflow-utils/deep-research.md` | ✅ | 4-phase systematic research methodology |
-| `search-first` | `workflow-utils/search-first.md` | ✅ | Pre-coding gate: library + codebase scan → Adopt/Extend/Compose/Build before any custom implementation |
-| `rules-distill` | `workflow-utils/rules-distill.md` | ✅ | Scans skills for repeated principles, elevates to rules/ with anti-abstraction guard and per-item approval |
-| `skill-stocktake` | `workflow-utils/skill-stocktake.md` | ✅ | Automated skill quality audit: Keep/Improve/Retire/Merge with incremental cache |
+References previously under `skills/orchestration/references/` are now in `docs/orchestration-references/`.
 
 ---
 
-## Legacy paths (kept for backward compat, content migrated to v5 dirs)
+## Auto-injected rules (was `skills/core/`)
+
+These live at `rules/<name>.md` and are always-on:
+
+| File | Purpose |
+|------|---------|
+| `rules/banned-phrases.md` | Quick-ref: banned phrases → required replacements |
+| `rules/context-awareness.md` | Always read state before assuming |
+| `rules/quality-enforcement.md` | Anti-rationalization + verification enforcement |
+
+Supporting references at `rules/references/{configuration,detection-algorithm,examples}.md`.
+
+---
+
+## Legacy paths (kept for backward compat, content migrated)
 
 | Old Path | New Location |
 |----------|-------------|
-| `_core/anti-rationalization/` | `core/quality-enforcement.md` |
-| `_core/verification-enforcement/` | `core/quality-enforcement.md` |
-| `_core/context-awareness/` | `core/context-awareness.md` |
-| `_core/decision-memory/` | `core/` (reference only — logic in orchestration) |
-| `_core/session-state/` | `orchestration/state-sync.md` |
-| `_orchestration/session-orchestrator/` | `orchestration/session-manager.md` |
-| `_orchestration/ralph-loop-wrapper/` | `orchestration/ralph-loop-wrapper.md` |
-| `workflow/writing-plans/` | `pipeline/plan.md` |
-| `sop/sop-planning/` | `pipeline/plan.md` |
-| `sop/sop-code-assist/` | `pipeline/generate.md` |
-| `workflow/verification-before-completion/` | `pipeline/verify.md` |
-| `sop/sop-reviewer/` | `pipeline/verify.md` |
-| `workflow/brainstorming/` | `pipeline/brainstorming.md` |
-| `workflow/subagent-driven-development/` | `pipeline/subagent-driven-development.md` |
-| `workflow/using-git-worktrees/` | `pipeline/using-git-worktrees.md` |
-| `workflow/finishing-a-development-branch/` | `pipeline/finishing-a-development-branch.md` |
-| `sop/sop-reverse/` | `pipeline/sop-reverse.md` |
-| `api-design-principles/` | `domain/api-design-principles/` |
-| `architecture-patterns/` | `domain/architecture-patterns/` |
-| `resilience-patterns/` | `domain/resilience-patterns/` |
-| `nestjs-code-reviewer/` | `domain/nestjs-code-reviewer/` |
-| `security-review/` | `domain/security-review/` |
-| `react-best-practices/` | `domain/react-best-practices/` |
-| `frontend-design/` | `domain/frontend-design/` |
-| `workflow/commit/` | `workflow-utils/commit.md` |
-| `workflow/pull-request/` | `workflow-utils/pull-request.md` |
-| `workflow/changelog/` | `workflow-utils/changelog.md` |
-| `workflow/deep-research/` | `workflow-utils/deep-research.md` |
+| `skills/core/banned-phrases.md` | `rules/banned-phrases.md` (Ola 25 flatten 2026-05-26) |
+| `skills/core/context-awareness.md` | `rules/context-awareness.md` |
+| `skills/core/quality-enforcement.md` | `rules/quality-enforcement.md` |
+| `skills/core/references/*.md` | `rules/references/*.md` |
+| `skills/domain/<name>/SKILL.md` | `skills/domain-<name>/SKILL.md` |
+| `skills/quality-gates/<name>/SKILL.md` | `skills/quality-gates-<name>/SKILL.md` |
+| `skills/quality-gates/agent-self-diagnosis.md` | `skills/agent-self-diagnosis/SKILL.md` (wrapped) |
+| `skills/product/product-discovery/` | `skills/product-product-discovery/SKILL.md` |
+| `skills/devrel/api-documentation/` | `skills/devrel-api-documentation/SKILL.md` |
+| `skills/workflow-utils/<name>.md` | `skills/<name>/SKILL.md` (wrapped) |
+| `skills/orchestration/{session-manager,ralph-loop-wrapper,iterative-retrieval}.md` | `docs/orchestration/<name>.md` (auto-injected docs, NOT skills) |
+| `skills/orchestration/references/*.md` | `docs/orchestration-references/*.md` |
 
 ---
 
@@ -144,17 +113,21 @@
 
 ```
 PIPELINE: plan, generate, verify, brainstorming, tdd-workflow, subagent-driven-development,
-          using-git-worktrees, finishing-a-development-branch, sop-reverse
-CORE: quality-enforcement*, banned-phrases*, context-awareness*  (* = auto-injected)
-ORCH: session-manager*, ralph-loop-wrapper*, state-sync*, iterative-retrieval*
-DOMAIN: api-design-principles, architecture-patterns, resilience-patterns,
-        nestjs-code-reviewer, security-review, react-best-practices, frontend-design, gsap,
-        discovery-before-code, shadcn-component-install, a11y-contrast-check,
-        design-tokens-extract, design-system-doc, page-transitions-barba,
-        ios-hig-mobile, spline-3d-embed, karpathy
-QUALITY-GATES: systematic-debugging, agent-self-diagnosis, performance-profiling
-DEVREL: api-documentation
-PRODUCT: product-discovery
+          using-git-worktrees, finishing-a-development-branch, sop-reverse,
+          adr-review, adr-write, prd-author, retrospective, issue-creation
+ORCH: sdd-debate*, sdd-verify-diff*, consult-decide, consult-critique
+DOMAIN: domain-api-design-principles, domain-architecture-patterns, domain-resilience-patterns,
+        domain-nestjs-code-reviewer, domain-security-review, domain-react-best-practices,
+        domain-frontend-design, domain-gsap, domain-discovery-before-code,
+        domain-shadcn-component-install, domain-a11y-contrast-check,
+        domain-design-tokens-extract, domain-design-system-doc, domain-page-transitions-barba,
+        domain-ios-hig-mobile, domain-spline-3d-embed, domain-karpathy
+QUALITY-GATES: quality-gates-systematic-debugging, agent-self-diagnosis,
+               quality-gates-performance-profiling
+DEVREL: devrel-api-documentation
+PRODUCT: product-product-discovery
 UTILS: commit, pull-request, changelog, deep-research, search-first, rules-distill, skill-stocktake
-Total: 36 invokable + 7 auto-injected = 43 active skills (v6)
+Total: 45 invokable + 2 auto-injected = 47 active skills (v6 flat layout)
+(* = auto-injected)
+AUTO-DOCS (not skills): docs/orchestration/{session-manager,ralph-loop-wrapper,iterative-retrieval}.md
 ```
