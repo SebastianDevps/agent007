@@ -1,13 +1,9 @@
 ---
 name: design-system-doc
 description: "Generate canonical DESIGN.md (9-section schema) for the project. Drives consistency across components and onboarding."
-invokable: true
 version: 1.0.0
 when:
   keywords: [design system, design.md, style guide, brand doc, design tokens doc]
-canonical-sources:
-  - url: https://github.com/VoltAgent/awesome-design-md
-    when: "para schema de 9 secciones"
 allowed-tools:
   - Read
   - Write
@@ -23,7 +19,7 @@ Generates a canonical `DESIGN.md` at the project root using the 9-section schema
 
 - ALWAYS write `DESIGN.md` at the project root. Never nest it inside `src/` or `docs/`.
 - ALWAYS include all 9 sections, in the exact order below. Empty sections are forbidden — if data is missing, mark `TBD` with a concrete question for the user.
-- NEVER invent hex values. Extract them from `tokens.ts` / `tailwind.config.js` / `theme.css`. If none exist, run Skill('design-tokens-extract') first.
+- NEVER invent hex values. Extract them from `tokens.ts` / `tailwind.config.js` / `theme.css`. If none exist, run Skill('domain-design-tokens-extract') first.
 - NEVER write more than 2 font families. If the project has 3+, ask the user which 2 to keep.
 - NEVER skip the Guardrails section — a DESIGN.md without explicit `NEVER` rules is a wishlist, not a contract.
 
@@ -40,7 +36,7 @@ Generates a canonical `DESIGN.md` at the project root using the 9-section schema
 1. **Discover sources** (parallel Glob): `tokens.{ts,js,json}`, `tailwind.config.{ts,js,cjs}`, `theme.css`, `**/*.tokens.*`, plus existing `DESIGN.md` (read first to preserve curated content).
 2. **Decision branch**:
    - Sources exist → Read them and extract palette / typography / spacing / shadows.
-   - No sources → invoke Skill('design-tokens-extract') and pause until tokens exist.
+   - No sources → invoke Skill('domain-design-tokens-extract') and pause until tokens exist.
 3. **Reference URL** (optional): if the user supplied an inspiration URL, cite it verbatim in section 1 — never paraphrase the brand.
 4. **Render** the template below, replacing `{{...}}` placeholders with extracted values.
 5. **Write** `DESIGN.md` at project root. If the file exists, diff and ask before overwriting curated prose in sections 1, 7, 9.
@@ -162,3 +158,7 @@ Copy-pasteable prompts to regenerate components consistent with this doc.
 - No `{{...}}` placeholder remains
 - At least 3 hex values in section 2
 - At least 1 NEVER rule in section 7
+
+## Sources
+
+- https://github.com/VoltAgent/awesome-design-md — schema de 9 secciones

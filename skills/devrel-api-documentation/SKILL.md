@@ -1,18 +1,12 @@
 ---
 name: api-documentation
 description: "Crear documentación de API: OpenAPI specs, guides, error catalogs. Use when user asks to 'document API', 'create API docs', 'generate OpenAPI spec', or 'write API guide'."
-invokable: true
-accepts_args: true
 allowed-tools: ["Read", "Write", "Grep", "Glob"]
 auto-activate: false
 version: 1.0.0
 when:
   - task_type: documentation
   - user_mentions: ["api docs", "documentation", "openapi", "swagger", "developer portal"]
-references:
-  - references/quickstart-auth.md
-  - references/api-reference.md
-  - references/error-catalog.md
 ---
 
 # API Documentation — Developer-First Documentation

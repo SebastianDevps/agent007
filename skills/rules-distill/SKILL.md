@@ -7,8 +7,6 @@ allowed-tools:
   - Glob
   - Write
   - Edit
-invokable: true
-accepts_args: false
 version: 1.0.0
 constraints:
   - require_approval_before_writing

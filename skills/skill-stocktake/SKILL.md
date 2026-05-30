@@ -6,8 +6,6 @@ allowed-tools:
   - Grep
   - Glob
   - Write
-invokable: true
-accepts_args: false
 version: 1.0.0
 constraints:
   - read_only_unless_approved

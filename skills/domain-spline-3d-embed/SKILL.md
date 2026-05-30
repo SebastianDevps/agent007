@@ -1,13 +1,9 @@
 ---
 name: spline-3d-embed
 description: "Embed Spline 3D scenes safely: lazy-load, perf-gated, mobile-aware, a11y-conscious. Never ships without LCP measurement."
-invokable: true
 version: 1.0.0
 when:
   keywords: [spline, 3d, three, hero animation, interactive 3d, splinetool]
-canonical-sources:
-  - url: https://docs.spline.design/doc/exporting-spline-scenes-as-react-components/
-    when: "para integración React/Next oficial"
 allowed-tools:
   - Bash(npm install *)
   - Bash(pnpm add *)
@@ -166,3 +162,7 @@ Before returning generated code, confirm:
 - [ ] `role="img"` + `aria-label` + `tabIndex={-1}` on wrapper
 - [ ] LCP measurement requested from user
 - [ ] Static fallback path tested
+
+## Sources
+
+- https://docs.spline.design/doc/exporting-spline-scenes-as-react-components/ — integración React/Next oficial

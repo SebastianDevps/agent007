@@ -1,15 +1,9 @@
 ---
 name: ios-hig-mobile
 description: "Mobile-first components following Apple HIG patterns adapted for web (React/Next/PWA). Tab bars, sheets, Dynamic Type, Safe Areas, haptics."
-invokable: true
 version: 1.0.0
 when:
   keywords: [mobile, ios, hig, tab bar, sheet, modal, safe area, dynamic type, haptic, native feel]
-canonical-sources:
-  - url: https://developer.apple.com/design/human-interface-guidelines
-    when: "para patrones HIG canónicos"
-  - url: https://lucide.dev/icons/
-    when: "para mapeo SF Symbols → Lucide"
 allowed-tools:
   - Read
   - Write
@@ -198,3 +192,8 @@ Before returning generated code, confirm:
 - [ ] Icons from `lucide-react`, not inline SVG
 - [ ] Haptic calls are wrapped in feature detection
 - [ ] `<meta viewport ... viewport-fit=cover>` documented if first install
+
+## Sources
+
+- https://developer.apple.com/design/human-interface-guidelines — Apple HIG canonical patterns
+- https://lucide.dev/icons/ — SF Symbols → Lucide mapping

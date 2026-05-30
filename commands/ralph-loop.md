@@ -20,7 +20,7 @@ From `$ARGUMENTS` extract:
 | **task** | Quoted string at the start | Required |
 | **requirements** | Lines after `Requisitos:` or `Requirements:` | [] |
 | **successCriteria** | Lines after `Criterios de éxito:` or `Success Criteria:` | [] |
-| **completionPromise** | `--completion-promise "TEXT"` | `"COMPLETE"` |
+| **completionPromise** | `--completion-promise "TEXT"` | `"COMPLETE"` | **DEPRECATED** — use `criteria.md` instead; see REQ-4 verification-ladder. Still functional for changes without a `criteria.md`. |
 | **maxIterations** | `--max-iterations N` | `20` (max: 50) |
 | **verificationCommand** | `--verify "command"` | `null` |
 
@@ -101,13 +101,21 @@ Implement the task immediately:
 2. Implement following all requirements
 3. Run verificationCommand if set (after each significant change)
 4. Show actual output — no claims without evidence
-5. Output `<promise>COMPLETE</promise>` + write signal file when ALL success criteria confirmed
+5. Resolve termination signal:
+   - If `--change <name>` flag was passed, use that change name.
+   - Else read `.sdlc/state/active-change` (one-line file with the change slug).
+   - If neither found, abort with error: "no active change set; pass --change or write .sdlc/state/active-change".
+   - If `openspec/changes/<change>/criteria.md` exists:
+     run `python scripts/verify/parse_criteria.py --check openspec/changes/<change>/criteria.md`
+     Exit 0 = all criteria done = loop terminates.
+   - Else fallback (DEPRECATED — use criteria.md; see REQ-4 verification-ladder):
+     Output `<promise>COMPLETE</promise>` + write signal file when ALL success criteria confirmed.
 
 ---
 
 ### ORCHESTRATED Mode
 
-For complex tasks, apply the full superpowers pipeline **within the ralph loop**:
+For complex tasks, apply the full quality pipeline **within the loop**:
 
 > Note: Skip brainstorming — the requirements block already provides the spec.
 > Note: Skip interactive finishing — commit to worktree branch and report status.
@@ -132,11 +140,21 @@ For complex tasks, apply the full superpowers pipeline **within the ralph loop**
 - Report the worktree branch name so user can review/merge
 
 **CRITICAL — When ALL pipeline steps complete and all criteria verified:**
-1. Output `<promise>COMPLETE</promise>` in your response
-2. Run this exact command:
-   ```bash
-   echo "COMPLETE" > .claude/ralph-complete.txt
-   ```
+
+Resolve active change (in order):
+1. If `--change <name>` flag was passed to ralph-loop, use that name.
+2. Else read `.sdlc/state/active-change`.
+3. If neither found, abort: "no active change set; pass --change or write .sdlc/state/active-change".
+
+Termination check:
+- If `openspec/changes/<change>/criteria.md` exists:
+  Run `python scripts/verify/parse_criteria.py --check openspec/changes/<change>/criteria.md`.
+  Exit 0 = done = loop terminates.
+- Else fallback (DEPRECATED — use criteria.md; see REQ-4 verification-ladder):
+  Output `<promise>COMPLETE</promise>` in your response and run:
+  ```bash
+  echo "COMPLETE" > .claude/ralph-complete.txt
+  ```
 
 ---
 

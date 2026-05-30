@@ -1,20 +1,7 @@
 ---
 name: react-best-practices
 description: "React/Next.js patterns for performant, maintainable, accessible components"
-canonical-sources:
-  - url: https://react.dev/learn
-    when: "for React official documentation"
-  - url: https://react.dev/reference/react
-    when: "for React API reference (hooks, memo, Suspense)"
-  - url: https://nextjs.org/docs
-    when: "for Next.js documentation"
-  - url: https://nextjs.org/docs/app
-    when: "for Next.js App Router (Server Components, Server Actions, streaming)"
-  - url: https://react-router.com/
-    when: "for React Router documentation"
 version: 2.0.0
-invokable: true
-accepts_args: true
 allowed-tools: ["Read", "Grep", "Glob", "WebFetch"]
 load_when:
   - writing_react_components
@@ -38,16 +25,6 @@ constraints:
   - functional_components_only_no_class_components
   - accessibility_attributes_required_on_interactive_elements
   - no_prop_drilling_beyond_2_levels
-references:
-  - references/fundamentals.md
-  - references/components.md
-  - references/hooks.md
-  - references/performance.md
-  - references/typescript.md
-  - references/server-components.md
-  - references/state-management.md
-  - references/testing.md
-  - references/cheatsheet.md
 mandatory-fetch-rule: |
   Antes de afirmar "best practice" sobre React, Next.js o React Router,
   invocar WebFetch contra el dominio canónico correspondiente y citar
@@ -132,3 +109,11 @@ Violaciones duras detectadas durante revisión de código React/Next.js. Cada un
 **Versión**: 2.0.0 (split en references por regla del proyecto: max 200 líneas/archivo)
 **Última actualización**: 2026-05-06
 **Fuente**: Vercel Labs React Best Practices (adaptado)
+
+## Sources
+
+- https://react.dev/learn — React official documentation
+- https://react.dev/reference/react — React API reference (hooks, memo, Suspense)
+- https://nextjs.org/docs — Next.js documentation
+- https://nextjs.org/docs/app — Next.js App Router (Server Components, Server Actions, streaming)
+- https://react-router.com/ — React Router documentation

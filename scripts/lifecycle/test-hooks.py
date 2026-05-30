@@ -8,7 +8,7 @@ like the mutation-guard fingerprint bug before they hit a real session.
 
 Test format (fixtures/<hook-name>--<scenario>.json):
 {
-  "hook": "path-existence-guard",        # script in .claude/hooks/<hook>.py
+  "hook": "path-existence-guard",        # script in .claude/harness/<hook>.py
   "stdin": { ... payload sent to hook },
   "env": { "KEY": "VALUE" },             # optional env overrides
   "expect": {

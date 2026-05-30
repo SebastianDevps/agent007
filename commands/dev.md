@@ -107,6 +107,8 @@ Continue? [yes/no]
    → Tests pass → present 4 options [merge/PR/keep/discard]
 ```
 
+> **v7.1 note (Substantial routing).** When routing Substantial work to `/sdd-new`, the SDD pipeline now passes through v7.1 automatic gates: after design, if the change is medium/high risk, two blind proposers debate to converge on a final design. After apply, high-risk changes get per-file adversarial review. Both gates are transparent — invocation pattern stays `/sdd-new <change>`. Use `--debate=skip` or `--verify=skip` to bypass for known-safe work.
+
 ### Path C — Complex (full autonomous pipeline)
 
 ```

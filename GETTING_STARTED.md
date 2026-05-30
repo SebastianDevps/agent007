@@ -1,6 +1,15 @@
-# Getting Started — Agent007 v5.1
+# Getting Started — Agent007
 
-> Este plugin convierte Claude Code en un sistema autónomo de desarrollo de software con 10 agentes expertos, 35 skills y 18 hooks de calidad.
+> Este plugin convierte Claude Code en un sistema autónomo de desarrollo de software.
+
+> ⚠️ **Stale notice (2026-05-23):** Este doc refleja la era v5.1 y NO se actualizó al programa v7 ni al pivot file-based de 2026-05-23 (engram-removal). Para info actual ver:
+> - `.claude/README.md` — referencia actual de comandos, agentes y hooks
+> - `.claude/CLAUDE.md` — identidad e core rules del orchestrator
+> - `.sdlc/adrs/ADR-002-remove-engram-from-plugin.md` — decisión de persistencia file-based
+>
+> Re-write completo planificado en sub-change `3e identity-and-taxonomy-refactor`. Los flujos y comandos abajo pueden estar desactualizados.
+>
+> **Persistencia actual: file-based exclusivo.** No hay setup de memoria externa, no hay binarios que instalar. `git clone` + `make verify` y listo.
 
 ---
 

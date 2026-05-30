@@ -1,15 +1,9 @@
 ---
 name: a11y-contrast-check
 description: "Statically check WCAG 2.2 AA color contrast in TS/TSX/CSS files. Detects Tailwind text/bg pairs and CSS color/background rules, fails build if ratio < 4.5:1 (normal) or < 3:1 (large)."
-invokable: true
 version: 1.0.0
 when:
   keywords: [contrast, wcag, accessibility, a11y, color contrast, contrast ratio, color blind, low vision, design audit]
-canonical-sources:
-  - url: https://www.w3.org/WAI/WCAG22/quickref/
-    when: "for WCAG 2.2 success criteria"
-  - url: https://www.w3.org/TR/WCAG22/#contrast-minimum
-    when: "for the exact contrast ratio formula"
 allowed-tools:
   - Bash(node .claude/skills/domain-a11y-contrast-check/scripts/check-contrast.js *)
   - Read
@@ -116,3 +110,8 @@ For those cases, complement with browser DevTools or axe-core in E2E tests.
 - **AA large text** — 3:1 (≥ 18pt regular OR ≥ 14pt bold)
 - **AA non-text UI** — 3:1 (icons, focus rings, form borders) — same threshold as large text
 - **AAA normal** — 7:1, **AAA large** — 4.5:1 (this script targets AA, not AAA)
+
+## Sources
+
+- https://www.w3.org/WAI/WCAG22/quickref/ — WCAG 2.2 success criteria
+- https://www.w3.org/TR/WCAG22/#contrast-minimum — exact contrast ratio formula

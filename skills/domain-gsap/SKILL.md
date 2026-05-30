@@ -1,12 +1,8 @@
 ---
 name: gsap
 description: "Official GSAP skill — core API, timelines, ScrollTrigger, plugins (Flip/SplitText/MorphSVG), React/Vue/Svelte integration, performance, utils. Use for any GSAP animation, scroll, or DOM motion task."
-canonical-sources:
-  - url: https://gsap.com/docs/v3/
-    when: "for GSAP official documentation"
+disable-model-invocation: true
 version: 2.1.0
-invokable: false
-accepts_args: false
 when:
   - task_type: [feature, consult]
     keywords: [animation, gsap, tween, gsap.to, gsap.from, easing, stagger, motion, timeline, sequence,
@@ -16,11 +12,6 @@ when:
                gsap vue, gsap svelte, gsap nuxt, gsap sveltekit,
                animation performance, 60fps, jank, will-change, quickto,
                gsap utils, clamp, maprange, normalize, snap, interpolate]
-references:
-  - references/scrolltrigger.md
-  - references/plugins.md
-  - references/framework-integration.md
-  - references/performance-utils.md
 ---
 
 # GSAP — Reference Index
@@ -118,3 +109,7 @@ tl.to(".a", { x: 100 })
 - ✅ `gsap.registerPlugin(...)` once before first use of any plugin
 - ✅ `ease: "none"` on `containerAnimation` tween for horizontal scroll
 - ✅ Cleanup via `ctx.revert()` / `ScrollTrigger.kill()` in unmount hooks
+
+## Sources
+
+- https://gsap.com/docs/v3/ — GSAP official documentation

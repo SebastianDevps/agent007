@@ -1,0 +1,28 @@
+# Sensitive path patterns for the v7.1 triage layer.
+# Any change touching files under these paths is auto-elevated to "high" tier.
+
+[sensitive_paths]
+patterns = [
+    "auth/",
+    "authentication/",
+    "payment/",
+    "payments/",
+    "billing/",
+    "crypto/",
+    "encryption/",
+    "secrets/",
+    "credentials/",
+    "migrations/",
+    "schema/",
+    "iam/",
+    "permissions/",
+]
+
+[thresholds]
+files_high_tier = 3      # > this count -> automatic high tier
+files_trivial = 1        # <= this count + risk=low + no public surface -> trivial
+
+[overrides]
+# CLI flag mapping: /sdd-new <name> --debate=<value>
+force_keyword = "force"
+skip_keyword = "skip"

@@ -1,8 +1,6 @@
 ---
 name: changelog
 description: "Generate structured changelog from git history. Groups commits by type, filters noise, produces Keep a Changelog format. Single source of truth — no /commands wrapper."
-invokable: true
-accepts_args: true
 version: 2.0.0
 when:
   keywords: ["changelog", "release notes", "what changed", "history"]

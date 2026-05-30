@@ -1,12 +1,9 @@
 ---
 name: page-transitions-barba
 description: "Add barba.js page transitions integrated with GSAP. Workflow: install → entry init → default transition → named per-route → hooks."
-invokable: true
 version: 1.0.0
 when:
   keywords: [barba, page transition, smooth transition, route transition, animated navigation]
-canonical-sources:
-  - url: https://barba.js.org/docs/getting-started/intro/
 allowed-tools:
   - Bash(npm install *)
   - Bash(pnpm add *)
@@ -14,8 +11,6 @@ allowed-tools:
   - Read
   - Write
   - Edit
-references:
-  - "../gsap/SKILL.md"
 ---
 
 # page-transitions-barba
@@ -27,7 +22,7 @@ Wires `@barba/core` + GSAP into a non–App-Router project to deliver smooth pag
 - ALWAYS verify the target framework FIRST. Barba is for: plain HTML/JS, Vite SPAs, Next.js Pages Router, Astro (with `view-transitions` opt-out), Remix Pages mode.
 - NEVER use barba in Next.js **App Router**. Use the native View Transitions API + `unstable_ViewTransition` (or CSS `view-transition-name`) instead — barba's DOM-swap fights React's reconciler.
 - ALWAYS wrap the page in `data-barba="wrapper"` and the swappable block in `data-barba="container"`. Barba does nothing without those.
-- ALWAYS delegate the actual animation to GSAP timelines — see Skill('gsap'). Barba is the router; GSAP is the choreographer.
+- ALWAYS delegate the actual animation to GSAP timelines — see Skill('domain-gsap'). Barba is the router; GSAP is the choreographer.
 - NEVER animate `display: none` → `display: block`. Use `opacity` + `transform` and toggle visibility via `onComplete`.
 - ALWAYS handle scroll restoration in `afterEnter` — barba does not restore scroll automatically.
 - ALWAYS move focus to `<main>` (or the new page heading) in `afterEnter` for a11y; intercepted SPA navigation skips browser focus reset.
@@ -148,3 +143,7 @@ export default function Layout({ children }) {
 ```
 
 Barba and the App Router router will both try to own navigation — symptoms: hydration mismatch, stuck transitions, leaked event listeners. There is no fix; pick one.
+
+## Sources
+
+- https://barba.js.org/docs/getting-started/intro/ — official Barba.js documentation

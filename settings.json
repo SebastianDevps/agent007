@@ -1,27 +1,33 @@
 {
+  "_comment_hooks": "Hook commands invoke _dispatch.py via a small Python bootstrap that walks up from cwd to find .claude/harness/. This replaces the POSIX while-loop and is cross-platform (Mac/Linux/WSL/Git-Bash/Windows native).",
+  "_bootstrap": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),sys.argv[1]],stdin=sys.stdin).returncode)\"",
   "hooks": {
     "SessionStart": [
       {
         "hooks": [
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/memory-check.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/memory-check.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/rtk-bootstrap.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/rtk-bootstrap.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/memory-decay.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/memory-decay.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/context-tick.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/context-tick.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/session-recover.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/session-recover.py'],stdin=sys.stdin).returncode)\""
+          },
+          {
+            "type": "command",
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/lifecycle-clock-in.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       }
@@ -32,7 +38,37 @@
         "hooks": [
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/constraint-reinforcement.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/constraint-reinforcement.py'],stdin=sys.stdin).returncode)\""
+          },
+          {
+            "type": "command",
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/date-injector.py'],stdin=sys.stdin).returncode)\""
+          }
+        ]
+      }
+    ],
+    "SubagentStop": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/agent-tool-allowlist.py'],stdin=sys.stdin).returncode)\""
+          },
+          {
+            "type": "command",
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/reference-only.py'],stdin=sys.stdin).returncode)\""
+          },
+          {
+            "type": "command",
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/debate-trigger.py'],stdin=sys.stdin).returncode)\""
+          },
+          {
+            "type": "command",
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sentinels/iteration-budget.py'],stdin=sys.stdin).returncode)\""
+          },
+          {
+            "type": "command",
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/lifecycle-bookend.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       }
@@ -42,11 +78,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/subagent-context.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/subagent-context.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/transcript-policy.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/transcript-policy.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       }
@@ -56,26 +92,48 @@
         "hooks": [
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/state-sync.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sentinels/state-sync.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/context-engine.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/context-engine.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/context-tick.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/context-tick.py'],stdin=sys.stdin).returncode)\""
+          },
+          {
+            "type": "command",
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sentinels/cache-pulse.py'],stdin=sys.stdin).returncode)\""
+          },
+          {
+            "type": "command",
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sentinels/blueprint-archiver.py'],stdin=sys.stdin).returncode)\""
+          },
+          {
+            "type": "command",
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/lifecycle-clock-out.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       }
     ],
     "PreToolUse": [
       {
+        "_comment": "F2 — per-agent tool allowlist enforcement. Runs on every tool call; reads .claude/state/active-subagent.json. No matcher = matches all tools.",
+        "matcher": "",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/agent-tool-allowlist.py'],stdin=sys.stdin).returncode)\""
+          }
+        ]
+      },
+      {
         "matcher": "WebFetch",
         "hooks": [
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/web-distill.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/web-distill.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       },
@@ -84,7 +142,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/context-engine.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/context-engine.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       },
@@ -93,7 +151,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/path-existence-guard.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/path-existence-guard.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       },
@@ -102,23 +160,33 @@
         "hooks": [
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/frontend-discovery-gate.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/frontend-discovery-gate.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/tool-policy-guard.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/tool-policy-guard.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/sdd-guard.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/sdd-guard.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/config-guard.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/config-guard.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/mutation-guard.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/mutation-guard.py'],stdin=sys.stdin).returncode)\""
+          }
+        ]
+      },
+      {
+        "_comment_hook_ordering": "sdd-wip-guard is in a separate Write-only block (index 4 in PreToolUse array). path-existence-guard is in the Edit|Write|Read block (index 2). Ordering assumption: Claude Code processes PreToolUse blocks in array order within a single tool event, so path-existence-guard fires before sdd-wip-guard for Write calls. This is an architectural assumption — not guaranteed by the public schema. If Claude Code changes to parallel block execution, move sdd-wip-guard into the Edit|Write|Read block after path-existence-guard.",
+        "matcher": "Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/sdd-wip-guard.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       },
@@ -127,27 +195,27 @@
         "hooks": [
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/tool-allowlist-guard.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/tool-allowlist-guard.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/safety-guard.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/safety-guard.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/rtk-rewrite.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/rtk-rewrite.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/block-no-verify.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/block-no-verify.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/pre-commit-guard.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/pre-commit-guard.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/mutation-guard.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/mutation-guard.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       }
@@ -157,15 +225,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/context-window-guard.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/context-window-guard.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/tool-loop-detection.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/tool-loop-detection.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/context-tick.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/context-tick.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       },
@@ -174,11 +242,31 @@
         "hooks": [
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/format-on-save.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/format-on-save.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/sdd-guard.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/sdd-guard.py'],stdin=sys.stdin).returncode)\""
+          }
+        ]
+      },
+      {
+        "_comment": "REQ-4 — emit criteria.md template after writing openspec/changes/*/spec.md",
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/emit-criteria-hook.py'],stdin=sys.stdin).returncode)\""
+          }
+        ]
+      },
+      {
+        "_comment": "REQ-2 — update openspec/changes/_index.json state machine after any write to SDD artifacts",
+        "matcher": "Write|Edit",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sentinels/sdd-state-writer.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       }
@@ -188,9 +276,25 @@
         "hooks": [
           {
             "type": "command",
-            "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && cd \"$HOOK_ROOT\" && python3 .claude/hooks/notify.py"
+            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sentinels/notify.py'],stdin=sys.stdin).returncode)\""
           }
         ]
+      }
+    ]
+  },
+  "disabled_hooks": {
+    "engram-removal-2026-05-23": [
+      {
+        "event": "SessionStart",
+        "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'lifecycle/engram-install.py'],stdin=sys.stdin).returncode)\"",
+        "timeout": 30000,
+        "reason": "engram-removal"
+      },
+      {
+        "event": "Stop",
+        "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sentinels/engram-snapshot.py'],stdin=sys.stdin).returncode)\"",
+        "timeout": 5000,
+        "reason": "engram-removal"
       }
     ]
   },
@@ -218,7 +322,12 @@
       "Bash(gh:*)",
       "Bash(chmod:*)"
     ],
-    "deny": ["Bash(rm -rf /)", "Bash(sudo:*)", "Write(.env)", "Edit(.env)"]
+    "deny": [
+      "Bash(rm -rf /)",
+      "Bash(sudo:*)",
+      "Write(.env)",
+      "Edit(.env)"
+    ]
   },
   "context": {
     "include": [
@@ -243,7 +352,7 @@
   "maxFileReadTokens": 100000,
   "statusLine": {
     "type": "command",
-    "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/hooks\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && bash \"$HOOK_ROOT/.claude/scripts/lifecycle/statusline.sh\""
+    "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/harness\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && bash \"$HOOK_ROOT/.claude/harness/statusline/statusline.sh\""
   },
   "experimental": {
     "agentTeams": true

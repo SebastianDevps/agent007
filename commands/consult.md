@@ -28,6 +28,8 @@ routing:
 flags:
   --deep: "120 lines max, read all agent skills in full"
   --quick: "25 lines max, skip skills loading"
+  --debate: "force consult-decide mode (dual-blind-proposer for option decisions)"
+  --critique: "force consult-critique mode (adversarial review of pasted proposal)"
 ---
 
 # /consult — Expert Consultation
@@ -105,3 +107,17 @@ When writing, use this format:
 \`\`\`
 
 Create `.sdlc/context/` if it doesn't exist. Overwrite if file exists.
+
+---
+
+## Mode B — Decision between options (`consult-decide`, v7.1 Ola 19)
+
+When the question is a CHOICE between alternatives, route to `Skill('consult-decide')` instead of the single-expert Step 1–3 path above. Auto-trigger (case-insensitive, en + es): `vs`, ` or `, ` o `, `versus`, `elegir entre`, `decidir entre`, `comparar`, `cuál es mejor`, `which is better`, `compare`. Explicit `--debate` flag forces this mode. The skill spawns two blind proposers (each defending one option), converges via the existing `sdd-debate` state machine, and returns a consensus / hybrid / divergence verdict in prose. No SDD change is created.
+
+Example: `/consult ¿PostgreSQL o MongoDB para un feature de 100 usuarios?` → both proposers converge on PostgreSQL with merged reasoning.
+
+## Mode C — Adversarial critique (`consult-critique`, v7.1 Ola 19)
+
+When the user pastes a structured proposal (architecture sketch, plan, design doc) to be torn apart, route to `Skill('consult-critique')`. Auto-trigger: `--critique` flag, OR input contains `## Approach`, `## Plan`, `## Design`, `## Implementation` AND length > 200 words. The skill spawns two adversarial reviewers (default: `code-reviewer` + `security-expert`), aggregates findings via the existing `sdd-verify-diff` aggregator, and returns a verdict (`clean` / `findings` / `blocked`) plus top blocking issues. No SDD change is created.
+
+Example: `/consult --critique [pasted 300-word plan with hard-coded secrets]` → "3 findings (1 high blocking, 2 med). Top: hard-coded secrets reference in section X."

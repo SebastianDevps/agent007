@@ -1,4 +1,4 @@
-# Commands INDEX — Agent007 v6
+# Commands INDEX — Agent007 v7
 
 **Commands** son orquestadores de alto nivel. Para skills invocables (commit, pull-request, changelog, deep-research, etc.) ver `.claude/skills/INDEX.md`.
 

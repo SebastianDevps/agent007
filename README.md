@@ -1,361 +1,238 @@
-# Agent007 v6.0.0
+# Agent007 v7 — Plugin de Orquestación
 
-> Intelligent development orchestration for Claude Code.
-> 8 expert agents · 44 skills · 26 deterministic hooks · LLM-native routing · SDD-enforced pipeline
-
----
-
-## What it does
-
-Agent007 turns Claude Code into a structured engineering team. Instead of prompting one model, you get a full development pipeline: specialized agents routed by intent, quality gates enforced at the tool level (not the instruction level), and a spec-driven workflow that catches design problems before implementation.
-
-**The core bet**: hooks are deterministic, CLAUDE.md rules are probabilistic. Agent007 enforces everything non-negotiable via hooks — safety, anti-reward-hacking, context budgets, loop detection, secret scanning, path existence, frontend discovery — and uses rules only for preferences and style.
-
-**v6.0.0 in one line**: same pipeline, less weight. Eager-loaded context dropped from ~7300 lines to 1195 (-84%), 18 silently oversized files brought to zero, and 72 references now lazy-load on demand.
+> **13 agentes · 57 skills · 43 hooks · 390/390 tests verde · 0 findings abiertos.** Sistema de orquestación con contratos de comportamiento always-on, pipeline SDD con 4 auto-gates, auto-loop V7.3 endurecido (fire → feedback → retry → converge/escalate), fan-out paralelo con worktree isolation, estado file-based, first-run onboarding, tool-allowlist fail-CLOSED, safety-guard con clasificación por ejecutor y detección de data-flow por pipes.
 
 ---
 
-## Install
+## Quickstart
 
 ```bash
-/plugin marketplace add SebastianDevps/agent007-marketplace
-/plugin install agent007@agent007-marketplace
+.claude/scripts/lifecycle/verify.sh                # 5 checks (+ --with-tests para regression)
+.claude/scripts/lifecycle/install.sh /path/to/proj # deploy a otro proyecto
+.claude/scripts/lifecycle/sync-to-public.sh        # sync a Agent007/ flat (público)
+.claude/scripts/lifecycle/waste-report.py          # audit de gasto (cuando tengas datos)
 ```
 
-Requires Claude Code CLI or the Claude desktop app.
+CI gate (`.github/workflows/plugin-validate.yml`) corre los 5 checks en cada PR.
 
 ---
 
-## The 8 expert agents
+## 3 comandos de entrada
 
-| Agent | Model | Domain |
-|-------|-------|--------|
-| `backend-db-expert` | Opus | APIs, NestJS, TypeORM, PostgreSQL, Redis, microservices |
-| `frontend-ux-expert` | Sonnet | React, Next.js, Tailwind, GSAP, accessibility, Core Web Vitals — **executor with anti-convergence** |
-| `platform-expert` | Sonnet | CI/CD, Docker, Jest, Playwright, Kubernetes, monitoring |
-| `product-expert` | Opus | RICE, user stories, roadmap, MVP scoping, product discovery |
-| `security-expert` | Opus | OWASP Top 10, JWT, threat modeling, GDPR, SOC2 |
-| `code-reviewer` | Sonnet | Code quality — CRITICAL/HIGH/MEDIUM/LOW taxonomy |
-| `loop-operator` | Sonnet | Ralph loop lifecycle, stall detection, cost drift monitoring |
-| `refactor-cleaner` | Sonnet | Dead code detection, batch removal, safe refactoring |
+| Comando | Uso |
+|---|---|
+| `/dev "task"` | Maestro. **Trivial** → `Skill('generate')` + `Skill('verify')`. **Substancial** → SDD pipeline (proposal → spec → design → tasks → apply → verify → archive). |
+| `/consult "question"` | Routing por keywords al agente especializado |
+| `/ralph-loop "task"` | Iteración autónoma hasta `<promise>COMPLETE</promise>` |
 
-Routing is LLM-native: the orchestrator reads agent descriptions and matches by intent — no keyword table to maintain.
-
-**Removed in v6.0.0** — capabilities preserved as skills:
-
-| Removed agent | Replacement |
-|---------------|-------------|
-| `architect` | `Skill('architecture-patterns')` |
-| `performance-optimizer` | `Skill('performance-profiling')` |
-
-The agents were over-broad — every concrete task they handled now lives in a focused skill that can be composed by any agent.
+Routing siempre anuncia: `🎯 [target] | Risk: [low/med/high/critical]`. Risk auto-escala a **high** en auth/payments/encryption/migrations/breaking. **High/critical requiere "yes" explícito**.
 
 ---
 
-## Frontend executor with anti-convergence
+## 13 Agentes (8 principales abajo; ver `agents/INDEX.md` para los 5 cross-cutting)
 
-`frontend-ux-expert` no longer just validates — it builds. Four modes:
+| Agente | Modelo | Dominio |
+|---|---|---|
+| `backend-db-expert` | opus | NestJS · TypeORM · PostgreSQL · Redis · microservices |
+| `frontend-ux-expert` ⚡ | sonnet | **BUILDER mode default** — escribe código. React · Next · Tailwind · GSAP · shadcn · iOS HIG. Anti-convergencia gate enforced. |
+| `security-expert` | opus | OWASP · JWT · threat modeling · GDPR/SOC2 |
+| `platform-expert` | sonnet | CI/CD · Docker · Jest · Playwright · Kubernetes |
+| `product-expert` | opus | RICE/ICE · user stories · roadmap · MVP scoping |
+| `code-reviewer` | sonnet | Quality review (CRITICAL/HIGH/MED/LOW) |
+| `loop-operator` | sonnet | Ralph control · stall detection · cost drift |
+| `refactor-cleaner` | sonnet | Dead code (knip/depcheck/ts-prune) |
 
-| Mode | When |
-|------|------|
-| `BUILDER` (default) | Implement components, styles, transitions |
-| `PLANNER` | Break down a UI ticket before any code |
-| `CONSULTANT` | Answer design/UX questions without writing |
-| `REVIEWER` | Audit existing UI for a11y, tokens, system fit |
-
-The `frontend-discovery-gate.py` hook blocks Edit/Write on `.tsx · .jsx · .css · .html · .svelte · .vue · .astro` until a recent discovery output exists. No more agents converging on identical Tailwind soup without first looking at design tokens or existing components.
-
-Eight new actionable frontend skills:
-
-`discovery-before-code` · `shadcn-component-install` · `a11y-contrast-check` (Node WCAG script) · `design-tokens-extract` · `design-system-doc` (9-section template) · `page-transitions-barba` · `ios-hig-mobile` · `spline-3d-embed`
+> Removidos en v6: `architect` → `Skill('domain-architecture-patterns')`. `performance-optimizer` → `Skill('quality-gates-performance-profiling')`.
 
 ---
 
-## Pipeline
+## Frontend ejecutor
 
-Two paths. No ambiguity.
+Antes el agente **validaba**. Ahora **construye**. Tools: `Read · Write · Edit · Bash · WebFetch · WebSearch`.
 
-```
-Trivial  → Skill('generate') → Skill('verify') → done
-           (single-file edit, no new behavior, no public surface change)
+**Flujo blindado por hook**:
+1. `Skill('domain-discovery-before-code')` — referent fetch + 1 de 11 estilos extremos + states + tokens
+2. Escribe `.claude/state/discovery-output.json` (TTL 30 min)
+3. `frontend-discovery-gate.py` (PreToolUse) bloquea cualquier `.tsx/.jsx/.css/.html/.svelte/.vue/.astro` sin discovery output reciente
 
-Substantial → SDD: proposal → spec → design → tasks → apply → verify → archive
-              (new behavior, multi-file, public surface, refactor, any high/critical risk)
-```
-
-When in doubt, SDD. Over-planning a small change costs one extra round. Under-planning a substantial one can cost a week.
+**8 skills accionables**: `domain-discovery-before-code` · `domain-shadcn-component-install` · `domain-a11y-contrast-check` (script Node.js zero-deps WCAG) · `domain-design-tokens-extract` · `domain-design-system-doc` (9-section schema) · `domain-page-transitions-barba` · `domain-ios-hig-mobile` · `domain-spline-3d-embed`.
 
 ---
 
-## 44 active skills
+## 43 Hooks (deterministas — sample abajo, lista completa en `harness/`)
 
-**Pipeline** (9): `plan` · `generate` · `verify` · `brainstorming` · `tdd-workflow` · `subagent-driven-development` · `using-git-worktrees` · `finishing-a-development-branch` · `sop-reverse`
+| Hook | Trigger | Qué enforza |
+|---|---|---|
+| `safety-guard` | PreToolUse/Bash | Bloquea destructivos (rm -rf, force push, DROP TABLE) |
+| `sdd-guard` | Pre+Post/Edit\|Write | Anti-reward-hacking (edits que reducen assertions) |
+| `path-existence-guard` ⭐ | Pre/Edit\|Write\|Read | Bloquea paths alucinados |
+| `tool-allowlist-guard` ⭐ | Pre/Bash | Skill-level bash whitelist (shadcn pattern) |
+| `frontend-discovery-gate` ⭐ | Pre/Edit\|Write | Anti-convergencia frontend inevitable |
+| `mutation-guard` | Pre/Edit\|Write | Dedup writes; defensive contra retries |
+| `web-distill` | Pre/WebFetch | Distill HTML + 24h URL cache |
+| `context-engine` | Pre/Agent + Stop | Token budget gate ≥80% |
+| `context-window-guard` | PostToolUse | Warning 30%, crítico 15% |
+| `tool-loop-detection` | PostToolUse | Circuit breaker 30× tool repetido |
+| `block-no-verify` | Pre/Bash | Prohíbe `git commit --no-verify` |
+| `pre-commit-guard` | Pre/Bash | Valida staging antes de commit |
+| `context-tick` | Session+Post+Stop | Telemetry → `.sdlc/state/context-budget.jsonl` |
+| `session-recover` | SessionStart | Preamble con resumen de sesión previa + first-run onboarding |
+| `rtk-bootstrap` · `rtk-rewrite` · `state-sync` · `tool-policy-guard` · `subagent-context` · `transcript-policy` · `config-guard` · `format-on-save` · `notify` · `constraint-reinforcement` | varios | …infraestructura |
 
-**Core — always active** (3): `quality-enforcement` · `banned-phrases` · `context-awareness`
+> `memory-check` y `memory-decay` removidos en pivot 2026-05-23 (engram-removal).
 
-**Orchestration — always active** (4): `session-manager` · `ralph-loop-wrapper` · `state-sync` · `iterative-retrieval`
-
-**Domain — backend & architecture** (6): `api-design-principles` · `architecture-patterns` · `resilience-patterns` · `nestjs-code-reviewer` · `security-review` · `performance-profiling`
-
-**Domain — frontend** (10): `react-best-practices` · `frontend-design` · `gsap` · `discovery-before-code` · `shadcn-component-install` · `a11y-contrast-check` · `design-tokens-extract` · `design-system-doc` · `page-transitions-barba` · `ios-hig-mobile`
-
-**Domain — frontend extras** (1): `spline-3d-embed`
-
-**Quality gates** (2): `systematic-debugging` · `agent-self-diagnosis`
-
-**DevRel** (1): `api-documentation`
-
-**Product** (1): `product-discovery`
-
-**Workflow utils** (7): `commit` · `pull-request` · `changelog` · `deep-research` · `search-first` · `rules-distill` · `skill-stocktake`
 
 ---
 
-## 26 deterministic hooks
+## Telemetría + recovery
 
-| Hook | Trigger | What it enforces |
-|------|---------|-----------------|
-| `memory-check.py` | SessionStart | Detects manifest changes via MD5 |
-| `rtk-bootstrap.py` | SessionStart | Token compression binary setup |
-| `memory-decay.py` | SessionStart | Marks MEMORY.md entries stale at 30d, archives at 60d |
-| `session-recover.py` | SessionStart | Reads context-budget tail; injects prior-session summary if <4h old |
-| `context-tick.py` | SessionStart + PostToolUse + Stop | Persists token telemetry to `.sdlc/state/context-budget.jsonl` |
-| `constraint-reinforcement.py` | UserPromptSubmit | Reinjects core rules at every turn |
-| `subagent-context.py` | SubagentStart | Injects project context + skill registry into every subagent |
-| `transcript-policy.py` | SubagentStart | Model-tier directives: haiku → concise, opus → deep-analysis |
-| `state-sync.py` | Stop | Writes session state to `.sdlc/state/session.md` |
-| `context-engine.py` | PreToolUse/Agent + Stop | Blocks Agent spawns at ≥80% context budget |
-| `web-distill.py` | PreToolUse/WebFetch | Strips HTML noise, returns semantic text only (≤10KB) |
-| `tool-policy-guard.py` | PreToolUse/Edit\|Write | Enforces tool_profile per active agent |
-| `tool-allowlist-guard.py` | PreToolUse/Bash | Skill-level bash whitelist (shadcn-style scoping) |
-| `path-existence-guard.py` | PreToolUse/Edit\|Read | Blocks paths that don't exist (no more hallucinated files) |
-| `frontend-discovery-gate.py` | PreToolUse/Edit\|Write | Blocks frontend file edits without recent discovery output |
-| `sdd-guard.py` | PreToolUse+PostToolUse/Edit\|Write | Blocks reward-hacking (edits that reduce assertions) |
-| `config-guard.py` | PreToolUse/Edit\|Write | Protects settings.json and hooks from accidental edits |
-| `mutation-guard.py` | PreToolUse/Edit\|Write\|Bash | Fingerprints writes, skips exact duplicates silently |
-| `safety-guard.py` | PreToolUse/Bash | Blocks destructive commands (rm -rf, force push, DROP TABLE) |
-| `rtk-rewrite.py` | PreToolUse/Bash | Compresses git/npm/docker commands (~40% token reduction) |
-| `block-no-verify.py` | PreToolUse/Bash | Blocks `git commit --no-verify` |
-| `pre-commit-guard.py` | PreToolUse/Bash | Scans for secrets and .env files before commit |
-| `context-window-guard.py` | PostToolUse | Warns when context window is filling |
-| `tool-loop-detection.py` | PostToolUse | SHA-256 fingerprint loop detection, circuit breaker at 30× |
-| `format-on-save.py` | PostToolUse/Edit\|Write | Auto-formats .ts .tsx .js .jsx .json .css .md |
-| `notify.py` | Notification | macOS/Linux desktop notifications on task completion |
-
-**Five new in v6.0.0**: `path-existence-guard`, `tool-allowlist-guard`, `frontend-discovery-gate`, `context-tick`, `session-recover`. The first three close real escape hatches the LLM was using. The last two power cross-session recovery.
-
-**Hook runtime profiles** — control overhead via `CLAUDE_HOOK_PROFILE`:
-
-| Profile | Active hooks | Use when |
-|---------|-------------|----------|
-| `minimal` | safety-guard, sdd-guard, block-no-verify, pre-commit-guard, config-guard | Rapid prototyping |
-| `standard` (default) | All 26 | Normal sessions |
-| `strict` | All 26 | Pre-merge, security reviews |
+`context-tick.py` (hook) registra todo a `.sdlc/state/context-budget.jsonl`. Cuando tengas datos:
 
 ```bash
-export CLAUDE_HOOK_PROFILE=minimal
+.claude/scripts/lifecycle/waste-report.py [--days 30] [--json]
+```
+
+Reporta: top 5 archivos cargados · references hit rate · references **never-loaded** (delete candidates) · p50/p95/p99 tokens-at-stop · sessions/día · avg tool calls/sesión.
+
+`session-recover.py` (SessionStart) emite preamble si la última actividad fue <4h: files touched, tools used, active task de `session.md`. Override: `SESSION_RECOVER_HOURS=0`.
+
+`statusLine` muestra en tiempo real:
+```
+◆ sonnet · 38% (76k/200k) · 24m · plugin~5%
+◆ opus · 84% (168k/200k) ⚠ COMPACT · 1h12m · plugin~7%
 ```
 
 ---
 
-## OpenClaw primitives
+## Persistencia (file-based)
 
-Five primitives run automatically on every session with no configuration needed:
+Todo el estado del plugin vive en filesystem. **No hay memory backend externo** (engram removido — ver `.sdlc/adrs/ADR-002-remove-engram-from-plugin.md`).
 
-| Primitive | What it does |
-|-----------|-------------|
-| `tool-loop-detection` | SHA-256 fingerprint window (30 calls). Warning at 10, circuit break at 30. 4h TTL auto-reset. |
-| `context-engine` | Hard block at ≥80% context before Agent spawns. Advisory at 60-79%. |
-| `mutation-guard` | Deduplicates writes by content hash. Silent skip on exact duplicates. |
-| `memory-decay` | Marks stale memory entries automatically. No manual cleanup needed. |
-| `web-distill` | All WebFetch calls go through semantic HTML distillation. ~99% noise reduction. |
+| Tipo | Ubicación |
+|---|---|
+| Artefactos SDD por sub-change | `openspec/changes/<change>/{proposal,spec,design,tasks,apply-progress,verify-report,archive-report}.md` |
+| Specs estables post-archive | `openspec/specs/<spec-name>.md` |
+| Session continuity | `.sdlc/RESUME-*.md`, `.sdlc/state/session-summary-<date>.md` |
+| Project context | `.sdlc/context/*.md` |
+| ADRs / PRDs / Retros | `.sdlc/{adrs,prds,retrospectives}/` |
+| State runtime | `.sdlc/state/*.json[l]` |
 
----
+Cross-session recovery = `Read` literal de los archivos. Keyword search = `rg` / `fd` / `grep` sobre `.sdlc/` y `openspec/`. Sin tools custom.
 
-## Telemetry & cross-session recovery
-
-`context-tick.py` writes one line per tool call to `.sdlc/state/context-budget.jsonl`. `session-recover.py` reads the tail at SessionStart and, if the previous session ended <4h ago, emits an `additionalContext` summary so the next session resumes without you re-explaining anything.
-
-`scripts/lifecycle/waste-report.py` audits the telemetry:
-
-- Top files by load count
-- Reference hit rate
-- p95 token cost per tool call
-- Never-loaded references (delete candidates)
-
-The waste report is what drove the v6.0.0 -84% reduction. It's the same script you run going forward.
+> Requisito: `ripgrep` y `fd` instalados (`brew install ripgrep fd` en macOS).
 
 ---
 
-## Memory protocol — 3-layer disclosure
+## Frontmatter convention
 
-Inspired by claude-mem progressive disclosure. ~10× token savings vs single-fetch:
+```yaml
+---
+name: my-skill
+description: "What it does, in one line"
+invokable: true
+when:
+  keywords: [...]
+canonical-sources:                # WebFetch obligatorio antes de afirmar best practice
+  - url: https://owasp.org/Top10
+    when: "para referencias OWASP"
+allowed-tools:                    # whitelist shadcn-style
+  - Read
+  - Bash(npm test*)
+references:                       # lazy-load
+  - references/section-a.md
+---
+```
 
-| Layer | Tool | Returns |
-|-------|------|---------|
-| 1. Discovery | `mem_search` | IDs + titles + score (no bodies) |
-| 2. Context | `mem_timeline` | Chronology of related observations |
-| 3. Detail | `mem_get_observation(id)` | Full untruncated body |
-
-The orchestrator only descends layers when narrowing a candidate. Most queries resolve at layer 1.
+**Single source of truth en `/skills`.** Cero duplicados entre `/commands` y `/skills`.
 
 ---
 
-## CLAUDE.md + CONTEXT.md (Pocock pattern)
-
-`CLAUDE.md` is now identity, core rules, and routing only — nothing the model has to skim every turn that isn't actually decision-making.
-
-`CONTEXT.md` is project navigation: where things live, hook events, lazy-loaded references. The orchestrator points to it instead of inlining it.
-
-Result: smaller eager prompt, faster classification, fewer stale duplicates.
-
----
-
-## RTK — Token compression
-
-All eligible Bash commands are rewritten automatically via `rtk-rewrite.py`:
-
-Covered: `git` · `npm` · `pnpm` · `cargo` · `pytest` · `vitest` · `docker` · `kubectl` · `bun` · `npx` · `eslint` · `tsc` · `jest` · `playwright` · `go` · `rspec` · `curl`
-
-Ultra-compact mode auto-applied to: `git log` · `docker ps` · `docker logs` · `kubectl` · `npm list`
-
----
-
-## Session persistence
-
-`.sdlc/state/session.md` is written silently after every task and at session end.
-
-- Active task ≠ "ninguna" → resume banner at next session start
-- Telemetry tail (<4h) → `session-recover.py` auto-injects last-session summary
-- Active plans in `.sdlc/tasks/active-plan.md`
-- Architecture decisions in `.sdlc/context/`
-
----
-
-## Lifecycle scripts
-
-Under `scripts/lifecycle/`:
-
-| Script | Purpose |
-|--------|---------|
-| `verify.sh` | End-to-end gate: settings, frontmatter, hooks, line caps, references — 6/6 must pass |
-| `install.sh` | Idempotent install into a target project |
-| `uninstall.sh` | Clean removal — settings restored, state preserved |
-| `sync-to-public.sh` | Publish from working `.claude/` to `Agent007/` for marketplace |
-| `test-hooks.py` | 13 fixture regression suite for hook payloads |
-| `waste-report.py` | Audit telemetry: top files, hit rate, p95, never-loaded refs |
-
----
-
-## CI
-
-`.github/workflows/plugin-validate.yml` — six jobs, no excuses:
-
-1. `settings.json` schema valid
-2. Skill/agent/command frontmatter lint
-3. Hook syntax (Python compile)
-4. Line caps per file (200 lines, debt registered in `.line-cap-exemptions`)
-5. All `@references` resolve to real files
-6. `verify.sh` full pass
-
-`.line-cap-exemptions` is an explicit debt register, not a silencer — every entry is a TODO with an owner.
-
----
-
-## v6.0.0 metrics
-
-| Metric | v5.1 | v6.0.0 | Change |
-|--------|------|--------|--------|
-| Eager-loaded total lines | ~7300 | 1195 | -84% |
-| Auto-inject overhead lines | 1239 | 237 | -81% |
-| Eager files >200 lines | 18 (silent) | 0 | fixed |
-| Lazy-loaded references | — | 72 | new |
-| Hook regression tests | — | 13 | new |
-| `verify.sh` baseline | — | 6/6 pass · 0 warnings | new |
-
-Removed in v6.0.0: `metrics/` directory, six orphaned legacy scripts (`test-loop-detection.py`, `test-memory-decay.py`, `test-mutation-guard.py`, `agent007-init.js`, `subagent-spawn.js`, `monitor-session.sh`) — about 916 lines of unreferenced code out.
-
----
-
-## Entry commands
-
-| Command | What it does |
-|---------|-------------|
-| `/dev "task"` | Auto-classifies and routes: simple → direct, medium → plan+subagents, complex → full pipeline |
-| `/consult "question"` | Routes to the best expert agent by intent. Flags: `--quick` `--deep` `--experts X,Y` |
-| `/ralph-loop "task"` | Autonomous loop until `<promise>COMPLETE</promise>`. Stall detection included. |
-| `/sdd-new "change"` | Starts spec-driven development: proposal → spec → design → tasks → apply → verify |
-| `/sdd-ff "change"` | Fast-forward: runs all planning phases (propose → spec → design → tasks) in sequence |
-
----
-
-## File structure
+## Estructura
 
 ```
 .claude/
-├── agents/          # 8 agent definitions (opus/sonnet)
-├── commands/        # Slash commands (/dev, /consult, /ralph-loop, /sdd-*)
-├── hooks/           # 26 deterministic quality gates
-├── rules/           # Code conventions (TypeScript, security, git, patterns)
-├── scripts/         # CLI utilities + lifecycle/ (verify, install, waste-report)
-├── skills/          # 44 skills organized by domain
-├── CLAUDE.md        # Identity, core rules, routing (lean — Pocock pattern)
-├── CONTEXT.md       # Project navigation, hook events, lazy refs
-├── GETTING_STARTED.md
-├── README.md
-└── settings.json    # Hook registration, permissions, context includes
-
-.sdlc/
-├── context/         # tech-stack.md, conventions.md, project-overview.md
-├── state/           # session.md, context-budget.jsonl, loop-state.json
-└── tasks/           # Active plans
-
-.github/workflows/
-└── plugin-validate.yml   # 6-job CI gate
+├── CLAUDE.md            # 99 líneas — identidad + core rules + routing + memory
+├── CONTEXT.md           # 92 líneas — navegación de proyecto (Pocock pattern)
+├── settings.json        # hooks registry + statusLine + permissions
+├── agents/              # 8 specialists
+├── commands/            # 8 orchestrators (dev, orchestrate, ralph-loop, …)
+├── skills/              # 57 skills, flat depth-1
+├── harness/             # 43 Python hooks (guides · sensors · sentinels · statusline)
+├── scripts/lifecycle/   # verify, install, uninstall, sync-to-public, test-hooks, waste-report, statusline
+├── instincts/           # active learning system (instinct-engine + /evolve + /instinct-status)
+├── rules/               # typescript, security, git, patterns, hooks-authoring, coding-style
+└── worktrees/           # placeholder for git worktrees
 ```
 
----
-
-## Model routing
-
-| Tier | Model | When |
-|------|-------|------|
-| Haiku | `claude-haiku-4-5-20251001` | Classification, boilerplate, narrow single-file edits |
-| Sonnet | `claude-sonnet-4-6` | Implementation, refactors, API design, debugging — default |
-| Opus | `claude-opus-4-6` | Architecture, root-cause analysis, multi-file invariants, security |
-
-Agent defaults: Opus → `backend-db-expert`, `product-expert`, `security-expert` · Sonnet → all others.
+> **v6 cleanup** removió `metrics/` y 6 scripts huérfanos legacy (~916 líneas). Cero archivos eager > 200 líneas.
 
 ---
 
-## Honest comparison
+## Métricas (histórico v5.1 → v6, referencial — v7 actualiza counts a 13/57/43)
 
-What Agent007 is good at: catching reward-hacking before it lands, refusing to edit hallucinated paths, blocking frontend code without discovery, persisting context across sessions, keeping the eager prompt small.
-
-What it is not: a magic wand. The orchestrator still depends on the underlying model. Hooks reduce the blast radius of bad decisions; they don't make every decision good. If you don't write specs, SDD won't help you. If you ignore the discovery gate by re-running discovery to satisfy it, you're cheating yourself.
+| | v5.1 | v6 | Δ |
+|---|---|---|---|
+| CLAUDE.md líneas | ~250 | 99 | -60% |
+| Eager-loaded total | ~7300 | 1195 | -84% |
+| Auto-inject overhead | 1239 | 237 | -81% |
+| Skills invokables | 28 | 44 | +16 |
+| Hooks | 21 | 26 | +5 |
+| References lazy-load | 0 | 72 | nuevo |
+| Archivos eager > 200 | 18 silenciosas | **0** | ✓ |
+| Hook regression tests | 0 | 14 fixtures | ✓ |
+| Anti-convergencia | no | hook + skill (inevitable) | ✓ |
+| Frontend agent | validator-only | builder default | ✓ |
+| Telemetría persistente | no | sí (JSONL + waste-report) | ✓ |
+| Cross-session recovery | no | sí (session-recover) | ✓ |
+| StatusLine | no | sí (tokens% + plugin~%) | ✓ |
+| CI propia | no | 6 jobs | ✓ |
+| Lifecycle scripts | no | 7 scripts | ✓ |
+| Debt register | implícito | explícito Y vacío | ✓ |
+| verify.sh status | n/a | **6/6 pass · 0 warnings** | ✓ |
 
 ---
 
-## Why it works
+## Filosofía
 
-Hooks fire at the tool layer. The model can lie in prose; it cannot lie about a `PreToolUse` exit code. Every non-negotiable behavior is a hook. Everything contextual is a rule. Skills are protocols, not paragraphs of advice. That's it.
+| Principio | Implementación |
+|---|---|
+| Hooks > rules | Lo no-negociable es determinista (hooks). Lo contextual es probabilístico (rules en CLAUDE.md). |
+| Single source | `/skills` es la unidad invocable. `/commands` solo orquestadores. |
+| Anti-convergencia | Hook bloquea visual writes sin discovery → no más "purple gradient + Inter" default. |
+| Debt visible | `.line-cap-exemptions` debe estar vacío. Si crece, falla CI. |
+| Medir antes de optimizar | Telemetría JSONL. waste-report decide qué cachear. No intuición. |
+| Anti-redundancia | Antes de feature nueva, audit: ¿ya existe? ¿hay solapamiento? Si sí, skip. |
+| Compaction-resistant | Hook persiste rastro continuo (no PreCompact native). SessionStart recupera. |
 
 ---
 
-## Requirements
+## Backlog (todo nice-to-have)
 
-- Claude Code CLI (any tier) or Claude desktop app
-- Python 3.8+ (for hook scripts)
-- Node 18+ (for `a11y-contrast-check` and lifecycle scripts)
-- macOS, Linux, or Windows (WSL recommended for hooks)
+Con justificación de SKIP donde aplica:
+
+- **F9** Multi-platform dist (otras plataformas) — solo si salir del nicho Claude Code
+- **F10** Marketplace metadata + manifest.json — cuando se publique
+- **D2** Web viewer citations — visualización de history, no bloquea
+- ❌ **B2** verbatim capture — skip hasta dolor real
+- ❌ **B4** instincts↔engram — redundante con `/evolve → skill`
+- ❌ **C1** reference cache — sin datos en waste-report aún
+- ❌ **C2** lazy auto-inject — peligroso (banned-phrases es seguridad)
+- ❌ **C4** compaction-aware priority — fuera de control de hooks
+- ⛔ **D1** worker HTTP / **D3** universal disclosure / **D4** superseded_by — out of scope (Engram engine)
 
 ---
 
-## Contributing
+## Patrones competitivos integrados
 
-PRs welcome. Two hard rules:
+allowed-tools whitelisting · frontend anti-patterns (11 estilos) · 3-layer disclosure (cache TTL · session continuity) · temporal validity · CONTEXT.md separado · lifecycle scripts + CI · banned-phrases · medir antes de optimizar
 
-1. `verify.sh` must stay 6/6 with zero warnings
-2. New hooks need a fixture in `test-hooks.py` — no exceptions
+---
 
-The line cap is 200. If you can't fit, register the file in `.line-cap-exemptions` with an owner and a removal plan. Debt is allowed; hidden debt is not.
+## Documentación
+
+- `CLAUDE.md` — identidad y core rules (auto-cargado)
+- `CONTEXT.md` — navegación del proyecto
+- `skills/INDEX.md` · `agents/INDEX.md` · `commands/INDEX.md`
+- `rules/*.md` — convenciones (typescript · security · git · patterns · hooks-authoring · coding-style)
+
+**Versión**: 7.0.0 · License: MIT · Author: Sebastian Guerra

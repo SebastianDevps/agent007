@@ -1,8 +1,6 @@
 ---
 name: deep-research
 description: "Systematic 4-phase research methodology: Scope → Gather → Synthesize → Deliver. Single source of truth — no /commands wrapper."
-invokable: true
-accepts_args: true
 version: 2.0.0
 when:
   keywords: ["research", "investigate", "explore", "compare", "analyze options", "deep-research"]

@@ -1,7 +1,7 @@
 ---
 name: prompt-gen
 version: 4.0.0
-description: "Convierte intención vaga en un prompt-spec XML canónico (Anthropic conventions). Persiste en .sdlc/state/active-prompt.json para que subagent-context.py lo inyecte a cada delegación. Prioriza investigar → planificar → construir."
+description: "Convierte intención vaga en un prompt-spec XML canónico (canonical XML conventions). Persiste en .sdlc/state/active-prompt.json para que subagent-context.py lo inyecte a cada delegación. Prioriza investigar → planificar → construir."
 accepts_args: true
 ---
 
@@ -204,9 +204,9 @@ FASE FINAL — QUALITY GATE
 
 ---
 
-## Step 4 — Construir el prompt (5 componentes canónicos Anthropic)
+## Step 4 — Construir el prompt (5 componentes canónicos)
 
-> Convergimos al set canónico de [Anthropic XML conventions](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/use-xml-tags). Antes había 10 componentes parcialmente solapados — ahora 5 + 2 opcionales.
+> Convergimos al set canónico de [canonical XML conventions](https://docs.claude.com/en/docs/build-with-claude/prompt-engineering/use-xml-tags). Antes había 10 componentes parcialmente solapados — ahora 5 + 2 opcionales.
 
 ### 1. `<identity>` (obligatorio)
 Una línea prosa: rol + stack + referente de calidad.
@@ -268,7 +268,7 @@ Técnico (con `cmd=`) + visual (preguntas auto-evaluables).
 ```
 
 ### 6. `<example>` (opcional, recomendado para tier Premium)
-Anthropic recomienda 1-3 ejemplos input→ideal_output dentro del prompt.
+Se recomienda 1-3 ejemplos input→ideal_output dentro del prompt.
 
 ### 7. `<self_check>` (opcional pero crítico en Premium)
 Verbos: "Considera / Evalúa / Razona a través de" — **NO usar "think"** (Opus 4.7+ con extended thinking off).
@@ -376,7 +376,7 @@ Verbos: "Considera / Evalúa / Razona a través de" — **NO usar "think"** (Opu
 ✓ "Velocidad no es criterio" explícito en Premium y Thorough
 ✓ Sin prefill en assistant turn
 ✓ Documentos largos antes de instrucciones específicas
-✓ Tags XML del set canónico Anthropic (identity/context/constraints/phases/success_criteria)
+✓ Tags XML del set canónico (identity/context/constraints/phases/success_criteria)
 ✓ <task_input>$ARGUMENTS</task_input> presente
 ✓ Persistido en .sdlc/state/active-prompt.json (atomic write)
 ✓ NO usar palabra "think" — usar "considera/evalúa/razona"

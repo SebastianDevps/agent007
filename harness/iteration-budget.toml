@@ -1,0 +1,20 @@
+# Iteration caps per (phase, triage_tier) combination.
+# When a phase emits status:partial and is re-invoked, budget decrements.
+# When budget reaches 0, the Sentinel emits escalation_required.
+
+[budgets]
+# Format: phase_name = { trivial = N, medium = N, high = N }
+"sdd-explore"  = { trivial = 1, medium = 2, high = 3 }
+"sdd-propose"  = { trivial = 1, medium = 2, high = 3 }
+"sdd-spec"     = { trivial = 1, medium = 3, high = 5 }
+"sdd-design"   = { trivial = 1, medium = 3, high = 5 }
+"sdd-tasks"    = { trivial = 1, medium = 2, high = 3 }
+"sdd-apply"    = { trivial = 2, medium = 4, high = 6 }
+"sdd-verify"   = { trivial = 1, medium = 3, high = 5 }
+"sdd-archive"  = { trivial = 1, medium = 1, high = 1 }   # never iterates
+"_default"     = { trivial = 1, medium = 3, high = 5 }   # fallback for non-SDD agents
+
+[feedback]
+# When the Sentinel detects partial status, it constructs a structured feedback envelope
+# (plannotator deny+feedback pattern) and writes it to the change's feedback queue.
+template = "Previous invocation returned status=partial. Reason: {reason}. Attempt {n}/{max}. Please address and emit status=done."

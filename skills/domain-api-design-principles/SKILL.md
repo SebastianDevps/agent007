@@ -1,18 +1,7 @@
 ---
 name: api-design-principles
 description: "RESTful API design principles for consistent, versioned, developer-friendly APIs"
-canonical-sources:
-  - url: https://restfulapi.net/
-    when: "for REST design principles"
-  - url: https://docs.nestjs.com/openapi/introduction
-    when: "for OpenAPI/Swagger integration with NestJS"
-  - url: https://jsonapi.org/
-    when: "for JSON:API specification"
-  - url: https://developer.mozilla.org/en-US/docs/Web/HTTP/Status
-    when: "for HTTP status codes reference"
 version: 1.0.0
-invokable: true
-accepts_args: true
 allowed-tools: ["Read", "Grep", "Glob", "Edit", "Write"]
 load_when:
   - designing_api_endpoints
@@ -36,15 +25,6 @@ constraints:
   - versioning_required_in_all_public_apis
   - no_breaking_changes_without_version_bump
   - consistent_error_response_format_enforced
-references:
-  - references/resource-oriented-urls.md
-  - references/http-semantics.md
-  - references/pagination.md
-  - references/filtering-sorting.md
-  - references/versioning.md
-  - references/error-handling.md
-  - references/swagger-docs.md
-  - references/audit-workflow.md
 ---
 
 # API Design Principles — NestJS & TypeORM
@@ -127,3 +107,10 @@ Skill para diseñar, implementar y auditar APIs REST siguiendo mejores práctica
 - [NestJS OpenAPI Documentation](https://docs.nestjs.com/openapi/introduction)
 - [HTTP Status Codes Reference](https://developer.mozilla.org/en-US/docs/Web/HTTP/Status)
 - [JSON:API specification](https://jsonapi.org/)
+
+## Sources
+
+- https://restfulapi.net/ — REST design principles
+- https://docs.nestjs.com/openapi/introduction — OpenAPI/Swagger integration with NestJS
+- https://jsonapi.org/ — JSON:API specification
+- https://developer.mozilla.org/en-US/docs/Web/HTTP/Status — HTTP status codes reference

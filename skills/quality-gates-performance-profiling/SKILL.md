@@ -1,7 +1,6 @@
 ---
 name: performance-profiling
 description: "Measure-first performance diagnosis: identify bottlenecks across backend, frontend, DB, network with evidence — never opinion. Captures expertise from former performance-optimizer agent."
-invokable: true
 version: 1.0.0
 when:
   keywords:
@@ -26,13 +25,6 @@ when:
     - query-plan
     - waterfall
     - blocking
-canonical-sources:
-  - url: https://web.dev/articles/lcp
-    when: "for Core Web Vitals references"
-  - url: https://nodejs.org/api/inspector.html
-    when: "for Node.js profiling and heap snapshots"
-  - url: https://www.postgresql.org/docs/current/using-explain.html
-    when: "for PostgreSQL EXPLAIN ANALYZE"
 allowed-tools:
   - Read
   - Grep
@@ -45,10 +37,6 @@ allowed-tools:
   - Bash(curl *)
   - Bash(time *)
   - Bash(psql *)
-references:
-  - references/backend-profiling.md
-  - references/frontend-profiling.md
-  - references/db-profiling.md
 ---
 
 # performance-profiling — Measure first, fix second
@@ -138,3 +126,9 @@ Method: [exact command / tool used]
 | "Optimize the loop" | Run with timer → confirm loop is the bottleneck |
 | Skip EXPLAIN for slow queries | Always run EXPLAIN ANALYZE before suggesting SQL changes |
 | Single-sample measurement | Always measure multiple times — variance matters |
+
+## Sources
+
+- https://web.dev/articles/lcp — Core Web Vitals references
+- https://nodejs.org/api/inspector.html — Node.js profiling and heap snapshots
+- https://www.postgresql.org/docs/current/using-explain.html — PostgreSQL EXPLAIN ANALYZE

@@ -1,15 +1,9 @@
 ---
 name: design-tokens-extract
 description: "Fetch a reference URL, extract its design tokens (colors, fonts, spacing, radii, shadows), and emit a W3C-format tokens file. Replaces vibes-based copying with a structured, auditable extraction."
-invokable: true
 version: 1.0.0
 when:
   keywords: [design tokens, extract tokens, palette extraction, copy design, inspiration site, reference style, design system bootstrap, tokens.css, tokens.ts, w3c tokens]
-canonical-sources:
-  - url: https://design-tokens.github.io/community-group/format/
-    when: "for the W3C design tokens schema"
-  - url: https://www.w3.org/TR/css-color-4/
-    when: "for color format normalization"
 allowed-tools:
   - WebFetch
   - Write
@@ -160,3 +154,8 @@ Before reporting "done":
 - [ ] All limits respected (5/2/6/4/4)
 - [ ] Source URL + timestamp recorded in the file
 - [ ] User informed this is a starting point, not a final system
+
+## Sources
+
+- https://design-tokens.github.io/community-group/format/ — W3C design tokens schema
+- https://www.w3.org/TR/css-color-4/ — color format normalization

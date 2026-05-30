@@ -1,7 +1,6 @@
 ---
 name: discovery-before-code
 description: "Anti-convergence gate for visual work. Forces a real referent fetch + extreme style choice + state design + token declaration BEFORE any code. Default to this skill before any frontend builder task."
-invokable: true
 version: 1.0.0
 when:
   keywords:
@@ -16,9 +15,6 @@ when:
     - rebrand
     - redesign
     - frontend build
-canonical-sources:
-  - url: https://github.com/anthropics/claude-code/blob/main/plugins/frontend-design/skills/frontend-design/SKILL.md
-    when: "para los 11 estilos extremos y anti-convergencia"
 allowed-tools:
   - WebFetch
   - WebSearch
@@ -27,9 +23,6 @@ allowed-tools:
   - Glob
   - Grep
   - Bash(mkdir -p .claude/state)
-references:
-  - "../frontend-design/SKILL.md"
-  - "../frontend-design/references/process.md"
 ---
 
 # discovery-before-code
@@ -144,7 +137,7 @@ SHADOW SCALE:  none · sm · md   (avoid more than 3 levels)
 ```
 
 If `tokens.ts` already exists, READ IT and align. Don't redefine.
-If it doesn't exist, invoke `Skill('design-tokens-extract')` with the referent URL.
+If it doesn't exist, invoke `Skill('domain-design-tokens-extract')` with the referent URL.
 
 ---
 
@@ -197,3 +190,7 @@ Then return the same content as a readable markdown block to the calling agent.
 ## Why this exists
 
 Without forced style choice, LLMs produce statistically identical "AI-looking" interfaces. The 11 extreme styles + referent fetch + token discipline is the only intervention that breaks convergence. The frontend builder agent invokes this BEFORE any visual code — non-negotiable.
+
+## Sources
+
+- https://github.com/anthropics/claude-code/blob/main/plugins/frontend-design/skills/frontend-design/SKILL.md — para los 11 estilos extremos y anti-convergencia

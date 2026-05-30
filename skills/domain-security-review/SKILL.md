@@ -1,23 +1,8 @@
 ---
 name: security-review
 description: "Security audit for code focusing on OWASP Top 10, authentication, authorization, and sensitive data handling. Use when user asks to 'review security', 'security audit', or 'check vulnerabilities'."
-canonical-sources:
-  - url: https://owasp.org/www-project-top-ten/
-    when: "for OWASP Top 10 references"
-  - url: https://cheatsheetseries.owasp.org/
-    when: "for OWASP cheatsheets"
-  - url: https://nvd.nist.gov/
-    when: "for CVE references"
 version: 1.0.0
-invokable: true
-accepts_args: true
 allowed-tools: ["Read", "Grep", "Glob", "Bash"]
-references:
-  - references/review-process.md
-  - references/owasp-top-10.md
-  - references/output-template.md
-  - references/quick-reference.md
-  - references/OWASP_CHECKLIST.md
 ---
 
 # Security Review — OWASP Top 10 & Best Practices
@@ -90,3 +75,9 @@ Detailed steps live in `references/review-process.md`.
 - [OWASP Top 10 (2021)](https://owasp.org/www-project-top-ten/)
 - [OWASP Cheatsheets](https://cheatsheetseries.owasp.org/)
 - [NVD — CVE Database](https://nvd.nist.gov/)
+
+## Sources
+
+- https://owasp.org/www-project-top-ten/ — OWASP Top 10 references
+- https://cheatsheetseries.owasp.org/ — OWASP cheatsheets
+- https://nvd.nist.gov/ — CVE references

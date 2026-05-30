@@ -1,8 +1,6 @@
 ---
 name: product-discovery
 description: "Validar ideas de producto, definir MVP, explorar problemas de usuario. Use when user asks to 'validate idea', 'define MVP', 'product discovery', or 'validate user needs'."
-invokable: true
-accepts_args: true
 allowed-tools: ["Read", "Grep", "Glob"]
 auto-activate: false
 version: 1.0.0
@@ -10,9 +8,6 @@ when:
   - task_type: product
     risk_level: [medium, high, critical]
   - user_mentions: ["validate idea", "mvp", "product discovery", "user needs", "problem validation"]
-references:
-  - references/socratic-questions.md
-  - references/discovery-document.md
 ---
 
 # Product Discovery — Problem-First Feature Definition

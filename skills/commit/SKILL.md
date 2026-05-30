@@ -1,8 +1,6 @@
 ---
 name: commit
 description: "Generate pipe-delimited commits: Tipo|IdTarea|YYYYMMDD|Descripción. Single source of truth — no /commands wrapper."
-invokable: true
-accepts_args: true
 version: 3.0.0
 preconditions:
   - changes_staged_or_unstaged

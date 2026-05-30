@@ -1,29 +1,8 @@
 ---
 name: frontend-design
 description: "Diseña y construye interfaces frontend distintivas de alta calidad con pensamiento de diseño profesional. Use when user asks to 'design component', 'create interface', 'build landing page', or 'design dashboard'."
-canonical-sources:
-  - url: https://www.w3.org/WAI/WCAG22/quickref/
-    when: "for WCAG 2.2 accessibility guidelines"
-  - url: https://material.io/design
-    when: "for Material Design references"
-  - url: https://developer.apple.com/design/human-interface-guidelines
-    when: "for Apple Human Interface Guidelines"
 version: 1.0.0
-invokable: true
-accepts_args: true
 allowed-tools: ["Read", "Write", "Edit", "Bash"]
-references:
-  - references/process.md
-  - references/color.md
-  - references/typography.md
-  - references/spacing.md
-  - references/layout.md
-  - references/motion.md
-  - references/components.md
-  - references/examples.md
-  - references/resources.md
-  - references/checklist.md
-  - references/common-errors.md
 ---
 
 # Frontend Design Skill
@@ -88,3 +67,9 @@ Diseños genéricos y reconocibles como IA. Si caés en alguno, REDISEÑÁ:
 ## Filosofía
 
 Calidad sobre velocidad · Creatividad distintiva sobre patrones AI · Contexto antes que código · Sistema antes que improvisación · Usuario al centro siempre.
+
+## Sources
+
+- https://www.w3.org/WAI/WCAG22/quickref/ — WCAG 2.2 accessibility guidelines
+- https://material.io/design — Material Design references
+- https://developer.apple.com/design/human-interface-guidelines — Apple Human Interface Guidelines

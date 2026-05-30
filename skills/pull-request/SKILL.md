@@ -1,8 +1,6 @@
 ---
 name: pull-request
 description: "Create well-structured GitHub PRs enforcing issue-first discipline. Single source of truth — no /commands wrapper."
-invokable: true
-accepts_args: true
 version: 3.0.0
 preconditions:
   - linked_issue_exists

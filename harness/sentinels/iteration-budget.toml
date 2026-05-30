@@ -1,0 +1,58 @@
+# iteration-budget.toml — v7.3 Auto-loop gate configuration.
+# Per-trigger × per-tier budgets. Tier "critical" always = 0 (never auto-loop).
+
+[loops.verify-fail]
+trivial  = 2
+medium   = 4
+high     = 6
+critical = 0
+
+[loops.code-review-findings]
+trivial  = 1
+medium   = 2
+high     = 3
+critical = 0
+
+[loops.verify-diff-blocked]
+trivial  = 1
+medium   = 2
+high     = 3
+critical = 0
+
+[loops.apply-test-fail]
+trivial  = 3
+medium   = 5
+high     = 7
+critical = 0
+
+[global]
+max_iterations_per_change = 6    # 6 fix→verify cycles; wall-clock is a watchdog, not a co-equal cap
+max_wall_clock_minutes    = 60
+
+[participants]
+allow = [
+  "sdd-verify",
+  "sdd-verify-diff",
+  "sdd-apply",
+  "code-reviewer",
+]
+deny = [
+  "sdd-archive",
+  "sdd-propose",
+  "sdd-explore",
+]
+
+[feedback]
+template = "Previous invocation returned status=partial. Reason: {reason}. Attempt {n}/{max}. Please address and emit status=done."
+
+[budgets]
+# Legacy per-phase caps (kept for backward compatibility with existing status:partial path).
+"sdd-explore"  = { trivial = 1, medium = 2, high = 3 }
+"sdd-propose"  = { trivial = 1, medium = 2, high = 3 }
+"sdd-spec"     = { trivial = 1, medium = 3, high = 5 }
+"sdd-design"   = { trivial = 1, medium = 3, high = 5 }
+"sdd-tasks"    = { trivial = 1, medium = 2, high = 3 }
+"sdd-apply"    = { trivial = 2, medium = 4, high = 6 }
+"sdd-verify"   = { trivial = 1, medium = 3, high = 5 }
+"sdd-archive"  = { trivial = 1, medium = 1, high = 1 }
+"_default"     = { trivial = 1, medium = 3, high = 5 }

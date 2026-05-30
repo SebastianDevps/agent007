@@ -1,16 +1,7 @@
 ---
 name: resilience-patterns
 description: "Circuit breakers, retries, timeouts, and bulkheads for fault-tolerant systems"
-canonical-sources:
-  - url: https://microservices.io/patterns/index.html
-    when: "for microservice patterns"
-  - url: https://docs.aws.amazon.com/whitepapers/latest/availability-and-beyond-improving-resilience/
-    when: "for AWS resilience guidance"
-  - url: https://docs.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker
-    when: "for Circuit Breaker pattern reference"
 version: 1.0.0
-invokable: true
-accepts_args: true
 allowed-tools: ["Read", "Grep", "Glob", "Edit", "Write", "Bash"]
 load_when:
   - designing_external_service_calls
@@ -34,13 +25,6 @@ constraints:
   - every_external_call_needs_timeout
   - circuit_breaker_required_for_critical_dependencies
   - retry_with_exponential_backoff_not_fixed_interval
-references:
-  - references/circuit-breaker.md
-  - references/retry-backoff.md
-  - references/timeout.md
-  - references/health-checks.md
-  - references/graceful-degradation.md
-  - references/bulkhead.md
 ---
 
 # Resilience Patterns — NestJS Monolith
@@ -137,3 +121,9 @@ Skill para implementar patrones de resiliencia en aplicaciones monolíticas Nest
 - [Circuit Breaker Pattern - Microsoft](https://docs.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker)
 - [Retry Pattern - AWS](https://aws.amazon.com/builders-library/timeouts-retries-and-backoff-with-jitter/)
 - [microservices.io patterns index](https://microservices.io/patterns/index.html)
+
+## Sources
+
+- https://microservices.io/patterns/index.html — microservice patterns
+- https://docs.aws.amazon.com/whitepapers/latest/availability-and-beyond-improving-resilience/ — AWS resilience guidance
+- https://docs.microsoft.com/en-us/azure/architecture/patterns/circuit-breaker — Circuit Breaker pattern reference

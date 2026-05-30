@@ -46,7 +46,7 @@ Score: [A-F]  |  [N] critical  [N] warnings  [N] clean categories
     WARNING  permissions.deny missing protection for: sudo
 🚨 [4] skills/ — prompt injection patterns
     CRITICAL Potential prompt injection: "ignore previous instructions"
-             → .claude/skills/pipeline/some-skill.md
+             → .claude/skills/some-skill/SKILL.md
 ```
 
 ## Step 3 — Act on findings

@@ -1,8 +1,6 @@
 ---
 name: systematic-debugging
 description: "Reproduce-first debugging protocol — never claim fixed without reproducing the bug"
-invokable: true
-accepts_args: bugDescription
 allowed-tools: ["Read", "Grep", "Glob", "Bash", "Write", "Edit"]
 auto-activate: bug-fixing (all levels)
 required-before: Any bug fix implementation
@@ -36,13 +34,6 @@ constraints:
   - reproduce_bug_before_fixing
   - write_failing_test_before_implementing_fix
   - never_claim_fixed_without_verification_evidence
-references:
-  - references/phase-1-reproduce.md
-  - references/phase-2-root-cause.md
-  - references/phase-3-hypothesis.md
-  - references/phase-4-implementation.md
-  - references/examples-by-bug-type.md
-  - references/ralph-loop-integration.md
 ---
 
 # Systematic Debugging — NO FIXES WITHOUT ROOT CAUSE
@@ -73,6 +64,35 @@ This skill enforces a 4-phase debugging process for any bug fix.
 | 4. Implementation | Implement fix + defense-in-depth + regression test | `references/phase-4-implementation.md` |
 
 Each phase has a CHECKPOINT — cannot proceed to the next without completing the current.
+
+---
+
+### Phase 1.4 — Multi-Component Diagnostic Instrumentation
+
+For EACH component boundary in the suspected path:
+- Log entry: what's coming in
+- Log exit: what's going out
+- Log config: what's the current config state
+- Log state: what's the current data state
+
+Re-run the failing scenario. Compare boundary logs across components. The bug lives where expectations diverge from reality — usually at a boundary, not within a component.
+
+---
+
+## Phase 4.5 — If 3+ Fixes Failed, Question Architecture
+
+Pattern indicating an architectural problem (not a failed hypothesis):
+- Each fix reveals new shared state or coupling in a different place
+- Fixes require "massive refactoring" to implement properly
+- Each fix creates new symptoms elsewhere
+- You're chasing the bug, not understanding it
+
+STOP and question fundamentals:
+- Is this pattern fundamentally sound for this use case?
+- Are we sticking with it through sheer inertia or sunk cost?
+- Should we refactor the architecture vs. continue patching symptoms?
+
+Discuss with the user BEFORE attempting fix #4. This is NOT a failed hypothesis to retry — this is a wrong architecture to redesign.
 
 ---
 

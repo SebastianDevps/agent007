@@ -1,0 +1,18 @@
+# Statusline segment configuration.
+#
+# Order matters — segments render left-to-right separated by " · ".
+# Comment out (#) a line to disable a segment. The entry script
+# (statusline.sh) skips any segment that returns empty or times out.
+
+order = [
+  "brand",
+  "model",
+  "plugin-context",
+  "harness-mode",
+  "exceptions",
+  "sensor-pulse",
+  "sdd-active",
+]
+
+[timeouts]
+default_ms = 200

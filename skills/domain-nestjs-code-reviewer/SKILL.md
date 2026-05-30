@@ -2,22 +2,7 @@
 name: nestjs-code-reviewer
 version: 1.0.0
 description: "Revisa código NestJS + TypeORM siguiendo mejores prácticas, detecta vulnerabilidades OWASP y anti-patterns. Use when user asks to 'review code', 'audit module', or 'check security'."
-canonical-sources:
-  - url: https://docs.nestjs.com/
-    when: "for NestJS official documentation"
-  - url: https://typeorm.io/
-    when: "for TypeORM documentation"
-  - url: https://owasp.org/www-project-top-ten/
-    when: "for OWASP Top 10 references"
-invokable: true
-accepts_args: true
 allowed-tools: ["Read", "Grep", "Bash"]
-references:
-  - references/architecture-patterns.md
-  - references/security-owasp.md
-  - references/performance-typescript.md
-  - references/SECURITY_CHECKLIST.md
-  - references/TYPEORM_ANTIPATTERNS.md
 ---
 
 # NestJS Code Reviewer
@@ -160,3 +145,9 @@ Este skill NO cubre:
 3. **Da contexto**: Explica el "por qué", no solo el "qué"
 4. **Sugiere, no impongas**: Usa "considera..." en lugar de "debes..."
 5. **Limita scope**: Si hay >10 files, pide al usuario enfocarse en un módulo
+
+## Sources
+
+- https://docs.nestjs.com/ — NestJS official documentation
+- https://typeorm.io/ — TypeORM documentation
+- https://owasp.org/www-project-top-ten/ — OWASP Top 10 references

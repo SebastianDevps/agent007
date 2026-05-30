@@ -8,7 +8,7 @@
 #   1. settings-json-valid          → .claude/settings.json parses as JSON
 #   2. skill-frontmatter-lint       → every SKILL.md / invokable .md has
 #                                      `name`, `description` keys
-#   3. hook-syntax-check            → every .py in .claude/hooks/ compiles
+#   3. hook-syntax-check            → every .py in .claude/harness/ compiles
 #   4. line-cap-check               → SKILL.md (eager-loaded) ≤ 200 lines.
 #                                      references/ are exempt (lazy)
 #   5. references-resolvable        → every `references:` entry in a SKILL.md
@@ -88,7 +88,7 @@ check_frontmatter() {
       fail "frontmatter missing/incomplete: ${f#$ROOT/}"
       broken=$((broken+1))
     fi
-  done < <(find "$CLAUDE_DIR/skills" -type f \( -name 'SKILL.md' -o -path '*/workflow-utils/*.md' -o -path '*/pipeline/*.md' -o -path '*/quality-gates/*.md' \) ! -path '*/references/*' ! -name 'INDEX.md')
+  done < <(find "$CLAUDE_DIR/skills" -type f \( -name 'SKILL.md' -o -path '*/workflow-utils/*.md' -o -path '*/quality-gates/*.md' \) ! -path '*/references/*' ! -name 'INDEX.md')
 
   if [ $broken -eq 0 ] && [ $found -gt 0 ]; then
     ok "$found SKILL.md frontmatter checks passed"
@@ -144,7 +144,7 @@ check_line_caps() {
 
   while IFS= read -r f; do
     evaluate "$f"
-  done < <(find "$CLAUDE_DIR/skills" -type f \( -name 'SKILL.md' -o -path '*/workflow-utils/*.md' -o -path '*/pipeline/*.md' -o -path '*/quality-gates/*.md' -o -path '*/orchestration/*.md' -o -path '*/core/*.md' \) ! -path '*/references/*' ! -name 'INDEX.md')
+  done < <(find "$CLAUDE_DIR/skills" -type f \( -name 'SKILL.md' -o -path '*/workflow-utils/*.md' -o -path '*/quality-gates/*.md' -o -path '*/orchestration/*.md' -o -path '*/core/*.md' \) ! -path '*/references/*' ! -name 'INDEX.md')
 
   for f in "$CLAUDE_DIR/CLAUDE.md" "$CLAUDE_DIR/CONTEXT.md"; do
     [ -f "$f" ] && evaluate "$f"

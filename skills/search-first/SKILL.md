@@ -1,8 +1,6 @@
 ---
 name: search-first
 description: "Pre-coding gate — before writing any custom implementation, forces a structured search: library scan, codebase scan, decision matrix. Proceed to Build only if all alternatives are ruled out."
-invokable: true
-accepts_args: implementation_goal
 allowed-tools: ["Bash", "Grep", "Glob", "Read", "WebSearch"]
 auto-activate: before any "create new" or "implement from scratch" task
 version: 1.0.0

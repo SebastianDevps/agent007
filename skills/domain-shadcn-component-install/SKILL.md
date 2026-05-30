@@ -1,15 +1,9 @@
 ---
 name: shadcn-component-install
 description: "Install shadcn/ui components via CLI with mandatory dry-run preview before write. Workflow: info → search → docs → diff → install."
-invokable: true
 version: 1.0.0
 when:
   keywords: [shadcn, ui component, button, dialog, accordion, card, install component, shadcn-ui, radix, registry]
-canonical-sources:
-  - url: https://ui.shadcn.com/docs/components
-    when: "for component reference and props"
-  - url: https://ui.shadcn.com/docs/cli
-    when: "for CLI flags and registry config"
 allowed-tools:
   - Bash(npx shadcn@latest *)
   - Bash(pnpm dlx shadcn@latest *)
@@ -149,3 +143,8 @@ Use the detected runner consistently across all 5 steps. Mixing runners triggers
 `button` · `dialog` · `dropdown-menu` · `form` · `input` · `label` · `select` · `sheet` · `table` · `tabs` · `toast` · `tooltip` · `accordion` · `alert` · `alert-dialog` · `avatar` · `badge` · `calendar` · `card` · `checkbox` · `command` · `data-table` · `date-picker` · `popover` · `progress` · `radio-group` · `scroll-area` · `separator` · `skeleton` · `slider` · `switch` · `textarea` · `toggle`
 
 When unsure, run `search` (Step 2) — never guess slugs.
+
+## Sources
+
+- https://ui.shadcn.com/docs/components — component reference and props
+- https://ui.shadcn.com/docs/cli — CLI flags and registry config

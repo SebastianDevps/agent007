@@ -1,18 +1,7 @@
 ---
 name: architecture-patterns
 description: "Hexagonal, Clean, and Screaming architecture patterns for maintainable systems"
-canonical-sources:
-  - url: https://martinfowler.com/architecture/
-    when: "for Martin Fowler architecture references"
-  - url: https://www.cosmicpython.com/
-    when: "for DDD/Hexagonal architecture patterns"
-  - url: https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html
-    when: "for Clean Architecture (Uncle Bob)"
-  - url: https://www.domainlanguage.com/ddd/
-    when: "for Domain-Driven Design (Eric Evans)"
 version: 1.0.0
-invokable: true
-accepts_args: true
 allowed-tools: ["Read", "Grep", "Glob", "Edit", "Write"]
 load_when:
   - designing_system_architecture
@@ -33,14 +22,6 @@ constraints:
   - prefer_hexagonal_over_layered_for_complex_domains
   - domain_layer_must_not_depend_on_infrastructure
   - ports_and_adapters_for_all_external_dependencies
-references:
-  - references/clean-architecture-layers.md
-  - references/bounded-contexts.md
-  - references/module-structure.md
-  - references/ddd-tactical.md
-  - references/repository-pattern.md
-  - references/dto-types-interfaces.md
-  - references/refactor-workflow.md
 ---
 
 # Architecture Patterns — NestJS Clean Architecture & DDD
@@ -116,3 +97,10 @@ Skill para implementar, auditar y refactorizar módulos siguiendo Clean Architec
 - [Domain-Driven Design - Eric Evans](https://www.domainlanguage.com/ddd/)
 - [NestJS Modules Documentation](https://docs.nestjs.com/modules)
 - [Martin Fowler — Architecture](https://martinfowler.com/architecture/)
+
+## Sources
+
+- https://martinfowler.com/architecture/ — Martin Fowler architecture references
+- https://www.cosmicpython.com/ — DDD/Hexagonal architecture patterns
+- https://blog.cleancoder.com/uncle-bob/2012/08/13/the-clean-architecture.html — Clean Architecture (Uncle Bob)
+- https://www.domainlanguage.com/ddd/ — Domain-Driven Design (Eric Evans)

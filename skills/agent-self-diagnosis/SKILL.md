@@ -5,7 +5,6 @@ allowed-tools:
   - Read
   - Grep
   - Glob
-invokable: true
 auto-activate: "when same tool called 3+ times with no progress, or when agent is stuck"
 version: 1.0.0
 constraints:
