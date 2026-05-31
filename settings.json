@@ -7,27 +7,27 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/memory-check.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/memory-check.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/rtk-bootstrap.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/rtk-bootstrap.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/memory-decay.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/memory-decay.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/context-tick.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sensors/context-tick.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/session-recover.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/session-recover.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/lifecycle-clock-in.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sensors/lifecycle-clock-in.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       }
@@ -38,11 +38,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/constraint-reinforcement.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/constraint-reinforcement.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/date-injector.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/date-injector.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       }
@@ -52,23 +52,23 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/agent-tool-allowlist.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/agent-tool-allowlist.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/reference-only.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sensors/reference-only.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/debate-trigger.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/debate-trigger.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sentinels/iteration-budget.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sentinels/iteration-budget.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/lifecycle-bookend.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sensors/lifecycle-bookend.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       }
@@ -78,11 +78,11 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/subagent-context.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/subagent-context.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/transcript-policy.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/transcript-policy.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       }
@@ -92,39 +92,39 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sentinels/state-sync.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sentinels/state-sync.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/context-engine.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/context-engine.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/context-tick.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sensors/context-tick.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sentinels/cache-pulse.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sentinels/cache-pulse.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sentinels/blueprint-archiver.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sentinels/blueprint-archiver.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/lifecycle-clock-out.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sensors/lifecycle-clock-out.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       }
     ],
     "PreToolUse": [
       {
-        "_comment": "F2 — per-agent tool allowlist enforcement. Runs on every tool call; reads .claude/state/active-subagent.json. No matcher = matches all tools.",
+        "_comment": "F2 \u2014 per-agent tool allowlist enforcement. Runs on every tool call; reads .claude/state/active-subagent.json. No matcher = matches all tools.",
         "matcher": "",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/agent-tool-allowlist.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/agent-tool-allowlist.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       },
@@ -133,7 +133,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/web-distill.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/web-distill.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       },
@@ -142,7 +142,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/context-engine.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/context-engine.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       },
@@ -151,7 +151,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/path-existence-guard.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/path-existence-guard.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       },
@@ -160,33 +160,33 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/frontend-discovery-gate.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/frontend-discovery-gate.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/tool-policy-guard.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/tool-policy-guard.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/sdd-guard.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/sdd-guard.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/config-guard.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/config-guard.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/mutation-guard.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/mutation-guard.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       },
       {
-        "_comment_hook_ordering": "sdd-wip-guard is in a separate Write-only block (index 4 in PreToolUse array). path-existence-guard is in the Edit|Write|Read block (index 2). Ordering assumption: Claude Code processes PreToolUse blocks in array order within a single tool event, so path-existence-guard fires before sdd-wip-guard for Write calls. This is an architectural assumption — not guaranteed by the public schema. If Claude Code changes to parallel block execution, move sdd-wip-guard into the Edit|Write|Read block after path-existence-guard.",
+        "_comment_hook_ordering": "sdd-wip-guard is in a separate Write-only block (index 4 in PreToolUse array). path-existence-guard is in the Edit|Write|Read block (index 2). Ordering assumption: Claude Code processes PreToolUse blocks in array order within a single tool event, so path-existence-guard fires before sdd-wip-guard for Write calls. This is an architectural assumption \u2014 not guaranteed by the public schema. If Claude Code changes to parallel block execution, move sdd-wip-guard into the Edit|Write|Read block after path-existence-guard.",
         "matcher": "Write",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/sdd-wip-guard.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/sdd-wip-guard.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       },
@@ -195,27 +195,27 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/tool-allowlist-guard.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/tool-allowlist-guard.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/safety-guard.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/safety-guard.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/rtk-rewrite.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/rtk-rewrite.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/block-no-verify.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/block-no-verify.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/pre-commit-guard.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/pre-commit-guard.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/mutation-guard.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/mutation-guard.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       }
@@ -225,15 +225,15 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/context-window-guard.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sensors/context-window-guard.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/tool-loop-detection.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sensors/tool-loop-detection.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/context-tick.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sensors/context-tick.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       },
@@ -242,31 +242,31 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sensors/format-on-save.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sensors/format-on-save.py'],stdin=sys.stdin).returncode)\""
           },
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/sdd-guard.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/sdd-guard.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       },
       {
-        "_comment": "REQ-4 — emit criteria.md template after writing openspec/changes/*/spec.md",
+        "_comment": "REQ-4 \u2014 emit criteria.md template after writing openspec/changes/*/spec.md",
         "matcher": "Edit|Write",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'guides/emit-criteria-hook.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'guides/emit-criteria-hook.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       },
       {
-        "_comment": "REQ-2 — update openspec/changes/_index.json state machine after any write to SDD artifacts",
+        "_comment": "REQ-2 \u2014 update openspec/changes/_index.json state machine after any write to SDD artifacts",
         "matcher": "Write|Edit",
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sentinels/sdd-state-writer.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sentinels/sdd-state-writer.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       }
@@ -276,7 +276,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "python3 -c \"import pathlib,sys,subprocess; p=pathlib.Path.cwd(); r=next((a for a in [p,*p.parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not r else sys.exit(subprocess.run([sys.executable,str(r/'.claude/harness/_dispatch.py'),'sentinels/notify.py'],stdin=sys.stdin).returncode)\""
+            "command": "python3 -c \"import os,pathlib,sys,subprocess; root=os.environ.get('CLAUDE_PLUGIN_ROOT'); h=(pathlib.Path(root)/'harness') if root else next((a/'.claude/harness' for a in [pathlib.Path.cwd(),*pathlib.Path.cwd().parents] if (a/'.claude/harness').is_dir()),None); sys.exit(0) if not (h and h.is_dir()) else sys.exit(subprocess.run([sys.executable,str(h/'_dispatch.py'),'sentinels/notify.py'],stdin=sys.stdin).returncode)\""
           }
         ]
       }
@@ -352,7 +352,7 @@
   "maxFileReadTokens": 100000,
   "statusLine": {
     "type": "command",
-    "command": "HOOK_ROOT=$(p=$PWD; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/harness\" ] && echo \"$p\" && break; p=$(dirname \"$p\"); done) && bash \"$HOOK_ROOT/.claude/harness/statusline/statusline.sh\""
+    "command": "H=\"${CLAUDE_PLUGIN_ROOT:+$CLAUDE_PLUGIN_ROOT/harness}\"; [ -z \"$H\" ] && H=\"$(p=\"$PWD\"; while [ \"$p\" != \"/\" ]; do [ -d \"$p/.claude/harness\" ] && echo \"$p/.claude/harness\" && break; p=\"$(dirname \"$p\")\"; done)\"; [ -f \"$H/statusline/statusline.sh\" ] && bash \"$H/statusline/statusline.sh\""
   },
   "experimental": {
     "agentTeams": true

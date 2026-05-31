@@ -1,5 +1,5 @@
 {
   "name": "agent007",
-  "version": "7.0.0",
+  "version": "7.0.1",
   "description": "13 expert agents, 57 skills (flat depth-1), 43 deterministic hooks across 7 events — orchestration system with always-on behavioral contracts, SDD pipeline (proposal→spec→design→tasks→apply→verify→archive) with 4 auto-gates, V7.3 hardened auto-loop (fire→feedback→retry→converge/escalate), parallel fan-out with worktree isolation, file-based state (no external memory backend), first-run onboarding, fail-CLOSED tool allowlist, executor-classification safety guard with pipe data-flow detection. Python 3.9+ compatible. Cross-platform (macOS/Linux/Windows)."
 }
